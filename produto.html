@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Loureiro Aquarismo — Produto de aquarismo em Fortaleza, CE.">
+  <meta name="author" content="Loureiro Aquarismo">
+  <meta property="og:type" content="product">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Loureiro Aquarismo">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/produto.css">
+  <link rel="stylesheet" href="css/carrinho.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <title id="pageTitle">Produto — Loureiro Aquarismo</title>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/produtos-db.js"></script>
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar__item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>Fortaleza, CE — R. Raimundo Neri, 372</span>
+      </div>
+      <div class="top-bar__item">
+        <span class="top-bar__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>4,8 — 120 avaliações no Google</span>
+      </div>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="top-bar__item top-bar__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+        <span>(85) 98530-1616</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header id="header">
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <a href="/" class="navbar__logo"><img src="assets/logo.png" alt="Loureiro Aquarismo"></a>
+        <ul class="navbar__menu" id="navMenu">
+          <li><a href="/" class="navbar__link">Início</a></li>
+          <li><a href="/categoria?cat=agua-doce" class="navbar__link" data-cat="agua-doce">Peixes</a></li>
+          <li><a href="/categoria?cat=aquarios" class="navbar__link" data-cat="aquarios">Aquários</a></li>
+          <li><a href="/categoria?cat=equipamentos" class="navbar__link" data-cat="equipamentos">Equipamentos</a></li>
+          <li><a href="/categoria?cat=racoes" class="navbar__link" data-cat="racoes">Rações</a></li>
+          <li><a href="/categoria?cat=marinho" class="navbar__link" data-cat="marinho">Corais</a></li>
+          <li><a href="/#sobre" class="navbar__link">Sobre</a></li>
+          <li><a href="/#contato" class="navbar__link">Contato</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <div class="navbar__search" id="navSearch">
+            <input type="text" class="navbar__search-input" placeholder="Buscar produtos...">
+            <button class="navbar__search-btn" aria-label="Buscar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></button>
+          </div>
+          <a href="/carrinho" class="navbar__carrinho" aria-label="Carrinho">&#x1F6D2;<span class="carrinho-badge" style="display:none">0</span></a>
+          <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="navbar__whatsapp">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+            <span>Falar no WhatsApp</span>
+          </a>
+          <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-menu__link">Início</a>
+      <a href="/categoria?cat=agua-doce" class="mobile-menu__link">Peixes</a>
+      <a href="/categoria?cat=aquarios" class="mobile-menu__link">Aquários</a>
+      <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
+      <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
+      <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="/#sobre" class="mobile-menu__link">Sobre</a>
+      <a href="/#contato" class="mobile-menu__link">Contato</a>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== CONTEUDO ===== -->
+  <main class="pagina-produto">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb container">
+      <a href="/">Início</a> ›
+      <a href="#" id="bc-categoria">Categoria</a> ›
+      <span id="bc-nome">Produto</span>
+    </nav>
+
+    <!-- LAYOUT PRINCIPAL: 2 colunas -->
+    <div class="produto-grid container">
+
+      <!-- COLUNA ESQUERDA: Galeria -->
+      <div class="coluna-galeria">
+        <div class="imagem-principal-wrap" id="imagem-principal-wrap">
+          <img id="img-principal" src="" alt="" class="img-principal">
+          <div id="placeholder-galeria" class="placeholder-galeria">
+            <span id="icone-categoria" class="icone-grande">🐠</span>
+          </div>
+        </div>
+        <div class="thumbnails-wrap" id="thumbnails-wrap"></div>
+        <div id="secao-video" class="secao-video" style="display:none">
+          <a id="link-video" href="#" target="_blank" class="btn-video">▶️ Ver vídeo no YouTube</a>
+        </div>
+      </div>
+
+      <!-- COLUNA DIREITA: Informações -->
+      <div class="coluna-info">
+
+        <h1 class="produto-titulo" id="produto-titulo">Carregando...</h1>
+
+        <div class="produto-compartilhar">
+          <button onclick="compartilharWhatsApp()" class="share-btn share-whatsapp">💬 WhatsApp</button>
+          <button onclick="copiarLink()" class="share-btn share-copy">🔗 Copiar link</button>
+        </div>
+
+        <div class="ficha-tecnica" id="ficha-tecnica"></div>
+
+        <div class="produto-preco-bloco" id="produto-preco-bloco"></div>
+
+        <div class="quantidade-wrap">
+          <label class="qtd-label">Quantidade</label>
+          <div class="qtd-controle">
+            <button class="qtd-btn" onclick="alterarQtd(-1)">−</button>
+            <input type="number" id="qtd-input" value="1" min="1" max="99" class="qtd-input" readonly>
+            <button class="qtd-btn" onclick="alterarQtd(1)">+</button>
+          </div>
+        </div>
+
+        <!-- Botoes de acao -->
+        <div id="produto-acoes" style="margin-top:16px">
+          <button id="btn-adicionar-carrinho" class="btn-add-carrinho" onclick="adicionarAoCarrinho()">&#x1F6D2; Adicionar ao Carrinho</button>
+          <div id="link-ver-carrinho"></div>
+          <button class="btn-whatsapp-principal" onclick="pedirWhatsApp()" style="width:100%;margin-top:8px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Consultar disponibilidade
+          </button>
+        </div>
+
+        <div class="produto-descricao-bloco" id="produto-descricao-bloco" style="display:none">
+          <h3>Descrição</h3>
+          <p id="produto-descricao-texto"></p>
+        </div>
+
+        <div class="entrega-opcoes">
+          <h3 class="entrega-titulo">🚚 Opções de Entrega</h3>
+          <div class="entrega-card">
+            <div class="entrega-icon">🏪</div>
+            <div class="entrega-info">
+              <strong>Retirada na Loja — Fortaleza/CE</strong>
+              <span>R. Raimundo Neri, 372 - Parque São José</span>
+              <span class="entrega-obs">Necessário confirmar disponibilidade no WhatsApp</span>
+            </div>
+            <span class="entrega-preco gratis">Grátis</span>
+          </div>
+          <div class="entrega-card">
+            <div class="entrega-icon">🛵</div>
+            <div class="entrega-info">
+              <strong>Entrega em Fortaleza</strong>
+              <span>Entrega feita durante a semana em horário comercial</span>
+              <span class="entrega-obs">Consultar taxa e disponibilidade no WhatsApp</span>
+            </div>
+            <span class="entrega-preco">A consultar</span>
+          </div>
+        </div>
+
+        <div class="badges-confianca">
+          <div class="badge-conf">⭐ 4,8 no Google</div>
+          <div class="badge-conf">🔒 Compra Segura</div>
+          <div class="badge-conf">✅ Produto com Procedência</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PRODUTOS RELACIONADOS -->
+    <section class="relacionados container">
+      <h2>Produtos Relacionados</h2>
+      <div class="grid-relacionados" id="grid-relacionados"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer" class="footer">
+    <div class="footer__wave-top">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#0A1A2E"/>
+        <path d="M0,58 L1440,58" stroke="rgba(201,168,76,0.25)" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="footer__bubbles"><div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div></div>
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <a href="/" class="footer__logo"><img src="assets/logo.png" alt="Loureiro Aquarismo"></a>
+          <span class="footer__tagline">Especialistas em Aquarismo em Fortaleza, CE</span>
+          <p class="footer__desc">Sua loja completa de aquarismo em Fortaleza.</p>
+        </div>
+        <div class="footer__nav">
+          <h3 class="footer__col-title">Links Rápidos</h3>
+          <nav class="footer__links">
+            <a href="/" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Início</a>
+            <a href="/#sobre" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Sobre Nós</a>
+            <a href="/#contato" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Contato</a>
+          </nav>
+        </div>
+        <div class="footer__categories">
+          <h3 class="footer__col-title">Categorias</h3>
+          <nav class="footer__links">
+            <a href="/categoria?cat=agua-doce" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes de Água Doce</a>
+            <a href="/categoria?cat=marinho" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Marinhos &amp; Corais</a>
+            <a href="/categoria?cat=equipamentos" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Equipamentos</a>
+            <a href="/categoria?cat=racoes" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Rações</a>
+          </nav>
+        </div>
+        <div class="footer__contact">
+          <h3 class="footer__col-title">Contato</h3>
+          <div class="footer__contact-list">
+            <div class="footer__contact-item"><span class="footer__contact-icon">&#x1F4F1;</span><span><a href="https://wa.me/5585985301616" target="_blank" rel="noopener">(85) 98530-1616</a></span></div>
+            <div class="footer__contact-item"><span class="footer__contact-icon">&#x1F4CD;</span><span>R. Raimundo Neri, 372 — Fortaleza, CE</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom"><div class="container"><div class="footer__bottom-inner">
+      <span class="footer__copyright">&copy; 2025 Loureiro Aquarismo — Todos os direitos reservados</span>
+      <span class="footer__bottom-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+      <span class="footer__bottom-contact">Fortaleza, Ceará — (85) 98530-1616</span>
+    </div></div></div>
+  </footer>
+
+  <script src="js/carrinho-db.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+  /* ============================================
+     PAGINA DE PRODUTO — Layout Profissional
+     ============================================ */
+
+  let quantidadeSelecionada = 1;
+  let produtoAtual = null;
+
+  const iconesCategorias = {
+    'agua-doce':'🐠','marinho':'🪸','aquarios':'🏠',
+    'equipamentos':'⚙️','racoes':'🍖','manutencao':'💧'
+  };
+  const nomesCategorias = {
+    'agua-doce':'Peixes de Água Doce','marinho':'Peixes e Corais Marinhos',
+    'aquarios':'Aquários & Kits','equipamentos':'Equipamentos',
+    'racoes':'Rações Premium','manutencao':'Produtos de Manutenção'
+  };
+  const labelsDetalhes = {
+    aquario_minimo:'Tamanho mínimo do aquário', cuidados:'Cuidados', temperamento:'Temperamento',
+    temperatura:'Temperatura', ph:'pH da água', tamanho:'Tamanho adulto',
+    sociabilidade:'Sociabilidade', dieta:'Dieta', familia:'Família', lago:'Lago/Origem',
+    voltagem:'Voltagem', potencia:'Potência', capacidade:'Capacidade', peso:'Peso',
+    indicado_para:'Indicado para', litros:'Volume', inclui:'Kit inclui', garantia:'Garantia',
+    volume:'Volume', dimensoes:'Dimensões', material:'Material', tipo:'Tipo',
+    vazao:'Vazão', para_aquarios:'Para aquários', comprimento:'Comprimento',
+    rendimento:'Rendimento', para:'Indicado para', iluminacao:'Iluminação', fluxo:'Fluxo',
+    dificuldade:'Dificuldade'
+  };
+
+  // Extrair ID do produto da URL (tenta query string, hash e path)
+  function extrairIdDaUrl() {
+    // 1. Query string: produto.html?id=xxx
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get('id');
+    if (id && id.trim()) return id.trim();
+
+    // 2. Hash: produto.html#xxx ou produto.html#id=xxx
+    var hash = window.location.hash;
+    if (hash && hash.length > 1) {
+      var hashVal = hash.substring(1);
+      // Tenta como query string dentro do hash
+      var hashParams = new URLSearchParams(hashVal);
+      var hashId = hashParams.get('id');
+      if (hashId && hashId.trim()) return hashId.trim();
+      // Tenta o hash puro como ID
+      if (hashVal.trim()) return hashVal.trim();
+    }
+
+    // 3. Path: /produto/xxx
+    var pathMatch = window.location.pathname.match(/produto[\/\.].*?([a-f0-9-]{36}|\d+)/i);
+    if (pathMatch) return pathMatch[1];
+
+    return null;
+  }
+
+  // Mostrar erro na pagina
+  function mostrarErro(titulo, mensagem) {
+    var el = document.querySelector('.pagina-produto');
+    if (el) {
+      el.innerHTML =
+        '<div style="text-align:center;padding:100px 20px;color:white;font-family:\'Lato\',sans-serif;">' +
+        '<h2 style="font-family:\'Cinzel\',serif;color:#C9A84C;">' + titulo + '</h2>' +
+        '<p style="margin:16px 0;color:rgba(255,255,255,0.6);">' + mensagem + '</p>' +
+        '<a href="/" style="display:inline-block;margin-top:20px;padding:12px 28px;background:#C9A84C;color:#0A1A2E;border-radius:8px;font-weight:700;text-decoration:none;">&larr; Voltar</a>' +
+        '</div>';
+    }
+  }
+
+  // CONTROLE DE QUANTIDADE
+  function alterarQtd(delta) {
+    var input = document.getElementById('qtd-input');
+    quantidadeSelecionada = Math.max(1, Math.min(99, quantidadeSelecionada + delta));
+    input.value = quantidadeSelecionada;
+  }
+
+  // PEDIR NO WHATSAPP
+  function pedirWhatsApp() {
+    if (!produtoAtual) return;
+    var preco = produtoAtual.preco_promo || produtoAtual.preco;
+    var msg = 'Olá! Tenho interesse no produto:\n\n*' + produtoAtual.nome + '*\nPreço: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\n\nEste produto está disponível?';
+    window.open('https://wa.me/5585985301616?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // PEDIR COM QUANTIDADE
+  function pedirWhatsAppComQtd() {
+    if (!produtoAtual) return;
+    var preco = produtoAtual.preco_promo || produtoAtual.preco;
+    var total = (Number(preco) * quantidadeSelecionada).toFixed(2).replace('.',',');
+    var msg = 'Olá! Gostaria de fazer um pedido:\n\n*' + produtoAtual.nome + '*\nQuantidade: ' + quantidadeSelecionada + ' unidade(s)\nPreço unitário: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\nTotal: R$ ' + total + '\n\nPoderia confirmar disponibilidade?';
+    window.open('https://wa.me/5585985301616?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // COMPARTILHAR
+  function compartilharWhatsApp() {
+    var msg = 'Olha esse produto incrível que achei no Loureiro Aquarismo!\n' + document.title + '\n' + window.location.href;
+    window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+  }
+  function copiarLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+      alert('Link copiado!');
+    });
+  }
+
+  // GALERIA DE THUMBNAILS
+  function configurarGaleria(imagens) {
+    var wrap = document.getElementById('thumbnails-wrap');
+    if (!imagens || imagens.length <= 1) { wrap.style.display = 'none'; return; }
+    wrap.innerHTML = imagens.map(function(url, i) {
+      return '<div class="thumb ' + (i === 0 ? 'thumb-ativa' : '') + '" onclick="trocarImagem(\'' + url + '\', this)">' +
+        '<img src="' + url + '" alt="Foto ' + (i+1) + '" loading="lazy">' +
+        '</div>';
+    }).join('');
+  }
+  function trocarImagem(url, thumbEl) {
+    document.getElementById('img-principal').src = url;
+    document.getElementById('img-principal').style.display = 'block';
+    document.getElementById('placeholder-galeria').style.display = 'none';
+    document.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('thumb-ativa'); });
+    thumbEl.classList.add('thumb-ativa');
+  }
+
+  // ADICIONAR AO CARRINHO
+  function adicionarAoCarrinho() {
+    if (!produtoAtual) return;
+    var qtd = parseInt(document.getElementById('qtd-input').value) || 1;
+    carrinhoDB.adicionarItem(produtoAtual, qtd);
+    var btn = document.getElementById('btn-adicionar-carrinho');
+    if (btn) {
+      btn.textContent = 'Adicionado!';
+      btn.style.background = '#27ae60';
+      btn.style.color = 'white';
+      setTimeout(function() {
+        btn.textContent = '\u{1F6D2} Adicionar mais';
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 2000);
+    }
+    var linkDiv = document.getElementById('link-ver-carrinho');
+    if (linkDiv) linkDiv.innerHTML = '<a href="/carrinho" class="btn-ver-carrinho">Ver Carrinho \u2192</a>';
+  }
+
+  // CARREGAR PRODUTO
+  document.addEventListener('DOMContentLoaded', function() {
+    carrinhoDB._atualizarContador();
+    var id = extrairIdDaUrl();
+
+    console.log('[produto] URL:', window.location.href);
+    console.log('[produto] search:', window.location.search);
+    console.log('[produto] hash:', window.location.hash);
+    console.log('[produto] ID extraido:', id);
+
+    if (!id) {
+      mostrarErro('Nenhum produto selecionado', 'Volte à página inicial e selecione um produto.');
+      return;
+    }
+
+    // Verificar se Supabase esta disponivel
+    if (typeof produtosDB === 'undefined' || typeof supabaseClient === 'undefined') {
+      console.error('[produto] produtosDB ou supabaseClient não definido');
+      mostrarErro('Erro de conexão', 'Não foi possível conectar ao banco de dados. Recarregue a página.');
+      return;
+    }
+
+    // Buscar produto no Supabase
+    produtosDB.getById(id).then(function(p) {
+      console.log('[produto] Resultado Supabase:', p);
+
+      if (!p) {
+        mostrarErro('Produto não encontrado', 'Este produto pode ter sido removido.');
+        return;
+      }
+
+      produtoAtual = p;
+
+      // Titulo da aba
+      document.title = p.nome + ' — Loureiro Aquarismo';
+
+      // Navbar ativa
+      document.querySelectorAll('.navbar__link[data-cat]').forEach(function(l) {
+        l.classList.toggle('active', l.dataset.cat === p.categoria);
+      });
+
+      // Breadcrumb
+      document.getElementById('bc-categoria').textContent = nomesCategorias[p.categoria] || p.categoria;
+      document.getElementById('bc-categoria').href = '/categoria?cat=' + p.categoria;
+      document.getElementById('bc-nome').textContent = p.nome;
+
+      // Titulo
+      document.getElementById('produto-titulo').textContent = p.nome;
+
+      // Galeria
+      var todasImagens = (p.imagens && p.imagens.length > 0)
+        ? p.imagens
+        : (p.imagem_url ? [p.imagem_url] : []);
+
+      if (todasImagens.length > 0) {
+        var imgEl = document.getElementById('img-principal');
+        imgEl.src = todasImagens[0];
+        imgEl.style.display = 'block';
+        document.getElementById('placeholder-galeria').style.display = 'none';
+        configurarGaleria(todasImagens);
+      } else {
+        document.getElementById('icone-categoria').textContent = iconesCategorias[p.categoria] || '📦';
+        document.getElementById('img-principal').style.display = 'none';
+      }
+
+      // Video YouTube
+      if (p.video_url) {
+        document.getElementById('secao-video').style.display = 'block';
+        document.getElementById('link-video').href = p.video_url;
+      }
+
+      // Ficha tecnica
+      var detalhes = p.detalhes || {};
+      var linhasDetalhes = Object.entries(detalhes)
+        .filter(function(e) { return e[1] && String(e[1]).trim(); })
+        .map(function(e) {
+          return '<div class="ficha-linha">' +
+            '<span class="ficha-label">' + (labelsDetalhes[e[0]] || e[0]) + '</span>' +
+            '<span class="ficha-valor">' + e[1] + '</span>' +
+            '</div>';
+        }).join('');
+
+      var fichaEl = document.getElementById('ficha-tecnica');
+      if (linhasDetalhes) {
+        fichaEl.innerHTML = linhasDetalhes;
+      } else {
+        fichaEl.style.display = 'none';
+      }
+
+      // Preco
+      var precoBloco = document.getElementById('produto-preco-bloco');
+      if (p.preco_promo) {
+        var economia = (Number(p.preco) - Number(p.preco_promo)).toFixed(2).replace('.',',');
+        precoBloco.innerHTML =
+          '<span class="preco-de">R$ ' + Number(p.preco).toFixed(2).replace('.',',') + '</span>' +
+          '<span class="preco-atual">R$ ' + Number(p.preco_promo).toFixed(2).replace('.',',') + '</span>' +
+          '<span class="preco-economia">Economia de R$ ' + economia + '</span>';
+      } else {
+        precoBloco.innerHTML = '<span class="preco-atual">R$ ' + Number(p.preco).toFixed(2).replace('.',',') + '</span>';
+      }
+
+      // Descricao
+      if (p.descricao && p.descricao.trim()) {
+        document.getElementById('produto-descricao-bloco').style.display = 'block';
+        document.getElementById('produto-descricao-texto').textContent = p.descricao;
+      }
+
+      // Relacionados
+      produtosDB.getByCategoria(p.categoria).then(function(relacionados) {
+        var outros = relacionados.filter(function(r) { return r.id !== p.id; }).slice(0, 4);
+        var gridRel = document.getElementById('grid-relacionados');
+        if (outros.length > 0) {
+          gridRel.innerHTML = outros.map(function(r) {
+            var imgR = (r.imagens && r.imagens.length > 0) ? r.imagens[0] : r.imagem_url;
+            var relUrl = '/produto?id=' + encodeURIComponent(r.id);
+            return '<a href="' + relUrl + '" class="card-rel" style="cursor:pointer;text-decoration:none;color:inherit;display:block">' +
+              '<div class="card-rel-img">' +
+              (imgR
+                ? '<img src="' + imgR + '" alt="' + r.nome + '" loading="lazy">'
+                : '<span>' + (iconesCategorias[r.categoria] || '📦') + '</span>') +
+              '</div>' +
+              '<div class="card-rel-info">' +
+              '<h4>' + r.nome + '</h4>' +
+              '<span>R$ ' + Number(r.preco_promo || r.preco).toFixed(2).replace('.',',') + '</span>' +
+              '</div>' +
+              '</a>';
+          }).join('');
+        } else {
+          document.querySelector('.relacionados').style.display = 'none';
+        }
+      }).catch(function(err) {
+        console.error('[produto] Erro ao carregar relacionados:', err);
+      });
+
+    }).catch(function(err) {
+      console.error('[produto] Erro ao buscar produto:', err);
+      mostrarErro('Erro ao carregar produto', 'Ocorreu um erro: ' + err.message + '. Tente recarregar a página.');
+    });
+  });
+  </script>
+</body>
+</html>

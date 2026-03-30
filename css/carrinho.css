@@ -1,0 +1,108 @@
+/* ============================================
+   CARRINHO — Loureiro Aquarismo
+   ============================================ */
+.carrinho-main { padding-top: 20px; padding-bottom: 80px; }
+.carrinho-titulo { font-family: var(--font-display); color: var(--dourado); font-size: 28px; margin-bottom: 32px; }
+.carrinho-grid { display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start; }
+.carrinho-itens { display: flex; flex-direction: column; gap: 16px; }
+
+.item-carrinho {
+  display: flex; gap: 16px; background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.15); border-radius: 14px; padding: 16px; align-items: center;
+}
+.item-imagem {
+  width: 88px; height: 88px; border-radius: 10px; overflow: hidden;
+  background: linear-gradient(135deg,#0D2840,#0D4F7C); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.item-imagem img { width: 100%; height: 100%; object-fit: cover; }
+.item-placeholder { font-size: 32px; }
+.item-info { flex: 1; min-width: 0; }
+.item-nome { font-family: var(--font-display); font-size: 14px; color: white; margin-bottom: 6px; }
+.item-preco-wrap { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.item-preco-de { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.item-preco { font-family: var(--font-display); font-size: 20px; color: var(--dourado); font-weight: 700; }
+.item-quantidade-wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.qtd-controle { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
+.qtd-controle button {
+  width: 32px; height: 32px; background: rgba(255,255,255,0.06); border: none;
+  color: white; font-size: 16px; cursor: pointer; transition: background 0.2s;
+}
+.qtd-controle button:hover { background: rgba(201,168,76,0.2); color: var(--dourado); }
+.qtd-controle span {
+  width: 40px; text-align: center; color: white; font-family: var(--font-body); font-weight: 700; font-size: 15px;
+}
+.item-subtotal { font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.5); }
+.item-subtotal strong { color: rgba(255,255,255,0.85); }
+.item-remover {
+  background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c;
+  border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: var(--font-body);
+  font-size: 12px; flex-shrink: 0; transition: all 0.2s;
+}
+.item-remover:hover { background: rgba(231,76,60,0.2); }
+
+/* Resumo lateral */
+.carrinho-resumo {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px; padding: 24px; position: sticky; top: 100px;
+}
+.resumo-titulo { font-family: var(--font-display); color: var(--dourado); font-size: 18px; margin-bottom: 16px; }
+.resumo-lista { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.resumo-linha { display: flex; justify-content: space-between; font-family: var(--font-body); font-size: 13px; color: rgba(255,255,255,0.6); }
+.resumo-nome { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.resumo-total {
+  display: flex; justify-content: space-between; font-family: var(--font-display);
+  font-size: 22px; color: var(--dourado); border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 14px; margin-bottom: 20px;
+}
+
+.btn-finalizar {
+  display: block; width: 100%; padding: 15px; background: var(--dourado); color: #0A1A2E;
+  border-radius: 10px; font-family: var(--font-display); font-size: 15px; font-weight: 700;
+  text-align: center; text-decoration: none; margin-bottom: 10px; transition: all 0.2s; box-sizing: border-box;
+}
+.btn-finalizar:hover { background: var(--dourado-claro); transform: translateY(-2px); }
+.btn-continuar {
+  display: block; width: 100%; padding: 12px; background: transparent;
+  color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+  font-family: var(--font-body); font-size: 14px; text-align: center; text-decoration: none;
+  transition: all 0.2s; box-sizing: border-box;
+}
+.btn-continuar:hover { border-color: rgba(255,255,255,0.3); color: white; }
+
+/* Botao carrinho no header */
+.navbar__carrinho {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(201,168,76,0.3);
+  color: white; text-decoration: none; font-size: 20px; transition: all 0.2s; background: rgba(255,255,255,0.05);
+}
+.navbar__carrinho:hover { border-color: var(--dourado); background: rgba(201,168,76,0.1); }
+.carrinho-badge {
+  position: absolute; top: -8px; right: -8px; background: #C0392B; color: white;
+  border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center;
+  justify-content: center; font-family: var(--font-body); font-size: 11px; font-weight: 700; pointer-events: none;
+}
+
+/* Botao add carrinho no produto */
+.btn-add-carrinho {
+  display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+  padding: 16px; background: var(--dourado); color: #0A1A2E; border: none; border-radius: 10px;
+  font-family: var(--font-body); font-size: 16px; font-weight: 700; cursor: pointer;
+  transition: all 0.3s; margin-bottom: 10px;
+}
+.btn-add-carrinho:hover { background: var(--dourado-claro); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+.btn-ver-carrinho {
+  display: block; text-align: center; padding: 12px; color: var(--dourado);
+  border: 1px solid rgba(201,168,76,0.4); border-radius: 10px; font-family: var(--font-body);
+  font-size: 14px; text-decoration: none; margin-bottom: 10px; transition: all 0.2s;
+}
+.btn-ver-carrinho:hover { background: rgba(201,168,76,0.1); }
+
+@media (max-width: 1024px) {
+  .carrinho-grid { grid-template-columns: 1fr; }
+  .carrinho-resumo { position: static; }
+}
+@media (max-width: 600px) {
+  .item-carrinho { flex-wrap: wrap; }
+  .item-remover { width: 100%; text-align: center; }
+}

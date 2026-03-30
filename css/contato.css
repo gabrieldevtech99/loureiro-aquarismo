@@ -1,0 +1,322 @@
+/* ============================================
+   LOUREIRO AQUARISMO — Contato + WhatsApp Float
+   ============================================ */
+
+/* ================================================
+   SEÇÃO CONTATO
+   ================================================ */
+.contato {
+  position: relative;
+  background: linear-gradient(180deg, var(--cinza-escuro) 0%, #0e2640 100%);
+  padding: var(--spacing-xxl) 0;
+  overflow: hidden;
+}
+
+.contato__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xxl);
+  align-items: start;
+}
+
+/* ── Coluna esquerda — Formulário ── */
+.contato__form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.contato__label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--dourado);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--dourado);
+  width: fit-content;
+}
+
+.contato__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--branco);
+  line-height: 1.2;
+}
+
+/* ── Formulário ── */
+.contato__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Grupo de input com label flutuante */
+.contato__field {
+  position: relative;
+}
+
+.contato__input,
+.contato__select,
+.contato__textarea {
+  width: 100%;
+  padding: 16px 16px 8px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--branco);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(26, 143, 191, 0.3);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.contato__input:focus,
+.contato__select:focus,
+.contato__textarea:focus {
+  border-color: var(--dourado);
+  background: rgba(201, 168, 76, 0.04);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+}
+
+.contato__textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+/* Seta customizada do select */
+.contato__field--select::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+.contato__select option {
+  background: var(--cinza-escuro);
+  color: var(--branco);
+}
+
+/* Label flutuante */
+.contato__float-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  transition:
+    top var(--transition-fast),
+    font-size var(--transition-fast),
+    color var(--transition-fast);
+}
+
+/* Textarea label posiciona diferente */
+.contato__field--textarea .contato__float-label {
+  top: 20px;
+  transform: none;
+}
+
+/* Label sobe ao focar ou quando preenchido */
+.contato__input:focus ~ .contato__float-label,
+.contato__input:not(:placeholder-shown) ~ .contato__float-label,
+.contato__textarea:focus ~ .contato__float-label,
+.contato__textarea:not(:placeholder-shown) ~ .contato__float-label {
+  top: 6px;
+  font-size: 0.7rem;
+  color: var(--dourado);
+}
+
+/* Select sempre mostra label em cima */
+.contato__field--select .contato__float-label {
+  top: 6px;
+  font-size: 0.7rem;
+  color: var(--dourado);
+}
+
+/* Estado de erro nos inputs */
+.contato__input--error,
+.contato__textarea--error {
+  border-color: var(--vermelho-acento) !important;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.15) !important;
+  animation: shakeField 0.4s ease;
+}
+
+@keyframes shakeField {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+/* ── Botão enviar ── */
+.contato__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 32px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--branco);
+  background-color: #25D366;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.contato__submit svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.contato__submit:hover {
+  background-color: #1ebe5c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+}
+
+/* ── Coluna direita — Info + Mapa ── */
+.contato__info-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Cards de informação */
+.contato__info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contato__info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-med), box-shadow var(--transition-med);
+}
+
+.contato__info-card:hover {
+  border-color: rgba(201, 168, 76, 0.3);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.08);
+}
+
+.contato__info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(26, 143, 191, 0.2), rgba(13, 79, 124, 0.35));
+  font-size: 20px;
+  line-height: 1;
+}
+
+.contato__info-content {
+  flex: 1;
+}
+
+.contato__info-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--branco);
+  margin-bottom: 2px;
+}
+
+.contato__info-text {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+.contato__info-text a {
+  color: var(--azul-agua);
+  transition: color var(--transition-fast);
+}
+
+.contato__info-text a:hover {
+  color: var(--dourado-claro);
+}
+
+/* ── Mapa ── */
+.contato__map {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1.5px solid rgba(26, 143, 191, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.contato__map iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  filter: brightness(0.85) contrast(1.1) saturate(0.9);
+}
+
+/* Botao flutuante WhatsApp — estilos agora injetados via JS (main.js)
+   para funcionar em todas as paginas independente de qual CSS carrega. */
+
+/* ================================================
+   Responsivo
+   ================================================ */
+@media (max-width: 1024px) {
+  .contato__container {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+  }
+
+  .contato__map {
+    height: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contato {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .contato__map {
+    height: 200px;
+  }
+
+}

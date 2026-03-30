@@ -1,0 +1,100 @@
+/* ============================================
+   CHECKOUT — Loureiro Aquarismo
+   ============================================ */
+.checkout-main { padding-top: 20px; padding-bottom: 80px; }
+.checkout-titulo { font-family: var(--font-display); color: var(--dourado); font-size: 28px; margin-bottom: 32px; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start; }
+.checkout-form { display: flex; flex-direction: column; gap: 20px; }
+
+.checkout-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 24px;
+}
+.checkout-card-titulo { font-family: var(--font-display); color: var(--dourado); font-size: 16px; margin-bottom: 20px; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grupo { display: flex; flex-direction: column; gap: 6px; }
+.form-grupo.full { grid-column: 1 / -1; }
+.form-grupo label {
+  font-family: var(--font-body); font-size: 11px; color: rgba(255,255,255,0.45);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+.form-grupo input, .form-grupo textarea {
+  padding: 11px 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(26,143,191,0.3);
+  border-radius: 8px; color: white; font-family: var(--font-body); font-size: 14px;
+  outline: none; transition: border-color 0.2s; width: 100%; box-sizing: border-box;
+}
+.form-grupo input:focus, .form-grupo textarea:focus { border-color: var(--dourado); }
+.form-grupo textarea { resize: vertical; }
+
+.opcao-entrega {
+  display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.1); cursor: pointer; margin-bottom: 10px; transition: all 0.2s;
+}
+.opcao-entrega:hover { border-color: rgba(201,168,76,0.3); }
+.opcao-entrega.ativo { border-color: var(--dourado); background: rgba(201,168,76,0.07); }
+.opcao-radio {
+  width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s;
+}
+.opcao-radio.ativo { border-color: var(--dourado); }
+.radio-inner { width: 10px; height: 10px; border-radius: 50%; background: var(--dourado); opacity: 0; transition: opacity 0.2s; }
+.opcao-radio.ativo .radio-inner { opacity: 1; }
+.opcao-icone { font-size: 22px; flex-shrink: 0; }
+.opcao-info { flex: 1; display: flex; flex-direction: column; gap: 2px; font-family: var(--font-body); font-size: 13px; }
+.opcao-info strong { color: rgba(255,255,255,0.9); }
+.opcao-info span { color: rgba(255,255,255,0.45); font-size: 12px; }
+.opcao-preco { font-family: var(--font-body); font-weight: 700; font-size: 13px; color: rgba(255,255,255,0.6); white-space: nowrap; flex-shrink: 0; }
+.opcao-preco.gratis { color: #2ecc71; }
+
+.pagamento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.opcao-pagamento {
+  padding: 16px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.opcao-pagamento:hover { border-color: rgba(201,168,76,0.3); }
+.opcao-pagamento.ativo { border-color: var(--dourado); background: rgba(201,168,76,0.07); }
+.pag-titulo { font-family: var(--font-display); font-size: 15px; color: white; margin-bottom: 3px; }
+.pag-desc { font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.4); }
+.gateway-info {
+  background: rgba(26,143,191,0.08); border: 1px solid rgba(26,143,191,0.2);
+  border-radius: 10px; padding: 12px 16px; font-family: var(--font-body);
+  font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5;
+}
+
+.checkout-resumo {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px; padding: 24px; position: sticky; top: 100px;
+}
+.entrega-linha {
+  display: flex; justify-content: space-between; font-family: var(--font-body);
+  font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px;
+}
+.btn-pagar {
+  width: 100%; padding: 15px; background: var(--dourado); color: #0A1A2E; border: none;
+  border-radius: 10px; font-family: var(--font-display); font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s; margin-bottom: 10px;
+}
+.btn-pagar:hover:not(:disabled) { background: var(--dourado-claro); transform: translateY(-2px); }
+.btn-pagar:disabled { opacity: 0.5; cursor: not-allowed; }
+.seguranca-badge { text-align: center; font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.3); }
+
+.resumo-confirmado-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 16px; padding: 20px; margin: 0 auto 28px; max-width: 480px; text-align: left;
+}
+.btn-whatsapp-checkout {
+  display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px;
+  background: #25D366; color: white; border: none; border-radius: 12px;
+  font-family: var(--font-body); font-size: 17px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s; box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+}
+.btn-whatsapp-checkout:hover { background: #20bc5a; transform: translateY(-2px); }
+
+@media (max-width: 1024px) {
+  .checkout-grid { grid-template-columns: 1fr; }
+  .checkout-resumo { position: static; }
+}
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}

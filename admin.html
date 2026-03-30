@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel Admin — Loureiro Aquarismo</title>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   ADMIN PANEL — Estilos completos inline
+   ============================================ */
+:root {
+  --azul-profundo: #0D4F7C;
+  --azul-agua: #1A8FBF;
+  --dourado: #C9A84C;
+  --dourado-claro: #E8C96A;
+  --branco: #FFFFFF;
+  --cinza-escuro: #0A1A2E;
+  --vermelho: #C0392B;
+  --verde: #25D366;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Lato', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--cinza-escuro); color: var(--branco); min-height: 100vh; }
+a { color: var(--azul-agua); text-decoration: none; }
+
+/* ── LOGIN ── */
+.login-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--cinza-escuro);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-box {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 400px; text-align: center;
+}
+.login-box h1 { font-family: var(--font-display); color: var(--dourado); font-size: 1.5rem; margin-bottom: 8px; }
+.login-box p { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 28px; }
+.login-input {
+  width: 100%; padding: 14px 16px; font-family: var(--font-body); font-size: 1rem;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(26,143,191,0.3);
+  border-radius: 8px; color: var(--branco); outline: none; margin-bottom: 16px;
+  transition: border-color 0.2s;
+}
+.login-input:focus { border-color: var(--dourado); }
+.login-btn {
+  width: 100%; padding: 14px; font-family: var(--font-body); font-weight: 700; font-size: 1rem;
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-claro)); color: var(--cinza-escuro);
+  border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+}
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.3); }
+.login-error { color: var(--vermelho); font-size: 0.85rem; margin-top: 12px; display: none; }
+
+/* ── LAYOUT PRINCIPAL ── */
+.admin { display: none; }
+.admin.active { display: block; }
+
+.admin-header {
+  background: linear-gradient(135deg, var(--azul-profundo), #2563A8);
+  padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+.admin-header h1 { font-family: var(--font-display); font-size: 1.1rem; color: var(--dourado); }
+.admin-header-right { display: flex; align-items: center; gap: 16px; }
+.admin-header a { color: rgba(255,255,255,0.6); font-size: 0.85rem; transition: color 0.2s; }
+.admin-header a:hover { color: var(--dourado); }
+.btn-logout {
+  padding: 8px 18px; font-family: var(--font-body); font-weight: 700; font-size: 0.8rem;
+  background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4);
+  color: #e74c3c; border-radius: 20px; cursor: pointer; transition: background 0.2s;
+}
+.btn-logout:hover { background: rgba(192,57,43,0.35); }
+
+/* ── DASHBOARD ── */
+.dashboard { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px; margin-bottom: 32px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 20px; text-align: center;
+}
+.stat-card .stat-icon { font-size: 28px; margin-bottom: 8px; }
+.stat-card .stat-number { font-family: var(--font-display); font-size: 1.8rem; color: var(--dourado); font-weight: 900; }
+.stat-card .stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 20px; padding: 16px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+}
+.toolbar-search {
+  flex: 1; min-width: 200px; padding: 10px 14px; font-family: var(--font-body); font-size: 0.9rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(26,143,191,0.25);
+  border-radius: 6px; color: var(--branco); outline: none;
+}
+.toolbar-search:focus { border-color: var(--dourado); }
+.toolbar-search::placeholder { color: rgba(255,255,255,0.35); }
+.toolbar-select {
+  padding: 10px 14px; font-family: var(--font-body); font-size: 0.85rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(26,143,191,0.25);
+  border-radius: 6px; color: var(--branco); outline: none; appearance: none; cursor: pointer;
+}
+.toolbar-select option { background: var(--cinza-escuro); }
+.btn-novo {
+  padding: 10px 24px; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-claro)); color: var(--cinza-escuro);
+  border: none; border-radius: 8px; cursor: pointer; white-space: nowrap; transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-novo:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,0.3); }
+
+/* ── TABELA ── */
+.table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+thead { background: rgba(13,79,124,0.3); }
+th {
+  padding: 14px 16px; text-align: left; font-weight: 700; color: var(--dourado);
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+}
+td { padding: 12px 16px; border-top: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.td-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; display: block; }
+.td-placeholder {
+  width: 50px; height: 50px; border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-size: 24px; background: rgba(26,143,191,0.15);
+}
+.td-nome { font-weight: 700; color: var(--branco); }
+.td-cat {
+  display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem;
+  font-weight: 700; background: rgba(26,143,191,0.15); color: var(--azul-agua);
+}
+.td-preco { font-weight: 700; color: var(--dourado); white-space: nowrap; }
+.td-preco-promo { text-decoration: line-through; color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+.badge-on { padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; background: rgba(37,211,102,0.15); color: var(--verde); }
+.badge-off { padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; background: rgba(192,57,43,0.15); color: var(--vermelho); }
+.badge-destaque { padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; background: rgba(201,168,76,0.15); color: var(--dourado); }
+.td-actions { display: flex; gap: 6px; white-space: nowrap; }
+.btn-edit, .btn-del {
+  padding: 6px 14px; font-family: var(--font-body); font-weight: 700; font-size: 0.78rem;
+  border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s, transform 0.15s;
+}
+.btn-edit { background: rgba(26,143,191,0.2); color: var(--azul-agua); }
+.btn-edit:hover { background: rgba(26,143,191,0.35); transform: translateY(-1px); }
+.btn-del { background: rgba(192,57,43,0.15); color: #e74c3c; }
+.btn-del:hover { background: rgba(192,57,43,0.3); transform: translateY(-1px); }
+
+.empty-msg { text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.4); font-size: 1rem; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.7);
+  display: none; align-items: flex-start; justify-content: center;
+  padding: 40px 16px; overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #0e2240; border: 1px solid rgba(201,168,76,0.2); border-radius: 16px;
+  width: 100%; max-width: 640px; padding: 32px; position: relative;
+}
+.modal h2 { font-family: var(--font-display); color: var(--dourado); font-size: 1.3rem; margin-bottom: 24px; }
+.modal-close {
+  position: absolute; top: 16px; right: 16px; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%; color: rgba(255,255,255,0.6); font-size: 18px;
+  cursor: pointer; transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(192,57,43,0.2); color: var(--vermelho); }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: 1 / -1; }
+.form-label { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select, .form-textarea {
+  padding: 12px 14px; font-family: var(--font-body); font-size: 0.9rem;
+  background: rgba(255,255,255,0.06); border: 1.5px solid rgba(26,143,191,0.25);
+  border-radius: 8px; color: var(--branco); outline: none; transition: border-color 0.2s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--dourado); }
+.form-select { appearance: none; cursor: pointer; }
+.form-select option { background: var(--cinza-escuro); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-check-row { display: flex; align-items: center; gap: 24px; padding: 8px 0; }
+.form-check { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; color: rgba(255,255,255,0.7); }
+.form-check input[type="checkbox"] { accent-color: var(--dourado); width: 18px; height: 18px; cursor: pointer; }
+
+/* Upload de imagem */
+.img-upload-area {
+  border: 2px dashed rgba(26,143,191,0.3); border-radius: 12px; padding: 24px;
+  text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  position: relative; min-height: 120px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.img-upload-area:hover { border-color: var(--dourado); background: rgba(201,168,76,0.04); }
+.img-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.img-upload-text { font-size: 0.85rem; color: rgba(255,255,255,0.45); }
+.img-upload-icon { font-size: 32px; opacity: 0.5; }
+.img-preview { max-width: 200px; max-height: 150px; border-radius: 8px; object-fit: cover; display: none; }
+.img-remove { font-size: 0.8rem; color: var(--vermelho); cursor: pointer; display: none; }
+
+.form-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+.btn-salvar {
+  padding: 12px 32px; font-family: var(--font-body); font-weight: 700; font-size: 0.95rem;
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-claro)); color: var(--cinza-escuro);
+  border: none; border-radius: 8px; cursor: pointer; transition: transform 0.2s;
+}
+.btn-salvar:hover { transform: translateY(-2px); }
+.btn-cancelar {
+  padding: 12px 24px; font-family: var(--font-body); font-weight: 700; font-size: 0.95rem;
+  background: transparent; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; cursor: pointer; transition: border-color 0.2s;
+}
+.btn-cancelar:hover { border-color: rgba(255,255,255,0.35); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  padding: 14px 24px; border-radius: 10px; font-weight: 700; font-size: 0.88rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4); transform: translateY(100px); opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--verde); color: var(--branco); }
+.toast.error { background: var(--vermelho); color: var(--branco); }
+.toast.info { background: var(--azul-profundo); color: var(--branco); border: 1px solid var(--azul-agua); }
+
+/* ── RESPONSIVO ── */
+@media (max-width: 768px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .toolbar { flex-direction: column; }
+  .toolbar-search { width: 100%; }
+  .admin-header { flex-direction: column; gap: 12px; text-align: center; }
+  .admin-header-right { flex-wrap: wrap; justify-content: center; }
+  th, td { padding: 10px 8px; font-size: 0.8rem; }
+}
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .dashboard { padding: 16px; }
+  .login-box { padding: 32px 24px; margin: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TELA DE LOGIN ============ -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-box">
+    <h1>Loureiro Aquarismo</h1>
+    <p>Painel Administrativo</p>
+    <input type="password" class="login-input" id="loginSenha" placeholder="Digite a senha" autofocus>
+    <button class="login-btn" id="loginBtn">Entrar</button>
+    <p class="login-error" id="loginError">Senha incorreta. Tente novamente.</p>
+  </div>
+</div>
+
+<!-- ============ PAINEL ADMIN ============ -->
+<div class="admin" id="adminPanel">
+
+  <!-- Header -->
+  <div class="admin-header">
+    <h1>Painel Administrativo</h1>
+    <div class="admin-header-right">
+      <a href="/">Ver site</a>
+      <button class="btn-logout" id="btnLogout">Sair</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+
+    <!-- Stats -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" class="toolbar-search" id="toolSearch" placeholder="Buscar produto por nome...">
+      <select class="toolbar-select" id="toolCategoria">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select class="toolbar-select" id="toolStatus">
+        <option value="">Todos os status</option>
+        <option value="disponivel">Disponíveis</option>
+        <option value="indisponivel">Indisponíveis</option>
+        <option value="destaque">Destaques</option>
+        <option value="promocao">Em promoção</option>
+      </select>
+      <button class="btn-novo" id="btnNovo">+ Novo Produto</button>
+    </div>
+
+    <!-- Tabela -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Preco</th>
+            <th>Status</th>
+            <th>Destaque</th>
+            <th>Acoes</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL DE PRODUTO ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <h2 id="modalTitle">Novo Produto</h2>
+
+    <form id="produtoForm">
+      <input type="hidden" id="prodId">
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome do Produto *</label>
+          <input type="text" class="form-input" id="prodNome" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Categoria *</label>
+          <select class="form-select" id="prodCategoria" required></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preco (R$) *</label>
+          <input type="number" class="form-input" id="prodPreco" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preco Promocional (R$)</label>
+          <input type="number" class="form-input" id="prodPrecoPromo" step="0.01" min="0" placeholder="Deixe vazio se sem promo">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Detalhes extra</label>
+          <input type="text" class="form-input" id="prodDetalhes" placeholder='Ex: tamanho:35cm, temp:24-28C'>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Descricao</label>
+          <textarea class="form-textarea" id="prodDescricao" rows="3" placeholder="Descricao do produto..."></textarea>
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Imagem</label>
+          <div class="img-upload-area" id="imgUploadArea">
+            <span class="img-upload-icon">&#x1F4F7;</span>
+            <span class="img-upload-text">Clique ou arraste uma imagem (max 500KB)</span>
+            <input type="file" id="prodImagem" accept="image/*">
+            <img class="img-preview" id="imgPreview">
+            <span class="img-remove" id="imgRemove">Remover imagem</span>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <div class="form-check-row">
+            <label class="form-check">
+              <input type="checkbox" id="prodDisponivel" checked> Disponivel
+            </label>
+            <label class="form-check">
+              <input type="checkbox" id="prodDestaque"> Destaque na Home
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
+        <button type="submit" class="btn-salvar">Salvar Produto</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="js/produtos-db.js"></script>
+<script>
+/* ============================================
+   ADMIN — Logica completa (Supabase)
+   ============================================ */
+(() => {
+  const SENHA = 'loureiro2025';
+  const AUTH_KEY = 'loureiro_admin_logado';
+
+  const CATEGORIAS = {
+    'agua-doce':     { nome: 'Peixes de Água Doce', icone: '🐠' },
+    'marinho':       { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
+    'aquarios':      { nome: 'Aquários & Kits', icone: '🏠' },
+    'equipamentos':  { nome: 'Equipamentos', icone: '⚙️' },
+    'racoes':        { nome: 'Rações Premium', icone: '🍖' },
+    'manutencao':    { nome: 'Produtos de Manutenção', icone: '💧' }
+  };
+
+  /* ── Elementos ── */
+  const loginOverlay = document.getElementById('loginOverlay');
+  const adminPanel = document.getElementById('adminPanel');
+  const loginSenha = document.getElementById('loginSenha');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+  const btnLogout = document.getElementById('btnLogout');
+  const btnNovo = document.getElementById('btnNovo');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalClose = document.getElementById('modalClose');
+  const modalTitle = document.getElementById('modalTitle');
+  const produtoForm = document.getElementById('produtoForm');
+  const btnCancelar = document.getElementById('btnCancelar');
+  const tabelaBody = document.getElementById('tabelaBody');
+  const statsGrid = document.getElementById('statsGrid');
+  const toolSearch = document.getElementById('toolSearch');
+  const toolCategoria = document.getElementById('toolCategoria');
+  const toolStatus = document.getElementById('toolStatus');
+  const toastEl = document.getElementById('toast');
+
+  // Form fields
+  const fId = document.getElementById('prodId');
+  const fNome = document.getElementById('prodNome');
+  const fCategoria = document.getElementById('prodCategoria');
+  const fPreco = document.getElementById('prodPreco');
+  const fPrecoPromo = document.getElementById('prodPrecoPromo');
+  const fDescricao = document.getElementById('prodDescricao');
+  const fDetalhes = document.getElementById('prodDetalhes');
+  const fDisponivel = document.getElementById('prodDisponivel');
+  const fDestaque = document.getElementById('prodDestaque');
+  const fImagem = document.getElementById('prodImagem');
+  const imgPreview = document.getElementById('imgPreview');
+  const imgRemove = document.getElementById('imgRemove');
+
+  let imagemArquivo = null;   // File object para upload no Supabase
+  let imagemUrlAtual = null;  // URL atual (quando editando)
+
+  /* ── Toast ── */
+  const toast = (msg, type = 'success') => {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast ' + type + ' show';
+    setTimeout(() => toastEl.classList.remove('show'), 3000);
+  };
+
+  /* ── Autenticacao ── */
+  const checkAuth = () => {
+    if (localStorage.getItem(AUTH_KEY) === 'true') {
+      loginOverlay.style.display = 'none';
+      adminPanel.classList.add('active');
+      init();
+    }
+  };
+
+  const doLogin = () => {
+    if (loginSenha.value === SENHA) {
+      localStorage.setItem(AUTH_KEY, 'true');
+      loginOverlay.style.display = 'none';
+      adminPanel.classList.add('active');
+      loginError.style.display = 'none';
+      init();
+    } else {
+      loginError.style.display = 'block';
+      loginSenha.value = '';
+      loginSenha.focus();
+    }
+  };
+
+  loginBtn.addEventListener('click', doLogin);
+  loginSenha.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  btnLogout.addEventListener('click', () => {
+    localStorage.removeItem(AUTH_KEY);
+    location.reload();
+  });
+
+  /* ── Popular selects de categoria ── */
+  const popularCategorias = () => {
+    let opts = '';
+    for (const [slug, info] of Object.entries(CATEGORIAS)) {
+      opts += `<option value="${slug}">${info.icone} ${info.nome}</option>`;
+    }
+    fCategoria.innerHTML = opts;
+    toolCategoria.innerHTML = '<option value="">Todas as categorias</option>' + opts;
+  };
+
+  /* ── Stats (async) ── */
+  const renderStats = async () => {
+    const todos = await produtosDB.getAll();
+    const disponiveis = todos.filter(p => p.disponivel).length;
+    const destaques = todos.filter(p => p.destaque).length;
+    const promos = todos.filter(p => p.preco_promo).length;
+    const cats = new Set(todos.map(p => p.categoria)).size;
+
+    statsGrid.innerHTML = `
+      <div class="stat-card"><div class="stat-icon">&#x1F4E6;</div><div class="stat-number">${todos.length}</div><div class="stat-label">Total de Produtos</div></div>
+      <div class="stat-card"><div class="stat-icon">&#x2705;</div><div class="stat-number">${disponiveis}</div><div class="stat-label">Disponiveis</div></div>
+      <div class="stat-card"><div class="stat-icon">&#x2B50;</div><div class="stat-number">${destaques}</div><div class="stat-label">Destaques</div></div>
+      <div class="stat-card"><div class="stat-icon">&#x1F525;</div><div class="stat-number">${promos}</div><div class="stat-label">Em Promocao</div></div>
+      <div class="stat-card"><div class="stat-icon">&#x1F4C1;</div><div class="stat-number">${cats}</div><div class="stat-label">Categorias</div></div>
+    `;
+  };
+
+  /* ── Tabela (async) ── */
+  const renderTabela = async () => {
+    const busca = toolSearch.value.toLowerCase().trim();
+    let produtos = busca
+      ? await produtosDB.buscar(busca)
+      : await produtosDB.getAll();
+
+    // Filtros locais
+    const catFiltro = toolCategoria.value;
+    const statusFiltro = toolStatus.value;
+
+    if (catFiltro) produtos = produtos.filter(p => p.categoria === catFiltro);
+    if (statusFiltro === 'disponivel') produtos = produtos.filter(p => p.disponivel);
+    if (statusFiltro === 'indisponivel') produtos = produtos.filter(p => !p.disponivel);
+    if (statusFiltro === 'destaque') produtos = produtos.filter(p => p.destaque);
+    if (statusFiltro === 'promocao') produtos = produtos.filter(p => p.preco_promo);
+
+    if (!produtos.length) {
+      tabelaBody.innerHTML = '<tr><td colspan="7" class="empty-msg">Nenhum produto encontrado.</td></tr>';
+      return;
+    }
+
+    tabelaBody.innerHTML = produtos.map(p => {
+      const cat = CATEGORIAS[p.categoria] || { nome: p.categoria, icone: '?' };
+      const precoFinal = p.preco_promo || p.preco;
+      const imgSrc = (p.imagens && p.imagens[0]) ? p.imagens[0] : p.imagem_url;
+      return `
+        <tr>
+          <td>${imgSrc
+            ? `<img src="${imgSrc}" class="td-img" alt="">`
+            : `<div class="td-placeholder">${cat.icone}</div>`
+          }</td>
+          <td class="td-nome">${p.nome}</td>
+          <td><span class="td-cat">${cat.icone} ${cat.nome}</span></td>
+          <td>
+            ${p.preco_promo ? `<span class="td-preco-promo">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</span><br>` : ''}
+            <span class="td-preco">R$ ${Number(precoFinal).toFixed(2).replace('.',',')}</span>
+          </td>
+          <td><span class="${p.disponivel ? 'badge-on' : 'badge-off'}">${p.disponivel ? 'Disponivel' : 'Indisponivel'}</span></td>
+          <td>${p.destaque ? '<span class="badge-destaque">Destaque</span>' : '<span style="color:rgba(255,255,255,0.2)">—</span>'}</td>
+          <td>
+            <div class="td-actions">
+              <button class="btn-edit" onclick="adminApp.editar('${p.id}')">Editar</button>
+              <button class="btn-del" onclick="adminApp.excluir('${p.id}','${p.nome.replace(/'/g,"\\'")}')">Excluir</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  };
+
+  /* ── Modal ── */
+  const abrirModal = (produto = null) => {
+    produtoForm.reset();
+    imagemArquivo = null;
+    imagemUrlAtual = null;
+    imgPreview.style.display = 'none';
+    imgPreview.src = '';
+    imgRemove.style.display = 'none';
+
+    if (produto) {
+      modalTitle.textContent = 'Editar Produto';
+      fId.value = produto.id;
+      fNome.value = produto.nome;
+      fCategoria.value = produto.categoria;
+      fPreco.value = produto.preco;
+      fPrecoPromo.value = produto.preco_promo || '';
+      fDescricao.value = produto.descricao || '';
+      fDisponivel.checked = produto.disponivel;
+      fDestaque.checked = produto.destaque;
+
+      if (produto.detalhes && typeof produto.detalhes === 'object') {
+        fDetalhes.value = Object.entries(produto.detalhes).map(([k,v]) => `${k}:${v}`).join(', ');
+      }
+
+      const imgSrc = (produto.imagens && produto.imagens[0]) ? produto.imagens[0] : produto.imagem_url;
+      if (imgSrc) {
+        imagemUrlAtual = imgSrc;
+        imgPreview.src = imgSrc;
+        imgPreview.style.display = 'block';
+        imgRemove.style.display = 'inline';
+      }
+    } else {
+      modalTitle.textContent = 'Novo Produto';
+      fId.value = '';
+      fDisponivel.checked = true;
+    }
+
+    modalOverlay.classList.add('open');
+    fNome.focus();
+  };
+
+  const fecharModal = () => {
+    modalOverlay.classList.remove('open');
+  };
+
+  /* ── Upload de imagem (preview local) ── */
+  fImagem.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast('Imagem muito grande (max 5MB)', 'error');
+      fImagem.value = '';
+      return;
+    }
+    imagemArquivo = file;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      imgPreview.src = ev.target.result;
+      imgPreview.style.display = 'block';
+      imgRemove.style.display = 'inline';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  imgRemove.addEventListener('click', (e) => {
+    e.stopPropagation();
+    imagemArquivo = null;
+    imagemUrlAtual = null;
+    imgPreview.style.display = 'none';
+    imgPreview.src = '';
+    imgRemove.style.display = 'none';
+    fImagem.value = '';
+  });
+
+  /* ── Salvar produto (async com Supabase) ── */
+  produtoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = produtoForm.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Salvando...';
+
+    try {
+      // Upload de imagem ao Supabase Storage se houver novo arquivo
+      let finalImageUrl = imagemUrlAtual;
+      let finalImagens = [];
+
+      if (imagemArquivo) {
+        toast('📤 Enviando imagem...', 'info');
+        const url = await produtosDB.uploadImagem(imagemArquivo, 'prod');
+        if (url) {
+          finalImageUrl = url;
+          finalImagens = [url];
+        }
+      } else if (imagemUrlAtual) {
+        finalImagens = [imagemUrlAtual];
+      }
+
+      const detalhesStr = fDetalhes.value.trim();
+      let detalhesObj = {};
+      if (detalhesStr) {
+        detalhesStr.split(',').forEach(par => {
+          const [k, ...v] = par.split(':');
+          if (k && v.length) detalhesObj[k.trim()] = v.join(':').trim();
+        });
+      }
+
+      const produto = {
+        nome: fNome.value.trim(),
+        categoria: fCategoria.value,
+        preco: parseFloat(fPreco.value) || 0,
+        preco_promo: fPrecoPromo.value ? parseFloat(fPrecoPromo.value) : null,
+        descricao: fDescricao.value.trim(),
+        detalhes: detalhesObj,
+        disponivel: fDisponivel.checked,
+        destaque: fDestaque.checked,
+        imagem_url: finalImageUrl,
+        imagens: finalImagens
+      };
+
+      if (fId.value) produto.id = fId.value;
+
+      const resultado = await produtosDB.salvar(produto);
+
+      if (resultado) {
+        fecharModal();
+        await renderStats();
+        await renderTabela();
+        toast(fId.value ? 'Produto atualizado!' : 'Produto cadastrado!');
+      } else {
+        toast('Erro ao salvar produto. Verifique o console.', 'error');
+      }
+    } catch (err) {
+      console.error('Erro ao salvar:', err);
+      toast('Erro inesperado ao salvar.', 'error');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  });
+
+  /* ── Eventos ── */
+  btnNovo.addEventListener('click', () => abrirModal());
+  modalClose.addEventListener('click', fecharModal);
+  btnCancelar.addEventListener('click', fecharModal);
+  modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) fecharModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharModal(); });
+
+  // Debounce para busca
+  let searchTimer;
+  toolSearch.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(renderTabela, 300);
+  });
+  toolCategoria.addEventListener('change', renderTabela);
+  toolStatus.addEventListener('change', renderTabela);
+
+  /* ── API global para onclick na tabela (async) ── */
+  window.adminApp = {
+    editar: async (id) => {
+      const p = await produtosDB.getById(id);
+      if (p) abrirModal(p);
+    },
+    excluir: async (id, nome) => {
+      if (confirm(`Excluir "${nome}"? Esta acao nao pode ser desfeita.`)) {
+        const ok = await produtosDB.deletar(id);
+        if (ok) {
+          await renderStats();
+          await renderTabela();
+          toast('Produto excluido.', 'info');
+        } else {
+          toast('Erro ao excluir produto.', 'error');
+        }
+      }
+    }
+  };
+
+  /* ── Init (async) ── */
+  const init = async () => {
+    popularCategorias();
+    await renderStats();
+    await renderTabela();
+  };
+
+  checkAuth();
+})();
+</script>
+</body>
+</html>

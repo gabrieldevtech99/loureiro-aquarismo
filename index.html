@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Loureiro Aquarismo — Loja especializada em aquários, peixes ornamentais, plantas aquáticas e acessórios em Fortaleza, Ceará.">
+  <meta name="keywords" content="aquarismo, aquário, peixes ornamentais, plantas aquáticas, Fortaleza, Ceará, loja de aquário">
+  <meta name="author" content="Loureiro Aquarismo">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Loureiro Aquarismo — Aquários e Peixes Ornamentais em Fortaleza">
+  <meta property="og:description" content="A maior loja de aquarismo de Fortaleza. Aquários, peixes ornamentais, plantas aquáticas, equipamentos e consultoria especializada.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Loureiro Aquarismo">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/categorias.css">
+  <link rel="stylesheet" href="css/produtos.css">
+  <link rel="stylesheet" href="css/sobre.css">
+  <link rel="stylesheet" href="css/contato.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/categoria.css">
+  <link rel="stylesheet" href="css/carrinho.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <title>Loureiro Aquarismo — Aquários e Peixes Ornamentais em Fortaleza</title>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/produtos-db.js"></script>
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="container">
+      <!-- Localização -->
+      <div class="top-bar__item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>Fortaleza, CE — R. Raimundo Neri, 372</span>
+      </div>
+      <!-- Avaliações -->
+      <div class="top-bar__item">
+        <span class="top-bar__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>4,8 — 120 avaliações no Google</span>
+      </div>
+      <!-- WhatsApp -->
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="top-bar__item top-bar__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+        <span>(85) 98530-1616</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER / NAVBAR ===== -->
+  <header id="header">
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <!-- Logo -->
+        <a href="#" class="navbar__logo">
+          <img src="assets/logo.png" alt="Loureiro Aquarismo">
+        </a>
+
+        <!-- Menu -->
+        <ul class="navbar__menu">
+          <li><a href="#hero" class="navbar__link active">Início</a></li>
+          <li><a href="/categoria?cat=agua-doce" class="navbar__link">Peixes</a></li>
+          <li><a href="/categoria?cat=aquarios" class="navbar__link">Aquários</a></li>
+          <li><a href="/categoria?cat=equipamentos" class="navbar__link">Equipamentos</a></li>
+          <li><a href="/categoria?cat=racoes" class="navbar__link">Rações</a></li>
+          <li><a href="/categoria?cat=marinho" class="navbar__link">Corais</a></li>
+          <li><a href="#sobre" class="navbar__link">Sobre</a></li>
+          <li><a href="#contato" class="navbar__link">Contato</a></li>
+        </ul>
+
+        <!-- Ações -->
+        <div class="navbar__actions">
+          <!-- Busca -->
+          <div class="navbar__search" id="navSearch">
+            <input type="text" class="navbar__search-input" placeholder="Buscar produtos...">
+            <button class="navbar__search-btn" aria-label="Buscar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+          </div>
+
+          <!-- Carrinho -->
+          <a href="/carrinho" class="navbar__carrinho" aria-label="Carrinho">&#x1F6D2;<span class="carrinho-badge" style="display:none">0</span></a>
+          <!-- WhatsApp -->
+          <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="navbar__whatsapp">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+            <span>Falar no WhatsApp</span>
+          </a>
+
+          <!-- Hamburger -->
+          <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Menu Mobile -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#hero" class="mobile-menu__link">Início</a>
+      <a href="/categoria?cat=agua-doce" class="mobile-menu__link">Peixes</a>
+      <a href="/categoria?cat=aquarios" class="mobile-menu__link">Aquários</a>
+      <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
+      <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
+      <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="#sobre" class="mobile-menu__link">Sobre</a>
+      <a href="#contato" class="mobile-menu__link">Contato</a>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="hero">
+
+    <!-- Bolhas animadas -->
+    <div class="hero__bubbles">
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+      <div class="hero__bubble"></div>
+    </div>
+
+    <div class="container hero__container">
+
+      <!-- ── Conteúdo Textual ── -->
+      <div class="hero__content">
+        <span class="hero__badge">&#x1F420; Especialistas em Aquarismo desde 2016</span>
+
+        <h1 class="hero__title">
+          O Mundo Aquático<br>
+          ao Alcance da <span>Sua Casa</span>
+        </h1>
+
+        <p class="hero__subtitle">
+          Peixes, corais, aquários e equipamentos selecionados com qualidade
+          premium em Fortaleza, CE.
+        </p>
+
+        <div class="hero__cta">
+          <a href="#categorias" class="btn-primary">Ver Catálogo</a>
+          <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="btn-secondary">
+            Falar no WhatsApp
+          </a>
+        </div>
+
+        <div class="hero__stats">
+          <div class="hero__stat">
+            <span class="hero__stat-icon">&#x1F41F;</span>
+            <span><strong>+500</strong> espécies</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-icon">&#x2B50;</span>
+            <span><strong>4,8</strong> no Google</span>
+          </div>
+          <div class="hero__stat">
+            <span class="hero__stat-icon">&#x1F4CD;</span>
+            <span><strong>Fortaleza</strong>, CE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Visual Direito ── -->
+      <div class="hero__visual">
+        <!-- Mini-cards flutuantes -->
+        <div class="hero__float-card">
+          <span class="hero__float-card-icon">&#x1F420;</span>
+          Peixes Exóticos
+        </div>
+        <div class="hero__float-card">
+          <span class="hero__float-card-icon">&#x1FAB8;</span>
+          Corais Marinhos
+        </div>
+        <div class="hero__float-card">
+          <span class="hero__float-card-icon">&#x1F52C;</span>
+          Equipamentos
+        </div>
+
+        <!-- Círculo principal com Slideshow -->
+        <div class="hero__circle">
+          <div class="hero-slideshow-wrap">
+
+            <div class="hero-slideshow" id="hero-slideshow">
+              <div class="hero-slide ativo">
+                <img src="https://images.unsplash.com/photo-1524704654690-b56c05c78a00?w=700&q=85"
+                     alt="Peixe Palhaço" loading="eager">
+                <div class="slide-caption">
+                  <span class="slide-nome">Peixe Palhaço</span>
+                  <span class="slide-cientifico">Amphiprioninae</span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=700&q=85"
+                     alt="Ciclídeo Africano" loading="lazy">
+                <div class="slide-caption">
+                  <span class="slide-nome">Ciclídeo Africano</span>
+                  <span class="slide-cientifico">Água Doce Exótico</span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=700&q=85"
+                     alt="Peixe Beta" loading="lazy">
+                <div class="slide-caption">
+                  <span class="slide-nome">Peixe Beta</span>
+                  <span class="slide-cientifico">Betta splendens</span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <img src="https://cdn.dlojavirtual.com/static1/107424/sku/peixes-de-agua-doce-oscar-albino-red-tiger-4-a-5-cm-1725542073436.png"
+                     alt="Oscar Albino" loading="lazy">
+                <div class="slide-caption">
+                  <span class="slide-nome">Oscar Albino</span>
+                  <span class="slide-cientifico">Reef Exotic</span>
+                </div>
+              </div>
+              <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=700&q=85"
+                     alt="Peixe Dourado" loading="lazy">
+                <div class="slide-caption">
+                  <span class="slide-nome">Peixe Dourado</span>
+                  <span class="slide-cientifico">Carassius auratus</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slideshow-dots" id="slideshow-dots">
+              <button class="dot ativo" onclick="irParaSlide(0)" aria-label="Slide 1"></button>
+              <button class="dot" onclick="irParaSlide(1)" aria-label="Slide 2"></button>
+              <button class="dot" onclick="irParaSlide(2)" aria-label="Slide 3"></button>
+              <button class="dot" onclick="irParaSlide(3)" aria-label="Slide 4"></button>
+              <button class="dot" onclick="irParaSlide(4)" aria-label="Slide 5"></button>
+            </div>
+
+            <button class="slide-arrow slide-prev" onclick="slideAnterior()" aria-label="Anterior">&#x2039;</button>
+            <button class="slide-arrow slide-next" onclick="slideProximo()" aria-label="Próximo">&#x203A;</button>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Wave divider -->
+    <div class="hero__wave">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,80 C240,120 480,40 720,80 C960,120 1200,40 1440,80 L1440,120 L0,120 Z" fill="var(--cinza-escuro)"/>
+      </svg>
+    </div>
+
+  </section>
+
+  <!-- ===== CATEGORIAS ===== -->
+  <section id="categorias" class="categorias">
+
+    <!-- Wave topo -->
+    <div class="categorias__wave-top">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 L0,40 C360,80 720,0 1080,40 C1260,60 1380,50 1440,40 L1440,0 Z" fill="#1A3A5C"/>
+      </svg>
+    </div>
+
+    <div class="container">
+
+      <!-- Cabeçalho -->
+      <div class="categorias__header">
+        <h2 class="categorias__title">Explore Nossas Categorias</h2>
+        <p class="categorias__subtitle">Tudo que seu aquário precisa em um só lugar</p>
+      </div>
+
+      <!-- Grid -->
+      <div class="categorias__grid">
+
+        <!-- 1 — Peixes de Água Doce -->
+        <a href="/categoria?cat=agua-doce" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/aguadoce.png" alt="Peixes de Água Doce" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Peixes de Água Doce</h3>
+            <p class="categorias__desc">Ciclídeos, Óscar, Aruanã, Bagres e muito mais</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- 2 — Peixes e Corais Marinhos -->
+        <a href="/categoria?cat=marinho" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/corais.png" alt="Peixes e Corais Marinhos" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Peixes e Corais Marinhos</h3>
+            <p class="categorias__desc">Espécies exóticas e corais selecionados</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- 3 — Aquários & Kits -->
+        <a href="/categoria?cat=aquarios" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/aquario.png" alt="Aquários e Kits" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Aquários &amp; Kits</h3>
+            <p class="categorias__desc">Aquários de todos os tamanhos, prontos para uso</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- 4 — Equipamentos -->
+        <a href="/categoria?cat=equipamentos" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/bomba.png" alt="Equipamentos" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Equipamentos</h3>
+            <p class="categorias__desc">Filtros, bombas, luminárias e termostatos</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- 5 — Rações Premium -->
+        <a href="/categoria?cat=racoes" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/raçãopremium.png" alt="Rações Premium" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Rações Premium</h3>
+            <p class="categorias__desc">Nutricon, Sera, Tetra, Tropical e mais</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+        <!-- 6 — Produtos de Manutenção -->
+        <a href="/categoria?cat=manutencao" class="categorias__card">
+          <div class="categorias__foto-wrap">
+            <img src="img/anticloro.png" alt="Produtos de Manutenção" class="categorias__foto" loading="lazy">
+            <div class="categorias__foto-overlay"></div>
+          </div>
+          <div class="categorias__card-text">
+            <h3 class="categorias__name">Produtos de Manutenção</h3>
+            <p class="categorias__desc">Anticloro, condicionadores, medicamentos</p>
+            <span class="categorias__btn">
+              Ver mais <span class="categorias__btn-arrow">&rarr;</span>
+            </span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Wave base -->
+    <div class="categorias__wave-bottom">
+      <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,40 C360,0 720,80 1080,40 C1260,20 1380,30 1440,40 L1440,80 L0,80 Z" fill="var(--cinza-escuro)"/>
+      </svg>
+    </div>
+
+  </section>
+
+  <!-- ===== DESTAQUES ===== -->
+  <section id="destaques" class="destaques">
+    <div class="container">
+
+      <!-- Cabeçalho -->
+      <div class="destaques__header">
+        <h2 class="destaques__title">Destaques da Semana</h2>
+        <p class="destaques__subtitle">Os produtos mais procurados pelos aquaristas de Fortaleza</p>
+      </div>
+
+      <!-- Grid de Produtos (renderizado dinamicamente pelo JS) -->
+      <div class="destaques__grid" id="destaquesGrid">
+        <!-- Preenchido por renderizarDestaques() -->
+      </div>
+
+      <!-- Ver todos -->
+      <div class="destaques__ver-todos">
+        <a href="#" class="btn-primary">Ver Todos os Produtos &rarr;</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="sobre" class="sobre">
+    <div class="container sobre__container">
+
+      <!-- Texto -->
+      <div class="sobre__content">
+        <span class="sobre__label">Quem Somos</span>
+
+        <h2 class="sobre__title">Paixão por Aquarismo<br>em Fortaleza</h2>
+
+        <p class="sobre__text">
+          O Loureiro Aquarismo é a loja referência em aquarismo de Fortaleza, Ceará. Com anos
+          de experiência e dedicação, oferecemos as melhores espécies de peixes de água doce e
+          marinhos, corais selecionados, equipamentos de qualidade e produtos para manutenção
+          do seu aquário.
+        </p>
+        <p class="sobre__text">
+          Nossa equipe é apaixonada pelo universo aquático e está sempre pronta para te
+          orientar, seja você iniciante ou aquarista experiente.
+        </p>
+
+        <ul class="sobre__list">
+          <li class="sobre__list-item">
+            <span class="sobre__list-icon">&#x2713;</span>
+            Peixes e corais saudáveis, com procedência garantida
+          </li>
+          <li class="sobre__list-item">
+            <span class="sobre__list-icon">&#x2713;</span>
+            Atendimento especializado e personalizado
+          </li>
+          <li class="sobre__list-item">
+            <span class="sobre__list-icon">&#x2713;</span>
+            Entrega em Fortaleza e região
+          </li>
+          <li class="sobre__list-item">
+            <span class="sobre__list-icon">&#x2713;</span>
+            Suporte pelo WhatsApp 5 dias por semana
+          </li>
+        </ul>
+
+        <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="btn-primary">Fale Conosco</a>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="sobre__stats">
+        <div class="sobre__stat-card">
+          <span class="sobre__stat-icon">&#x1F420;</span>
+          <span class="sobre__stat-number" data-target="500" data-prefix="+">+500</span>
+          <span class="sobre__stat-label">Espécies disponíveis</span>
+        </div>
+        <div class="sobre__stat-card">
+          <span class="sobre__stat-icon">&#x2B50;</span>
+          <span class="sobre__stat-number" data-target="4.8" data-decimal="true">4,8</span>
+          <span class="sobre__stat-label">Avaliação média no Google</span>
+        </div>
+        <div class="sobre__stat-card">
+          <span class="sobre__stat-icon">&#x1F465;</span>
+          <span class="sobre__stat-number" data-target="1000" data-prefix="+">+1.000</span>
+          <span class="sobre__stat-label">Clientes satisfeitos</span>
+        </div>
+        <div class="sobre__stat-card">
+          <span class="sobre__stat-icon">&#x1F4CD;</span>
+          <span class="sobre__stat-number">2016</span>
+          <span class="sobre__stat-label">Em Fortaleza desde</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== AVALIAÇÕES ===== -->
+  <section id="avaliacoes" class="avaliacoes">
+    <div class="container">
+
+      <!-- Cabeçalho -->
+      <div class="avaliacoes__header">
+        <h2 class="avaliacoes__title">
+          O que nossos clientes dizem
+          <span class="avaliacoes__title-stars"> &#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        </h2>
+      </div>
+
+      <!-- Resumo geral -->
+      <div class="avaliacoes__summary">
+        <span class="avaliacoes__big-score">4,8</span>
+        <div class="avaliacoes__stars-row">
+          <svg class="avaliacoes__star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="avaliacoes__star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="avaliacoes__star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="avaliacoes__star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg class="avaliacoes__star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <span class="avaliacoes__count">Baseado em 120 avaliações no Google</span>
+        <a href="#" target="_blank" rel="noopener" class="avaliacoes__google-link">
+          <!-- Google "G" colorido -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Ver todas no Google
+        </a>
+      </div>
+
+      <!-- Carrossel -->
+      <div class="avaliacoes__carousel-wrapper">
+        <button class="avaliacoes__nav-btn avaliacoes__nav-btn--prev" aria-label="Anterior">
+          <svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
+
+        <div class="avaliacoes__carousel" id="avaliacoesCarousel">
+
+          <!-- Avaliação 1 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">J</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">João M.</span>
+                <span class="avaliacoes__card-date">2 semanas atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Melhor loja de aquarismo de Fortaleza! Atendimento incrível, peixes saudáveis e variedade enorme. Já comprei várias vezes e sempre fico satisfeito!
+            </p>
+          </div>
+
+          <!-- Avaliação 2 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">A</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">Ana Paula S.</span>
+                <span class="avaliacoes__card-date">1 mês atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Loja excelente! Me ajudaram a montar meu primeiro aquário do zero. Super atenciosos e preços justos. Recomendo demais!
+            </p>
+          </div>
+
+          <!-- Avaliação 3 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">C</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">Carlos R.</span>
+                <span class="avaliacoes__card-date">3 semanas atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Comprei um coral hammer que estava procurando há meses. Qualidade top e chegou muito bem embalado. Voltarei com certeza!
+            </p>
+          </div>
+
+          <!-- Avaliação 4 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">F</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">Fernanda L.</span>
+                <span class="avaliacoes__card-date">1 semana atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Atendimento pelo WhatsApp é rápido e eficiente. Tirei todas minhas dúvidas antes de comprar. Loja de confiança!
+            </p>
+          </div>
+
+          <!-- Avaliação 5 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">R</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">Ricardo T.</span>
+                <span class="avaliacoes__card-date">2 meses atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Variedade impressionante de peixes. Encontrei espécies que não via em outras lojas da cidade. Equipe muito conhecedora!
+            </p>
+          </div>
+
+          <!-- Avaliação 6 -->
+          <div class="avaliacoes__card">
+            <div class="avaliacoes__card-top">
+              <div class="avaliacoes__avatar">P</div>
+              <div class="avaliacoes__card-info">
+                <span class="avaliacoes__card-name">Patrícia A.</span>
+                <span class="avaliacoes__card-date">1 mês atrás</span>
+              </div>
+              <div class="avaliacoes__google-badge">
+                <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Google
+              </div>
+            </div>
+            <div class="avaliacoes__card-stars">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <p class="avaliacoes__card-text">
+              Fui presencialmente e adorei a loja! Tudo organizado, peixes bonitos e saudáveis. Me senti em outro mundo aquático!
+            </p>
+          </div>
+
+        </div>
+
+        <button class="avaliacoes__nav-btn avaliacoes__nav-btn--next" aria-label="Próximo">
+          <svg viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CONTATO ===== -->
+  <section id="contato" class="contato">
+    <div class="container contato__container">
+
+      <!-- ── Formulário ── -->
+      <div class="contato__form-wrapper">
+        <span class="contato__label">Entre em Contato</span>
+        <h2 class="contato__title">Fale com a Gente</h2>
+
+        <form class="contato__form" id="contatoForm" autocomplete="off">
+          <!-- Nome -->
+          <div class="contato__field">
+            <input type="text" class="contato__input" id="contatoNome" placeholder=" " required>
+            <label class="contato__float-label" for="contatoNome">Nome completo *</label>
+          </div>
+
+          <!-- E-mail -->
+          <div class="contato__field">
+            <input type="email" class="contato__input" id="contatoEmail" placeholder=" ">
+            <label class="contato__float-label" for="contatoEmail">E-mail</label>
+          </div>
+
+          <!-- Telefone -->
+          <div class="contato__field">
+            <input type="tel" class="contato__input" id="contatoTelefone" placeholder=" " required>
+            <label class="contato__float-label" for="contatoTelefone">Telefone / WhatsApp *</label>
+          </div>
+
+          <!-- Assunto -->
+          <div class="contato__field contato__field--select">
+            <select class="contato__select" id="contatoAssunto">
+              <option value="Orçamento de Aquário">Orçamento de Aquário</option>
+              <option value="Consulta sobre Peixes">Consulta sobre Peixes</option>
+              <option value="Informações de Produto">Informações de Produto</option>
+              <option value="Outros">Outros</option>
+            </select>
+            <label class="contato__float-label">Assunto</label>
+          </div>
+
+          <!-- Mensagem -->
+          <div class="contato__field contato__field--textarea">
+            <textarea class="contato__textarea" id="contatoMensagem" rows="5" placeholder=" " required></textarea>
+            <label class="contato__float-label" for="contatoMensagem">Sua mensagem *</label>
+          </div>
+
+          <!-- Enviar -->
+          <button type="submit" class="contato__submit">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+            Enviar via WhatsApp
+          </button>
+        </form>
+      </div>
+
+      <!-- ── Informações + Mapa ── -->
+      <div class="contato__info-wrapper">
+
+        <div class="contato__info-cards">
+          <!-- Endereço -->
+          <div class="contato__info-card">
+            <div class="contato__info-icon">&#x1F4CD;</div>
+            <div class="contato__info-content">
+              <span class="contato__info-title">Endereço</span>
+              <p class="contato__info-text">
+                R. Raimundo Neri, 372 — Parque São José<br>
+                Fortaleza — CE, 60730-220
+              </p>
+            </div>
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="contato__info-card">
+            <div class="contato__info-icon">&#x1F4F1;</div>
+            <div class="contato__info-content">
+              <span class="contato__info-title">WhatsApp</span>
+              <p class="contato__info-text">
+                <a href="https://wa.me/5585985301616" target="_blank" rel="noopener">(85) 98530-1616</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Avaliação -->
+          <div class="contato__info-card">
+            <div class="contato__info-icon">&#x2B50;</div>
+            <div class="contato__info-content">
+              <span class="contato__info-title">Avaliação</span>
+              <p class="contato__info-text">
+                4,8 no Google Maps — 120 avaliações
+              </p>
+            </div>
+          </div>
+
+          <!-- Horário -->
+          <div class="contato__info-card">
+            <div class="contato__info-icon">&#x1F550;</div>
+            <div class="contato__info-content">
+              <span class="contato__info-title">Horário de Funcionamento</span>
+              <p class="contato__info-text">
+                Segunda: Fechado<br>
+                Terça a Sexta: 09h às 19h<br>
+                Sábado: 09h às 18h<br>
+                Domingo: Fechado
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mapa -->
+        <div class="contato__map">
+          <iframe
+            src="https://maps.google.com/maps?q=R.+Raimundo+Neri,+372,+Fortaleza,+CE&output=embed"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Localização Loureiro Aquarismo">
+          </iframe>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer" class="footer">
+
+    <!-- Wave dourado topo -->
+    <div class="footer__wave-top">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#0A1A2E"/>
+        <path d="M0,58 L1440,58" stroke="rgba(201,168,76,0.25)" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+
+    <!-- Bolhas decorativas -->
+    <div class="footer__bubbles">
+      <div class="footer__bubble"></div>
+      <div class="footer__bubble"></div>
+      <div class="footer__bubble"></div>
+      <div class="footer__bubble"></div>
+      <div class="footer__bubble"></div>
+      <div class="footer__bubble"></div>
+    </div>
+
+    <!-- Grid principal -->
+    <div class="container">
+      <div class="footer__content">
+
+        <!-- Coluna 1 — Brand -->
+        <div class="footer__brand">
+          <a href="#" class="footer__logo">
+            <img src="assets/logo.png" alt="Loureiro Aquarismo">
+          </a>
+          <span class="footer__tagline">Especialistas em Aquarismo em Fortaleza, CE</span>
+          <p class="footer__desc">
+            Sua loja completa de aquarismo. Peixes, corais, equipamentos e
+            tudo para o seu aquário, com atendimento especializado e entrega em Fortaleza.
+          </p>
+
+          <!-- Redes sociais -->
+          <div class="footer__socials">
+            <!-- Instagram -->
+            <a href="#" class="footer__social-link footer__social-link--instagram" aria-label="Instagram" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </a>
+            <!-- Facebook -->
+            <a href="#" class="footer__social-link footer__social-link--facebook" aria-label="Facebook" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <!-- YouTube -->
+            <a href="#" class="footer__social-link footer__social-link--youtube" aria-label="YouTube" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <!-- WhatsApp -->
+            <a href="https://wa.me/5585985301616" class="footer__social-link footer__social-link--whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Coluna 2 — Navegação -->
+        <div class="footer__nav">
+          <h3 class="footer__col-title">Links Rápidos</h3>
+          <nav class="footer__links">
+            <a href="#hero" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Início</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Aquários</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Equipamentos</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Rações</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Corais</a>
+            <a href="#sobre" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Sobre Nós</a>
+            <a href="#contato" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Contato</a>
+          </nav>
+        </div>
+
+        <!-- Coluna 3 — Categorias -->
+        <div class="footer__categories">
+          <h3 class="footer__col-title">Categorias</h3>
+          <nav class="footer__links">
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes de Água Doce</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes Marinhos</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Corais LPS</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Corais SPS</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Filtros</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Bombas</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Termostatos</a>
+            <a href="#categorias" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Rações Premium</a>
+          </nav>
+        </div>
+
+        <!-- Coluna 4 — Contato -->
+        <div class="footer__contact">
+          <h3 class="footer__col-title">Contato</h3>
+          <div class="footer__contact-list">
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4CD;</span>
+              <span>R. Raimundo Neri, 372<br>Parque São José, Fortaleza — CE</span>
+            </div>
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4F1;</span>
+              <span><a href="https://wa.me/5585985301616" target="_blank" rel="noopener">(85) 98530-1616</a></span>
+            </div>
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x2B50;</span>
+              <span>
+                <span class="footer__rating-badge">
+                  <span class="footer__rating-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                  4,8 — 120 avaliações
+                </span>
+              </span>
+            </div>
+            <a href="https://maps.google.com/maps?q=R.+Raimundo+Neri,+372,+Fortaleza,+CE" target="_blank" rel="noopener" class="footer__maps-btn">
+              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+              Abrir no Google Maps
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer__bottom">
+      <div class="container">
+        <div class="footer__bottom-inner">
+          <span class="footer__copyright">&copy; 2025 Loureiro Aquarismo — Todos os direitos reservados</span>
+          <span class="footer__bottom-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+          <span class="footer__bottom-contact">Fortaleza, Ceará — (85) 98530-1616</span>
+        </div>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/carrinho-db.js"></script>
+  <script src="js/main.js"></script>
+  <script>document.addEventListener('DOMContentLoaded',function(){carrinhoDB._atualizarContador();});</script>
+
+</body>
+</html>

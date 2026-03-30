@@ -1,0 +1,416 @@
+/* ============================================
+   LOUREIRO AQUARISMO — Produtos em Destaque
+   ============================================ */
+
+/* ── Seção ── */
+.destaques {
+  position: relative;
+  background: linear-gradient(180deg, var(--cinza-escuro) 0%, #0e2640 100%);
+  padding: var(--spacing-xxl) 0 calc(var(--spacing-xxl) + 20px);
+  overflow: hidden;
+}
+
+/* ── Cabeçalho ── */
+.destaques__header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.destaques__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--dourado);
+  margin-bottom: var(--spacing-sm);
+}
+
+.destaques__subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.destaques__header::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+  border-radius: var(--radius-full);
+  margin: var(--spacing-md) auto 0;
+}
+
+/* ── Filtros / Tabs ── */
+.destaques__filters {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-xl);
+}
+
+.destaques__tab {
+  padding: 10px 22px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.destaques__tab:hover {
+  border-color: var(--dourado);
+  color: var(--dourado);
+}
+
+.destaques__tab.active {
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-claro));
+  color: var(--cinza-escuro);
+  border-color: var(--dourado);
+  box-shadow: 0 4px 16px var(--sombra-dourado);
+}
+
+/* ── Grid de Produtos ── */
+.destaques__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-lg);
+}
+
+/* ── Card de Produto ── */
+.destaques__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    transform var(--transition-med),
+    box-shadow var(--transition-med),
+    border-color var(--transition-med);
+}
+
+.destaques__card:hover {
+  transform: scale(1.03);
+  border-color: rgba(26, 143, 191, 0.3);
+  box-shadow: 0 16px 48px rgba(26, 143, 191, 0.15);
+}
+
+.destaques__card:hover .destaques__name {
+  color: var(--dourado);
+  transition: color 0.2s;
+}
+
+/* Animação de entrada */
+.destaques__card {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.destaques__card.visible {
+  animation: prodCardIn 0.5s ease forwards;
+}
+
+.destaques__card:nth-child(1).visible { animation-delay: 0.05s; }
+.destaques__card:nth-child(2).visible { animation-delay: 0.1s; }
+.destaques__card:nth-child(3).visible { animation-delay: 0.15s; }
+.destaques__card:nth-child(4).visible { animation-delay: 0.2s; }
+.destaques__card:nth-child(5).visible { animation-delay: 0.25s; }
+.destaques__card:nth-child(6).visible { animation-delay: 0.3s; }
+.destaques__card:nth-child(7).visible { animation-delay: 0.35s; }
+.destaques__card:nth-child(8).visible { animation-delay: 0.4s; }
+
+@keyframes prodCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.destaques__card.visible:hover {
+  transform: scale(1.03);
+}
+
+/* Transição de filtro (fadeOut antes de esconder) */
+.destaques__card.filtering {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Esconder card filtrado */
+.destaques__card.hidden {
+  display: none;
+}
+
+/* ── Imagem / Placeholder ── */
+.destaques__img {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  overflow: hidden;
+}
+
+/* Gradientes placeholder por categoria */
+.destaques__img--peixe {
+  background: linear-gradient(135deg, #0d3b5e 0%, #1a6d9e 50%, #0d4f7c 100%);
+}
+
+.destaques__img--marinho {
+  background: linear-gradient(135deg, #0e2640 0%, #1a8fbf 40%, #2563a8 100%);
+}
+
+.destaques__img--equipamento {
+  background: linear-gradient(135deg, #0a1a2e 0%, #1a3a5c 50%, #2563a8 100%);
+}
+
+.destaques__img--racao {
+  background: linear-gradient(135deg, #2e1a0a 0%, #5c3a1a 50%, #7c4f0d 100%);
+}
+
+/* ── Badges ── */
+.destaques__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: var(--radius-full);
+  z-index: 2;
+}
+
+.destaques__badge--promo {
+  background-color: var(--vermelho-acento);
+  color: var(--branco);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.destaques__badge--exclusivo {
+  background: linear-gradient(135deg, var(--dourado), var(--dourado-claro));
+  color: var(--cinza-escuro);
+}
+
+/* ── Favorito (coração) ── */
+.destaques__fav {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 26, 46, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    transform var(--transition-fast);
+  z-index: 2;
+}
+
+.destaques__fav svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 2;
+  transition: fill var(--transition-fast), stroke var(--transition-fast);
+}
+
+.destaques__fav:hover {
+  background: rgba(192, 57, 43, 0.25);
+  transform: scale(1.15);
+}
+
+.destaques__fav:hover svg {
+  stroke: var(--vermelho-acento);
+}
+
+.destaques__fav.liked svg {
+  fill: var(--vermelho-acento);
+  stroke: var(--vermelho-acento);
+}
+
+.destaques__fav.liked {
+  animation: heartBeat 0.4s ease;
+}
+
+@keyframes heartBeat {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.3); }
+  60%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* ── Corpo do card ── */
+.destaques__body {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  flex-grow: 1;
+  gap: var(--spacing-xs);
+}
+
+.destaques__category {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--azul-agua);
+}
+
+.destaques__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--branco);
+  line-height: 1.3;
+}
+
+.destaques__price {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--dourado);
+  margin-top: var(--spacing-xs);
+}
+
+.destaques__price-cents {
+  font-size: 0.8rem;
+  vertical-align: super;
+}
+
+/* ── Botão WhatsApp do produto ── */
+.destaques__whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-top: var(--spacing-sm);
+  background-color: #25D366;
+  color: var(--branco);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.destaques__whatsapp svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.destaques__whatsapp:hover {
+  background-color: #1ebe5c;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+}
+
+/* ── Botão "Ver Todos" ── */
+.destaques__ver-todos {
+  text-align: center;
+  margin-top: var(--spacing-xxl);
+}
+
+.destaques__ver-todos .btn-primary {
+  padding: 14px 40px;
+  font-size: 1rem;
+}
+
+/* ============================================
+   Responsivo
+   ============================================ */
+@media (max-width: 1024px) {
+  .destaques__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .destaques {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .destaques__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .destaques__img {
+    height: 150px;
+    font-size: 44px;
+  }
+
+  .destaques__filters {
+    gap: 6px;
+  }
+
+  .destaques__tab {
+    padding: 8px 16px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .destaques__grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .destaques__filters {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: var(--spacing-sm);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .destaques__tab {
+    flex-shrink: 0;
+  }
+
+  .destaques__ver-todos .btn-primary {
+    width: 100%;
+  }
+}

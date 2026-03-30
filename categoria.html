@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Loureiro Aquarismo — Produtos de aquarismo em Fortaleza, CE.">
+  <meta name="author" content="Loureiro Aquarismo">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/categoria.css">
+  <link rel="stylesheet" href="css/carrinho.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <title id="pageTitle">Categoria — Loureiro Aquarismo</title>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/produtos-db.js"></script>
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar__item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>Fortaleza, CE — R. Raimundo Neri, 372</span>
+      </div>
+      <div class="top-bar__item">
+        <span class="top-bar__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>4,8 — 120 avaliações no Google</span>
+      </div>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="top-bar__item top-bar__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+        <span>(85) 98530-1616</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER / NAVBAR ===== -->
+  <header id="header">
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <a href="/" class="navbar__logo">
+          <img src="assets/logo.png" alt="Loureiro Aquarismo">
+        </a>
+        <ul class="navbar__menu" id="navMenu">
+          <li><a href="/" class="navbar__link">Início</a></li>
+          <li><a href="/categoria?cat=agua-doce" class="navbar__link" data-cat="agua-doce">Peixes</a></li>
+          <li><a href="/categoria?cat=aquarios" class="navbar__link" data-cat="aquarios">Aquários</a></li>
+          <li><a href="/categoria?cat=equipamentos" class="navbar__link" data-cat="equipamentos">Equipamentos</a></li>
+          <li><a href="/categoria?cat=racoes" class="navbar__link" data-cat="racoes">Rações</a></li>
+          <li><a href="/categoria?cat=marinho" class="navbar__link" data-cat="marinho">Corais</a></li>
+          <li><a href="/#sobre" class="navbar__link">Sobre</a></li>
+          <li><a href="/#contato" class="navbar__link">Contato</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <div class="navbar__search" id="navSearch">
+            <input type="text" class="navbar__search-input" placeholder="Buscar produtos...">
+            <button class="navbar__search-btn" aria-label="Buscar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+          </div>
+          <a href="/carrinho" class="navbar__carrinho" aria-label="Carrinho">&#x1F6D2;<span class="carrinho-badge" style="display:none">0</span></a>
+          <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="navbar__whatsapp">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+            <span>Falar no WhatsApp</span>
+          </a>
+          <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Abrir menu">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-menu__link">Início</a>
+      <a href="/categoria?cat=agua-doce" class="mobile-menu__link">Peixes</a>
+      <a href="/categoria?cat=aquarios" class="mobile-menu__link">Aquários</a>
+      <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
+      <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
+      <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="/#sobre" class="mobile-menu__link">Sobre</a>
+      <a href="/#contato" class="mobile-menu__link">Contato</a>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== CONTEÚDO ===== -->
+  <main class="categoria-page">
+    <div class="container">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Navegação">
+        <a href="/">Início</a>
+        <span class="breadcrumb__sep">&#x203A;</span>
+        <span class="breadcrumb__current" id="breadcrumbCat">Categoria</span>
+      </nav>
+
+      <!-- Header da categoria -->
+      <div class="categoria__header">
+        <span class="categoria__icon" id="catIcon"></span>
+        <h1 class="categoria__title" id="catTitle">Categoria</h1>
+        <span class="categoria__count" id="catCount"></span>
+      </div>
+
+      <!-- Filtros -->
+      <div class="categoria__filters">
+        <div class="categoria__filter-group">
+          <span class="categoria__filter-label">Ordenar:</span>
+          <select class="categoria__filter-select" id="filterSort">
+            <option value="recentes">Mais recentes</option>
+            <option value="menor-preco">Menor preço</option>
+            <option value="maior-preco">Maior preço</option>
+            <option value="nome-az">Nome A-Z</option>
+          </select>
+        </div>
+        <div class="categoria__filter-group">
+          <span class="categoria__filter-label">Mostrar:</span>
+          <select class="categoria__filter-select" id="filterShow">
+            <option value="todos">Todos</option>
+            <option value="disponiveis">Disponíveis</option>
+            <option value="promocao">Em promoção</option>
+          </select>
+        </div>
+        <div class="categoria__filter-group" style="flex:1">
+          <input type="text" class="categoria__filter-input" id="filterSearch" placeholder="Buscar por nome...">
+        </div>
+      </div>
+
+      <!-- Grid de produtos (renderizado via JS) -->
+      <div class="categoria__grid" id="categoriaGrid">
+        <!-- Preenchido dinamicamente -->
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer" class="footer">
+    <div class="footer__wave-top">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#0A1A2E"/>
+        <path d="M0,58 L1440,58" stroke="rgba(201,168,76,0.25)" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="footer__bubbles">
+      <div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div>
+      <div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div>
+    </div>
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <a href="/" class="footer__logo"><img src="assets/logo.png" alt="Loureiro Aquarismo"></a>
+          <span class="footer__tagline">Especialistas em Aquarismo em Fortaleza, CE</span>
+          <p class="footer__desc">Sua loja completa de aquarismo em Fortaleza.</p>
+        </div>
+        <div class="footer__nav">
+          <h3 class="footer__col-title">Links Rápidos</h3>
+          <nav class="footer__links">
+            <a href="/" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Início</a>
+            <a href="/#sobre" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Sobre Nós</a>
+            <a href="/#contato" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Contato</a>
+          </nav>
+        </div>
+        <div class="footer__categories">
+          <h3 class="footer__col-title">Categorias</h3>
+          <nav class="footer__links">
+            <a href="/categoria?cat=agua-doce" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes de Água Doce</a>
+            <a href="/categoria?cat=marinho" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Marinhos &amp; Corais</a>
+            <a href="/categoria?cat=equipamentos" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Equipamentos</a>
+            <a href="/categoria?cat=racoes" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Rações</a>
+          </nav>
+        </div>
+        <div class="footer__contact">
+          <h3 class="footer__col-title">Contato</h3>
+          <div class="footer__contact-list">
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4F1;</span>
+              <span><a href="https://wa.me/5585985301616" target="_blank" rel="noopener">(85) 98530-1616</a></span>
+            </div>
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4CD;</span>
+              <span>R. Raimundo Neri, 372 — Fortaleza, CE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <div class="footer__bottom-inner">
+          <span class="footer__copyright">&copy; 2025 Loureiro Aquarismo — Todos os direitos reservados</span>
+          <span class="footer__bottom-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+          <span class="footer__bottom-contact">Fortaleza, Ceará — (85) 98530-1616</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/carrinho-db.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() { carrinhoDB._atualizarContador(); });
+  </script>
+  <script>
+    /* ============================================
+       Página de Categoria — Lógica Supabase
+       ============================================ */
+    const CATS_INFO = {
+      'agua-doce':    { nome: 'Peixes de Água Doce', icone: '🐠' },
+      'marinho':      { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
+      'aquarios':     { nome: 'Aquários & Kits', icone: '🏠' },
+      'equipamentos': { nome: 'Equipamentos', icone: '⚙️' },
+      'racoes':       { nome: 'Rações Premium', icone: '🍖' },
+      'manutencao':   { nome: 'Produtos de Manutenção', icone: '💧' }
+    };
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params   = new URLSearchParams(window.location.search);
+      const catSlug  = params.get('cat') || 'agua-doce';
+      const catInfo  = CATS_INFO[catSlug];
+
+      if (!catInfo) {
+        document.getElementById('catTitle').textContent = 'Categoria não encontrada';
+        return;
+      }
+
+      // Preencher cabeçalho
+      document.getElementById('pageTitle').textContent = catInfo.nome + ' — Loureiro Aquarismo';
+      document.getElementById('breadcrumbCat').textContent = catInfo.nome;
+      document.getElementById('catIcon').textContent = catInfo.icone;
+      document.getElementById('catTitle').textContent = catInfo.nome;
+
+      // Destacar link ativo no menu
+      document.querySelectorAll('.navbar__link[data-cat]').forEach(link => {
+        link.classList.toggle('active', link.dataset.cat === catSlug);
+      });
+
+      const grid = document.getElementById('categoriaGrid');
+      const filterSort = document.getElementById('filterSort');
+      const filterShow = document.getElementById('filterShow');
+      const filterSearch = document.getElementById('filterSearch');
+
+      // Loading
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:rgba(255,255,255,0.5);"><div style="width:36px;height:36px;border:3px solid rgba(26,143,191,0.3);border-top-color:#1A8FBF;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div><p style="font-family:'Lato',sans-serif;">Carregando...</p></div>`;
+
+      // Buscar produtos da categoria
+      let todosCategoria = await produtosDB.getByCategoria(catSlug);
+
+      const renderizar = () => {
+        let produtos = [...todosCategoria];
+
+        // Filtro "Mostrar"
+        const show = filterShow.value;
+        if (show === 'promocao') {
+          produtos = produtos.filter(p => p.preco_promo);
+        }
+
+        // Filtro de busca
+        const busca = filterSearch.value.trim().toLowerCase();
+        if (busca) {
+          produtos = produtos.filter(p =>
+            p.nome.toLowerCase().includes(busca) ||
+            (p.descricao && p.descricao.toLowerCase().includes(busca))
+          );
+        }
+
+        // Ordenação
+        const sort = filterSort.value;
+        if (sort === 'menor-preco') {
+          produtos.sort((a, b) => (a.preco_promo || a.preco) - (b.preco_promo || b.preco));
+        } else if (sort === 'maior-preco') {
+          produtos.sort((a, b) => (b.preco_promo || b.preco) - (a.preco_promo || a.preco));
+        } else if (sort === 'nome-az') {
+          produtos.sort((a, b) => a.nome.localeCompare(b.nome));
+        }
+
+        // Atualizar contagem
+        const catCountEl = document.getElementById('catCount');
+        if (catCountEl) catCountEl.textContent = produtos.length + ' produto' + (produtos.length !== 1 ? 's' : '');
+
+        if (produtos.length === 0) {
+          grid.innerHTML = `
+            <div class="categoria__empty">
+              <div class="categoria__empty-icon">${catInfo.icone}</div>
+              <p class="categoria__empty-text">Nenhum produto nesta categoria ainda.</p>
+              <a href="/" class="categoria__empty-link">&larr; Voltar ao início</a>
+            </div>`;
+          return;
+        }
+
+        grid.innerHTML = produtos.map(p => {
+          const precoFinal = p.preco_promo || p.preco;
+          const precoStr = Number(precoFinal).toFixed(2).replace('.', ',');
+          const descCurta = p.descricao ? p.descricao.slice(0, 80) + (p.descricao.length > 80 ? '...' : '') : '';
+          const imgSrc = (p.imagens && p.imagens[0]) ? p.imagens[0] : p.imagem_url;
+          const produtoUrl = '/produto?id=' + encodeURIComponent(p.id);
+
+          return `
+            <a href="${produtoUrl}" class="card-produto" data-id="${p.id}" style="cursor:pointer;text-decoration:none;color:inherit;display:block">
+              <div class="card-imagem">
+                ${imgSrc
+                  ? `<img src="${imgSrc}" alt="${p.nome}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
+                  : `<div class="placeholder-img cat-${p.categoria}">${catInfo.icone}</div>`
+                }
+                ${p.disponivel ? '<span class="badge-disponivel" title="Disponível"></span>' : ''}
+                ${p.preco_promo ? '<span class="badge-promo">PROMOÇÃO</span>' : ''}
+              </div>
+              <div class="card-info">
+                <h3 class="card-nome">${p.nome}</h3>
+                ${descCurta ? `<p class="card-descricao">${descCurta}</p>` : ''}
+                <div class="card-preco">
+                  ${p.preco_promo ? `<span class="preco-de">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</span>` : ''}
+                  <span class="preco-por">R$ ${precoStr}</span>
+                </div>
+                <button class="btn-whatsapp" onclick="event.preventDefault();event.stopPropagation();consultarWhatsApp('${p.nome.replace(/'/g,"\\'")}', 'R$ ${precoStr}')">
+                  &#x1F4AC; Consultar no WhatsApp
+                </button>
+              </div>
+            </a>`;
+        }).join('');
+      };
+
+      // Eventos dos filtros
+      filterSort.addEventListener('change', renderizar);
+      filterShow.addEventListener('change', renderizar);
+      filterSearch.addEventListener('input', renderizar);
+
+      renderizar();
+    });
+
+    function consultarWhatsApp(nome, preco) {
+      const msg = `Olá! Vi no site e tenho interesse no produto: *${nome}* por ${preco}. Está disponível?`;
+      window.open(`https://wa.me/5585985301616?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+  </script>
+
+</body>
+</html>

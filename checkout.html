@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Loureiro Aquarismo — Finalizar pedido.">
+  <meta name="author" content="Loureiro Aquarismo">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/carrinho.css">
+  <link rel="stylesheet" href="css/checkout.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <title>Finalizar Pedido — Loureiro Aquarismo</title>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/produtos-db.js"></script>
+  <script src="js/carrinho-db.js"></script>
+</head>
+<body>
+
+  <!-- ===== TOP BAR ===== -->
+  <div class="top-bar">
+    <div class="container">
+      <div class="top-bar__item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>Fortaleza, CE — R. Raimundo Neri, 372</span>
+      </div>
+      <div class="top-bar__item">
+        <span class="top-bar__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>4,8 — 120 avaliações no Google</span>
+      </div>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="top-bar__item top-bar__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+        <span>(85) 98530-1616</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== HEADER / NAVBAR ===== -->
+  <header id="header">
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <a href="/" class="navbar__logo"><img src="assets/logo.png" alt="Loureiro Aquarismo"></a>
+        <ul class="navbar__menu" id="navMenu">
+          <li><a href="/" class="navbar__link">Início</a></li>
+          <li><a href="/categoria?cat=agua-doce" class="navbar__link" data-cat="agua-doce">Peixes</a></li>
+          <li><a href="/categoria?cat=aquarios" class="navbar__link" data-cat="aquarios">Aquários</a></li>
+          <li><a href="/categoria?cat=equipamentos" class="navbar__link" data-cat="equipamentos">Equipamentos</a></li>
+          <li><a href="/categoria?cat=racoes" class="navbar__link" data-cat="racoes">Rações</a></li>
+          <li><a href="/categoria?cat=marinho" class="navbar__link" data-cat="marinho">Corais</a></li>
+          <li><a href="/#sobre" class="navbar__link">Sobre</a></li>
+          <li><a href="/#contato" class="navbar__link">Contato</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <div class="navbar__search" id="navSearch">
+            <input type="text" class="navbar__search-input" placeholder="Buscar produtos...">
+            <button class="navbar__search-btn" aria-label="Buscar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+          </div>
+          <a href="/carrinho" class="navbar__carrinho" aria-label="Carrinho">
+            &#x1F6D2;
+            <span class="carrinho-badge"></span>
+          </a>
+          <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="navbar__whatsapp">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.009a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.981.998-3.648-.235-.374A9.86 9.86 0 0 1 2.16 12.01C2.16 6.576 6.582 2.16 12.06 2.16a9.84 9.84 0 0 1 6.982 2.898 9.825 9.825 0 0 1 2.893 6.994c-.003 5.434-4.426 9.853-9.885 9.853z"/></svg>
+            <span>Falar no WhatsApp</span>
+          </a>
+          <button class="navbar__hamburger" id="hamburgerBtn" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="/" class="mobile-menu__link">Início</a>
+      <a href="/categoria?cat=agua-doce" class="mobile-menu__link">Peixes</a>
+      <a href="/categoria?cat=aquarios" class="mobile-menu__link">Aquários</a>
+      <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
+      <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
+      <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="/#sobre" class="mobile-menu__link">Sobre</a>
+      <a href="/#contato" class="mobile-menu__link">Contato</a>
+      <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+        Falar no WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== TELA CHECKOUT ===== -->
+  <div id="tela-checkout">
+    <main class="checkout-main">
+      <div class="container">
+
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Navegação">
+          <a href="/">Início</a>
+          <span class="breadcrumb__sep">&#x203A;</span>
+          <a href="/carrinho">Carrinho</a>
+          <span class="breadcrumb__sep">&#x203A;</span>
+          <span class="breadcrumb__current">Finalizar Pedido</span>
+        </nav>
+
+        <h1 class="checkout-titulo">Finalizar Pedido</h1>
+
+        <div class="checkout-grid">
+
+          <!-- ===== COLUNA ESQUERDA — FORMULÁRIO ===== -->
+          <div class="checkout-form">
+
+            <!-- Seus Dados -->
+            <div class="checkout-card">
+              <h2 class="checkout-card-titulo">Seus Dados</h2>
+              <div class="form-grid">
+                <div class="form-grupo full">
+                  <label for="campo-nome">Nome completo *</label>
+                  <input type="text" id="campo-nome" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-grupo">
+                  <label for="campo-telefone">WhatsApp *</label>
+                  <input type="tel" id="campo-telefone" placeholder="(85) 99999-9999" required>
+                </div>
+                <div class="form-grupo">
+                  <label for="campo-email">E-mail (opcional)</label>
+                  <input type="email" id="campo-email" placeholder="seu@email.com">
+                </div>
+              </div>
+            </div>
+
+            <!-- Entrega -->
+            <div class="checkout-card">
+              <h2 class="checkout-card-titulo">Entrega</h2>
+              <div class="opcao-entrega ativo" id="op-retirada" onclick="selecionarEntrega('retirada')">
+                <div class="opcao-radio ativo" id="radio-retirada"><div class="radio-inner"></div></div>
+                <div class="opcao-icone">&#x1F3EA;</div>
+                <div class="opcao-info">
+                  <strong>Retirada na Loja</strong>
+                  <span>R. Raimundo Neri, 372 — Fortaleza, CE</span>
+                </div>
+                <div class="opcao-preco gratis">GRÁTIS</div>
+              </div>
+              <div class="opcao-entrega" id="op-combinar" onclick="selecionarEntrega('combinar')">
+                <div class="opcao-radio" id="radio-combinar"><div class="radio-inner"></div></div>
+                <div class="opcao-icone">&#x1F69A;</div>
+                <div class="opcao-info">
+                  <strong>Entrega a combinar</strong>
+                  <span>Combinaremos pelo WhatsApp</span>
+                </div>
+                <div class="opcao-preco">A combinar</div>
+              </div>
+            </div>
+
+            <!-- Pagamento -->
+            <div class="checkout-card">
+              <h2 class="checkout-card-titulo">Pagamento</h2>
+              <div class="pagamento-grid">
+                <div class="opcao-pagamento ativo" id="op-pix" onclick="selecionarPagamento('pix')">
+                  <div class="pag-titulo">PIX</div>
+                  <div class="pag-desc">Pagamento instantâneo</div>
+                </div>
+                <div class="opcao-pagamento" id="op-cartao" onclick="selecionarPagamento('cartao')">
+                  <div class="pag-titulo">Cartão</div>
+                  <div class="pag-desc">Crédito ou débito</div>
+                </div>
+              </div>
+              <div class="gateway-info" id="gateway-info">Você receberá as instruções do PIX após confirmar o pedido.</div>
+              <div class="form-grupo" style="margin-top:16px">
+                <label for="campo-obs">Observações</label>
+                <textarea id="campo-obs" rows="3" placeholder="Alguma observação sobre o pedido?"></textarea>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ===== COLUNA DIREITA — RESUMO ===== -->
+          <div class="checkout-resumo">
+            <h2 class="checkout-card-titulo">Resumo do Pedido</h2>
+            <div id="checkout-resumo-itens"></div>
+            <div class="entrega-linha">
+              <span>Entrega</span>
+              <span id="entrega-valor" style="color:#2ecc71">GRÁTIS</span>
+            </div>
+            <div class="resumo-total" style="display:flex;justify-content:space-between;font-family:var(--font-display);font-size:20px;color:var(--dourado);margin-bottom:24px">
+              <span>Total</span>
+              <span id="checkout-total">R$ 0,00</span>
+            </div>
+            <button class="btn-pagar" id="btn-pagar" onclick="processarPedido()">Pagar com PIX</button>
+            <div class="seguranca-badge">&#x1F512; Pagamento 100% seguro</div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== TELA CONFIRMAÇÃO ===== -->
+  <div id="tela-confirmado" style="display:none">
+    <main class="checkout-main">
+      <div class="container" style="text-align:center;max-width:600px;margin:0 auto;padding-top:40px">
+        <div style="width:80px;height:80px;border-radius:50%;background:rgba(46,204,113,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:40px">&#x2714;</div>
+        <h1 class="checkout-titulo" style="margin-bottom:8px">Pedido Confirmado!</h1>
+        <p style="font-family:var(--font-body);color:rgba(255,255,255,0.6);font-size:16px;margin-bottom:28px">
+          Obrigado, <strong id="nome-confirmado" style="color:white"></strong>! Seu pedido foi registrado com sucesso.
+        </p>
+        <div class="resumo-confirmado-box" id="resumo-confirmado"></div>
+        <button class="btn-whatsapp-checkout" onclick="abrirWhatsAppPedido()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+          Enviar Pedido pelo WhatsApp
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="footer" class="footer">
+    <div class="footer__wave-top">
+      <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="#0A1A2E"/>
+        <path d="M0,58 L1440,58" stroke="rgba(201,168,76,0.25)" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="footer__bubbles">
+      <div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div>
+      <div class="footer__bubble"></div><div class="footer__bubble"></div><div class="footer__bubble"></div>
+    </div>
+    <div class="container">
+      <div class="footer__content">
+        <div class="footer__brand">
+          <a href="/" class="footer__logo"><img src="assets/logo.png" alt="Loureiro Aquarismo"></a>
+          <span class="footer__tagline">Especialistas em Aquarismo em Fortaleza, CE</span>
+          <p class="footer__desc">Sua loja completa de aquarismo em Fortaleza.</p>
+        </div>
+        <div class="footer__nav">
+          <h3 class="footer__col-title">Links Rápidos</h3>
+          <nav class="footer__links">
+            <a href="/" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Início</a>
+            <a href="/#sobre" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Sobre Nós</a>
+            <a href="/#contato" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Contato</a>
+          </nav>
+        </div>
+        <div class="footer__categories">
+          <h3 class="footer__col-title">Categorias</h3>
+          <nav class="footer__links">
+            <a href="/categoria?cat=agua-doce" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Peixes de Água Doce</a>
+            <a href="/categoria?cat=marinho" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Marinhos &amp; Corais</a>
+            <a href="/categoria?cat=equipamentos" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Equipamentos</a>
+            <a href="/categoria?cat=racoes" class="footer__link"><span class="footer__link-arrow">&rarr;</span> Rações</a>
+          </nav>
+        </div>
+        <div class="footer__contact">
+          <h3 class="footer__col-title">Contato</h3>
+          <div class="footer__contact-list">
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4F1;</span>
+              <span><a href="https://wa.me/5585985301616" target="_blank" rel="noopener">(85) 98530-1616</a></span>
+            </div>
+            <div class="footer__contact-item">
+              <span class="footer__contact-icon">&#x1F4CD;</span>
+              <span>R. Raimundo Neri, 372 — Fortaleza, CE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <div class="footer__bottom-inner">
+          <span class="footer__copyright">&copy; 2025 Loureiro Aquarismo — Todos os direitos reservados</span>
+          <span class="footer__bottom-stars">&#9733; &#9733; &#9733; &#9733; &#9733;</span>
+          <span class="footer__bottom-contact">Fortaleza, Ceará — (85) 98530-1616</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+
+  <script>
+    var entregaSelecionada = 'retirada';
+    var pagamentoSelecionado = 'pix';
+    var dadosPedidoFinal = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      carrinhoDB._atualizarContador();
+      var itens = carrinhoDB.getItens();
+      if (itens.length === 0) { window.location.href = '/carrinho'; return; }
+      renderizarResumo();
+      selecionarEntrega('retirada');
+      selecionarPagamento('pix');
+    });
+
+    function renderizarResumo() {
+      var itens = carrinhoDB.getItens();
+      var listaEl = document.getElementById('checkout-resumo-itens');
+      var totalEl = document.getElementById('checkout-total');
+      if (listaEl) {
+        listaEl.innerHTML = itens.map(function(i) {
+          return '<div class="resumo-linha"><span class="resumo-nome">' + i.nome + ' &times;' + i.quantidade + '</span><span>R$ ' + carrinhoDB.fmt(i.preco * i.quantidade) + '</span></div>';
+        }).join('');
+      }
+      if (totalEl) totalEl.textContent = 'R$ ' + carrinhoDB.fmt(carrinhoDB.getTotalValor());
+    }
+
+    function selecionarEntrega(tipo) {
+      entregaSelecionada = tipo;
+      var ops = document.querySelectorAll('.opcao-entrega');
+      ops.forEach(function(op) { op.classList.remove('ativo'); });
+      var radios = document.querySelectorAll('.opcao-radio');
+      radios.forEach(function(r) { r.classList.remove('ativo'); });
+
+      if (tipo === 'retirada') {
+        document.getElementById('op-retirada').classList.add('ativo');
+        document.getElementById('radio-retirada').classList.add('ativo');
+      } else {
+        document.getElementById('op-combinar').classList.add('ativo');
+        document.getElementById('radio-combinar').classList.add('ativo');
+      }
+      var ev = document.getElementById('entrega-valor');
+      if (ev) {
+        ev.textContent = tipo === 'retirada' ? 'GRÁTIS' : 'A combinar';
+        ev.style.color = tipo === 'retirada' ? '#2ecc71' : 'rgba(255,255,255,0.5)';
+      }
+    }
+
+    function selecionarPagamento(tipo) {
+      pagamentoSelecionado = tipo;
+      document.querySelectorAll('.opcao-pagamento').forEach(function(op) { op.classList.remove('ativo'); });
+      document.getElementById('op-' + tipo).classList.add('ativo');
+      var btn = document.getElementById('btn-pagar');
+      var info = document.getElementById('gateway-info');
+      if (btn) btn.innerHTML = tipo === 'pix' ? '&#x26A1; Pagar com PIX' : '&#x1F4B3; Pagar com Cartao';
+      if (info) info.innerHTML = tipo === 'pix'
+        ? '&#x26A1; <strong>PIX</strong> — Aprovacao instantanea. QR Code gerado pela InfinitePay.'
+        : '&#x1F4B3; <strong>Cartao</strong> — Credito em ate 12x. Dados processados com seguranca pela InfinitePay.';
+    }
+
+    function mostrarErroCheckout(msg) {
+      var erroEl = document.getElementById('checkout-erro');
+      if (!erroEl) {
+        erroEl = document.createElement('div');
+        erroEl.id = 'checkout-erro';
+        erroEl.style.cssText = 'background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.4);color:#ff6b6b;padding:12px 16px;border-radius:10px;font-family:Lato,sans-serif;font-size:14px;margin-bottom:16px;line-height:1.5;';
+        var btnPagar = document.getElementById('btn-pagar');
+        if (btnPagar && btnPagar.parentNode) btnPagar.parentNode.insertBefore(erroEl, btnPagar);
+      }
+      erroEl.textContent = msg;
+      erroEl.style.display = 'block';
+      setTimeout(function() { if (erroEl) erroEl.style.display = 'none'; }, 6000);
+    }
+
+    function processarPedido() {
+      var nome = document.getElementById('campo-nome').value.trim();
+      var telefone = document.getElementById('campo-telefone').value.trim();
+      var email = document.getElementById('campo-email').value.trim();
+      var obs = document.getElementById('campo-obs').value.trim();
+
+      if (!nome) { mostrarErroCheckout('Por favor, informe seu nome completo.'); document.getElementById('campo-nome').focus(); return; }
+      if (!telefone) { mostrarErroCheckout('Por favor, informe seu WhatsApp.'); document.getElementById('campo-telefone').focus(); return; }
+      if (carrinhoDB.getItens().length === 0) { mostrarErroCheckout('Seu carrinho esta vazio.'); return; }
+
+      var btn = document.getElementById('btn-pagar');
+      if (btn) { btn.disabled = true; btn.textContent = 'Gerando link de pagamento...'; btn.style.opacity = '0.7'; }
+
+      var dadosPedido = {
+        nome: nome, telefone: telefone, email: email, obs: obs,
+        entrega: entregaSelecionada, pagamento: pagamentoSelecionado,
+        itens: carrinhoDB.getItens(), total: carrinhoDB.getTotalValor(),
+        data: new Date().toLocaleString('pt-BR')
+      };
+
+      carrinhoDB.gerarLinkPagamento(dadosPedido).then(function(linkPagamento) {
+        if (!linkPagamento) throw new Error('Link nao gerado');
+        window.location.href = linkPagamento;
+      }).catch(function(erro) {
+        console.error('Erro ao processar pedido:', erro);
+        mostrarErroCheckout('Nao foi possivel gerar o link de pagamento. Tente novamente ou fale pelo WhatsApp.');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = pagamentoSelecionado === 'pix' ? 'Pagar com PIX' : 'Pagar com Cartao';
+          btn.style.opacity = '1';
+        }
+      });
+    }
+
+    // Confirmacao agora fica em /pedido-confirmado (apos pagamento InfinitePay)
+  </script>
+
+</body>
+</html>

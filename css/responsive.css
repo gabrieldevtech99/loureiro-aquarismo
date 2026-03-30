@@ -1,0 +1,579 @@
+/* ============================================
+   LOUREIRO AQUARISMO — Responsividade Global
+   Camada de polimento e ajustes cross-component
+   (Estilos base de cada breakpoint já estão nos
+   arquivos de componente. Este arquivo trata
+   refinamentos, edge-cases e harmonia geral.)
+   ============================================ */
+
+/* ================================================
+   DESKTOP GRANDE — acima de 1280px
+   ================================================ */
+@media (min-width: 1281px) {
+  /* Container com mais respiro */
+  .container {
+    padding: 0 var(--spacing-xl);
+  }
+
+  /* Hero: mais espaçamento vertical */
+  .hero__container {
+    gap: calc(var(--spacing-xxl) * 1.2);
+  }
+
+  /* Footer: colunas com mais ar */
+  .footer__content {
+    gap: var(--spacing-xxl);
+  }
+}
+
+
+/* ================================================
+   DESKTOP — 1024px a 1280px
+   ================================================ */
+@media (max-width: 1280px) {
+  /* Títulos de seção um pouco menores */
+  .categorias__title,
+  .destaques__title,
+  .avaliacoes__title,
+  .sobre__title,
+  .contato__title {
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  }
+
+  /* Hero: círculo e cards flutuantes ajustados */
+  .hero__float-card {
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+}
+
+
+/* ================================================
+   TABLET — 768px a 1024px
+   ================================================ */
+@media (max-width: 1024px) {
+
+  /* ── Geral ── */
+  body {
+    font-size: 15px;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0 var(--spacing-lg);
+  }
+
+  /* ── Header ── */
+  .top-bar__item {
+    font-size: 12px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    text-align: center;
+  }
+
+  .hero__container {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__content {
+    align-items: center;
+  }
+
+  .hero__visual {
+    order: -1;
+  }
+
+  .hero__cta {
+    justify-content: center;
+  }
+
+  .hero__stats {
+    justify-content: center;
+  }
+
+  /* ── Sobre ── */
+  .sobre__container {
+    grid-template-columns: 1fr;
+  }
+
+  .sobre__stats {
+    max-width: 480px;
+  }
+
+  /* ── Contato ── */
+  .contato__container {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Footer ── */
+  .footer__content {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* ================================================
+   MOBILE GRANDE — 480px a 768px
+   ================================================ */
+@media (max-width: 768px) {
+
+  /* ── Geral ── */
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+
+  /* Reduzir padding vertical de seções */
+  .categorias,
+  .destaques,
+  .sobre,
+  .avaliacoes,
+  .contato {
+    padding: var(--spacing-xl) 0;
+  }
+
+  /* ── Top bar: simplificar ── */
+  .top-bar .container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: auto;
+    padding: var(--spacing-xl) 0 var(--spacing-xxl);
+  }
+
+  .hero__title {
+    font-size: clamp(1.7rem, 5vw, 2.2rem);
+  }
+
+  .hero__circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .hero__float-card {
+    font-size: 11px;
+    padding: 8px 12px;
+  }
+
+  /* ── Categorias ── */
+  .categorias__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .categorias__icon {
+    width: 56px;
+    height: 56px;
+    font-size: 26px;
+  }
+
+  /* ── Produtos ── */
+  .destaques__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .destaques__img {
+    height: 140px;
+    font-size: 40px;
+  }
+
+  .destaques__filters {
+    gap: 6px;
+  }
+
+  .destaques__tab {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* ── Sobre ── */
+  .sobre__stats {
+    grid-template-columns: 1fr 1fr;
+    max-width: 400px;
+  }
+
+  .sobre__stat-card {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .sobre__stat-number {
+    font-size: 1.6rem;
+  }
+
+  /* ── Avaliações ── */
+  .avaliacoes__card {
+    flex: 0 0 85%;
+    min-width: 260px;
+  }
+
+  .avaliacoes__big-score {
+    font-size: 3rem;
+  }
+
+  .avaliacoes__nav-btn {
+    display: none;
+  }
+
+  /* ── Contato ── */
+  .contato__map {
+    height: 250px;
+  }
+
+  /* ── Footer ── */
+  .footer__content {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl) 0;
+  }
+
+  .footer__logo img {
+    height: 60px;
+  }
+
+  .footer__bottom-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+}
+
+
+/* ================================================
+   MOBILE — abaixo de 480px
+   ================================================ */
+@media (max-width: 480px) {
+
+  /* ── Geral ── */
+  body {
+    font-size: 13px;
+  }
+
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* ── Top bar: esconder no mobile pequeno ── */
+  .top-bar {
+    display: none;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: var(--spacing-lg) 0 var(--spacing-xl);
+  }
+
+  .hero__title {
+    font-size: 1.75rem;
+  }
+
+  .hero__badge {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+
+  .hero__circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  /* Esconder mini-cards no mobile pequeno */
+  .hero__float-card:nth-child(2),
+  .hero__float-card:nth-child(3) {
+    display: none;
+  }
+
+  .hero__cta {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero__cta .btn-primary,
+  .hero__cta .btn-secondary {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .hero__stats {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    font-size: 13px;
+  }
+
+  /* ── Categorias: coluna única com layout horizontal ── */
+  .categorias__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categorias__card {
+    flex-direction: row;
+    text-align: left;
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+
+  .categorias__icon {
+    margin-bottom: 0;
+    min-width: 50px;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  /* ── Produtos: coluna única ── */
+  .destaques__grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .destaques__img {
+    height: 160px;
+    font-size: 48px;
+  }
+
+  /* Tabs com scroll horizontal */
+  .destaques__filters {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: var(--spacing-sm);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .destaques__filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .destaques__tab {
+    flex-shrink: 0;
+  }
+
+  /* ── Sobre ── */
+  .sobre__stats {
+    grid-template-columns: 1fr 1fr;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .sobre__stat-card {
+    padding: var(--spacing-md);
+  }
+
+  .sobre__stat-icon {
+    font-size: 28px;
+  }
+
+  .sobre__stat-number {
+    font-size: 1.4rem;
+  }
+
+  .sobre__stat-label {
+    font-size: 0.78rem;
+  }
+
+  /* ── Avaliações ── */
+  .avaliacoes__card {
+    flex: 0 0 92%;
+    min-width: 240px;
+    padding: var(--spacing-md);
+  }
+
+  .avaliacoes__summary {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .avaliacoes__google-link {
+    font-size: 0.8rem;
+    padding: 8px 18px;
+  }
+
+  /* ── Contato ── */
+  .contato__map {
+    height: 200px;
+  }
+
+  .contato__info-card {
+    padding: var(--spacing-sm);
+    gap: 12px;
+  }
+
+  .contato__info-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 17px;
+  }
+
+  .contato__submit {
+    font-size: 0.9rem;
+    padding: 14px 24px;
+  }
+
+  /* ── Footer: coluna única ── */
+  .footer__content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: var(--spacing-xl);
+  }
+
+  .footer__brand {
+    align-items: center;
+  }
+
+  .footer__socials {
+    justify-content: center;
+  }
+
+  .footer__col-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer__links {
+    align-items: center;
+  }
+
+  .footer__contact-list {
+    align-items: center;
+  }
+
+  .footer__contact-item {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer__maps-btn {
+    margin: var(--spacing-sm) auto 0;
+  }
+
+  /* WhatsApp float: estilos responsivos agora injetados via JS */
+}
+
+
+/* ================================================
+   MOBILE MUITO PEQUENO — abaixo de 360px
+   ================================================ */
+@media (max-width: 360px) {
+  .hero__title {
+    font-size: 1.5rem;
+  }
+
+  .hero__circle {
+    width: 150px;
+    height: 150px;
+  }
+
+  .hero__float-card {
+    display: none;
+  }
+
+  .sobre__stats {
+    grid-template-columns: 1fr;
+    max-width: 220px;
+  }
+
+  .destaques__grid {
+    max-width: 100%;
+  }
+
+  .navbar .container {
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+
+/* ================================================
+   LANDSCAPE MOBILE
+   (telefone deitado — evitar hero enorme)
+   ================================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    height: auto;
+    padding: var(--spacing-lg) 0;
+  }
+
+  .hero__circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  .hero__float-card {
+    display: none;
+  }
+
+  .hero__bubbles {
+    display: none;
+  }
+}
+
+
+/* ================================================
+   PRINT — Estilos para impressão
+   ================================================ */
+@media print {
+  .top-bar,
+  .navbar,
+  .hero__bubbles,
+  .hero__float-card,
+  .hero__wave,
+  .categorias__wave-top,
+  .categorias__wave-bottom,
+  .footer__bubbles,
+  .footer__wave-top,
+  #whatsapp-float,
+  .avaliacoes__nav-btn,
+  .avaliacoes__dots {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .hero,
+  .categorias,
+  .destaques,
+  .sobre,
+  .avaliacoes,
+  .contato,
+  .footer {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 20px 0 !important;
+  }
+
+  .hero__title,
+  .categorias__title,
+  .destaques__title,
+  .avaliacoes__title,
+  .sobre__title,
+  .contato__title,
+  .footer__col-title {
+    color: #0D4F7C !important;
+  }
+
+  a {
+    text-decoration: underline !important;
+    color: #0D4F7C !important;
+  }
+}

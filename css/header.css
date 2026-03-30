@@ -1,0 +1,396 @@
+/* ============================================
+   LOUREIRO AQUARISMO — Header & Navbar
+   ============================================ */
+
+/* ── Top Bar ── */
+.top-bar {
+  background-color: #082d4a;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.top-bar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.top-bar__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+
+.top-bar__item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: currentColor;
+  opacity: 0.7;
+}
+
+.top-bar__stars {
+  color: var(--dourado-claro);
+  letter-spacing: 1px;
+  margin-right: 4px;
+}
+
+.top-bar__link {
+  transition: color var(--transition-fast);
+}
+
+.top-bar__link:hover {
+  color: var(--dourado-claro);
+}
+
+/* ── Navbar Principal ── */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: linear-gradient(135deg, var(--azul-profundo), var(--azul-royal));
+  padding: 0;
+  transition: background var(--transition-med),
+              box-shadow var(--transition-med),
+              padding var(--transition-med);
+}
+
+.navbar.scrolled {
+  background: var(--azul-profundo);
+  box-shadow: 0 4px 20px var(--sombra-dourado);
+}
+
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  height: 80px;
+}
+
+/* ── Logo ── */
+.navbar__logo {
+  flex-shrink: 0;
+}
+
+.navbar__logo img {
+  height: 65px;
+  width: auto;
+  display: block;
+}
+
+/* ── Menu de Navegação ── */
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.navbar__link {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--branco);
+  position: relative;
+  padding: 6px 0;
+  transition: color var(--transition-fast);
+}
+
+/* Underline dourado animado */
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-med);
+}
+
+.navbar__link:hover,
+.navbar__link.active {
+  color: var(--dourado);
+}
+
+.navbar__link:hover::after,
+.navbar__link.active::after {
+  width: 100%;
+}
+
+/* ── Ações à Direita ── */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+/* ── Busca ── */
+.navbar__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__search-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--branco);
+  transition: color var(--transition-fast);
+}
+
+.navbar__search-btn:hover {
+  color: var(--dourado);
+}
+
+.navbar__search-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.navbar__search-input {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  padding: 0;
+  border: none;
+  border-bottom: 2px solid var(--dourado);
+  background: transparent;
+  color: var(--branco);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  opacity: 0;
+  transition: width var(--transition-med), opacity var(--transition-med),
+              padding var(--transition-med);
+}
+
+.navbar__search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.navbar__search.active .navbar__search-input {
+  width: 200px;
+  padding: 8px 12px;
+  opacity: 1;
+}
+
+/* ── Botão WhatsApp ── */
+.navbar__whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #25D366;
+  color: var(--branco);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.navbar__whatsapp svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.navbar__whatsapp:hover {
+  background-color: #1ebe5c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+}
+
+/* ── Hamburger (Mobile) ── */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: calc(var(--z-header) + 10);
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background-color: var(--branco);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
+  transform-origin: center;
+}
+
+/* Animação hamburger → X */
+.navbar__hamburger.active span:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+
+.navbar__hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar__hamburger.active span:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* ============================================
+   Menu Mobile Overlay
+   ============================================ */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--azul-profundo);
+  z-index: var(--z-header);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  opacity: 0;
+  transition: opacity var(--transition-med);
+}
+
+.mobile-menu.open {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-menu__link {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--branco);
+  padding: 12px 32px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  width: 80%;
+  text-align: center;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.mobile-menu__link:hover {
+  color: var(--dourado);
+  border-color: var(--dourado);
+}
+
+.mobile-menu__whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--spacing-md);
+  padding: 14px 32px;
+  background-color: #25D366;
+  color: var(--branco);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.mobile-menu__whatsapp svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.mobile-menu__whatsapp:hover {
+  background-color: #1ebe5c;
+}
+
+/* ============================================
+   Responsivo
+   ============================================ */
+@media (max-width: 1024px) {
+  .navbar__menu {
+    gap: var(--spacing-md);
+  }
+
+  .navbar__link {
+    font-size: 13px;
+  }
+
+  .navbar__whatsapp span {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Top bar empilha */
+  .top-bar .container {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 16px;
+  }
+
+  .top-bar__item {
+    font-size: 12px;
+  }
+
+  /* Navbar mobile */
+  .navbar .container {
+    height: 64px;
+  }
+
+  .navbar__logo img {
+    height: 48px;
+  }
+
+  .navbar__menu {
+    display: none;
+  }
+
+  .navbar__whatsapp {
+    display: none;
+  }
+
+  .navbar__search {
+    display: none;
+  }
+
+  .navbar__hamburger {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-bar {
+    display: none;
+  }
+
+  .mobile-menu__link {
+    font-size: 17px;
+    padding: 10px 24px;
+  }
+}

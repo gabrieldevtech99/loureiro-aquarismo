@@ -1,0 +1,300 @@
+/* ============================================
+   LOUREIRO AQUARISMO — Seção Categorias
+   ============================================ */
+
+/* ── Seção ── */
+.categorias {
+  position: relative;
+  background-color: var(--cinza-escuro);
+  padding: var(--spacing-xxl) 0;
+  overflow: hidden;
+}
+
+/* ── Wave topo ── */
+.categorias__wave-top {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  z-index: 2;
+}
+
+.categorias__wave-top svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Wave base ── */
+.categorias__wave-bottom {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+  z-index: 2;
+}
+
+.categorias__wave-bottom svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── Cabeçalho da seção ── */
+.categorias__header {
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+}
+
+.categorias__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  color: var(--dourado);
+  margin-bottom: var(--spacing-sm);
+}
+
+.categorias__subtitle {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Linha decorativa ── */
+.categorias__header::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--dourado), var(--dourado-claro));
+  border-radius: var(--radius-full);
+  margin: var(--spacing-md) auto 0;
+}
+
+/* ── Grid de cards ── */
+.categorias__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+/* ── Card individual ── */
+.categorias__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition:
+    transform var(--transition-med),
+    box-shadow var(--transition-med),
+    border-color var(--transition-med);
+  cursor: pointer;
+}
+
+.categorias__card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(201, 168, 76, 0.5);
+  box-shadow: 0 12px 40px rgba(201, 168, 76, 0.12);
+}
+
+/* ── Foto da categoria ── */
+.categorias__foto-wrap {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+}
+
+.categorias__foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.categorias__card:hover .categorias__foto {
+  transform: scale(1.08);
+}
+
+.categorias__foto-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    rgba(10, 26, 46, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Icone circular (legado, oculto) ── */
+.categorias__icon {
+  display: none;
+}
+
+/* ── Texto do card (com padding interno) ── */
+.categorias__card-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+}
+
+/* ── Nome da categoria ── */
+.categorias__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--branco);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ── Descrição ── */
+.categorias__desc {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: var(--spacing-lg);
+  flex-grow: 1;
+}
+
+/* ── Botão "Ver mais" ── */
+.categorias__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--dourado);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast), gap var(--transition-fast);
+}
+
+.categorias__btn-arrow {
+  display: inline-block;
+  transition: transform var(--transition-fast);
+}
+
+.categorias__card:hover .categorias__btn {
+  color: var(--dourado-claro);
+}
+
+.categorias__card:hover .categorias__btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ── Animação de entrada (Intersection Observer) ── */
+.categorias__card {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.categorias__card.visible {
+  animation: catCardIn 0.6s ease forwards;
+}
+
+.categorias__card:nth-child(1).visible { animation-delay: 0.05s; }
+.categorias__card:nth-child(2).visible { animation-delay: 0.15s; }
+.categorias__card:nth-child(3).visible { animation-delay: 0.25s; }
+.categorias__card:nth-child(4).visible { animation-delay: 0.35s; }
+.categorias__card:nth-child(5).visible { animation-delay: 0.45s; }
+.categorias__card:nth-child(6).visible { animation-delay: 0.55s; }
+
+@keyframes catCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hover mantém translateY quando já visível */
+.categorias__card.visible:hover {
+  transform: translateY(-8px);
+}
+
+/* ============================================
+   Responsivo
+   ============================================ */
+@media (max-width: 1024px) {
+  .categorias__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .categorias {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .categorias__header {
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .categorias__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .categorias__foto-wrap {
+    height: 140px;
+  }
+
+  .categorias__card-text {
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .categorias__grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .categorias__card {
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .categorias__foto-wrap {
+    width: 120px;
+    min-width: 120px;
+    height: auto;
+    min-height: 120px;
+    border-bottom: none;
+    border-right: 1px solid rgba(201, 168, 76, 0.15);
+    border-radius: 0;
+  }
+
+  .categorias__card-text {
+    align-items: flex-start;
+    padding: var(--spacing-md);
+  }
+
+  .categorias__desc {
+    margin-bottom: var(--spacing-sm);
+  }
+}
