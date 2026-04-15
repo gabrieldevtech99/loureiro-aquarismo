@@ -79,56 +79,102 @@ var carrinhoDB = {
     });
   },
 
-  // ── InfinitePay ──
-  INFINITE_TAG: 'INFINITE_TAG_DO_DONO', // Dono coloca a InfiniteTag aqui (sem o $)
+  // ================================================
+  // INFINITEPAY — Geração de link de pagamento
+  // ================================================
+  INFINITE_TAG: 'loureiro_pet_ltda',
 
-  gerarLinkPagamento: function(dadosPedido) {
-    var self = this;
+  gerarLinkPagamento: async function(dadosPedido) {
     var itens = this.getItens();
-    if (itens.length === 0) return Promise.reject(new Error('Carrinho vazio'));
+
+    if (!itens || itens.length === 0) {
+      throw new Error('Carrinho vazio');
+    }
+
+    var itensPagamento = itens.map(function(item) {
+      return {
+        quantity:    item.quantidade,
+        price:       Math.round(Number(item.preco) * 100),
+        description: String(item.nome).substring(0, 100)
+      };
+    });
 
     var orderNsu = 'loureiro-' + Date.now();
+
     var payload = {
-      handle: this.INFINITE_TAG,
-      order_nsu: orderNsu,
-      itens: itens.map(function(item) {
-        return {
-          quantity: item.quantidade,
-          price: Math.round(item.preco * 100),
-          description: item.nome.substring(0, 100)
-        };
-      }),
+      handle:       this.INFINITE_TAG,
+      order_nsu:    orderNsu,
+      itens:        itensPagamento,
       redirect_url: window.location.origin + '/pedido-confirmado'
     };
 
-    localStorage.setItem('loureiro_order_nsu', orderNsu);
-    localStorage.setItem('loureiro_pedido_dados', JSON.stringify(dadosPedido));
+    console.log('[InfinitePay] Enviando payload:', JSON.stringify(payload, null, 2));
 
-    return fetch('https://api.infinitepay.io/invoices/public/checkout/links', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(function(response) {
-      if (!response.ok) throw new Error('Erro ao gerar pagamento: ' + response.status);
-      return response.json();
-    }).then(function(data) {
-      return data.link;
-    });
+    var response = await fetch(
+      'https://api.infinitepay.io/invoices/public/checkout/links',
+      {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      }
+    );
+
+    var responseText = await response.text();
+    console.log('[InfinitePay] Resposta raw:', responseText);
+
+    if (!response.ok) {
+      console.error('[InfinitePay] Erro HTTP:', response.status, responseText);
+      throw new Error('Erro ' + response.status + ': ' + responseText);
+    }
+
+    var data;
+    try {
+      data = JSON.parse(responseText);
+    } catch (e) {
+      throw new Error('Resposta inválida da InfinitePay: ' + responseText);
+    }
+
+    console.log('[InfinitePay] Link gerado:', data);
+
+    if (!data.link) {
+      throw new Error('InfinitePay não retornou link de pagamento: ' + responseText);
+    }
+
+    localStorage.setItem('loureiro_order_nsu', orderNsu);
+    localStorage.setItem('loureiro_pedido_dados', JSON.stringify(Object.assign({}, dadosPedido, {
+      itens:     itens,
+      total:     this.getTotalValor(),
+      orderNsu:  orderNsu,
+      timestamp: new Date().toISOString()
+    })));
+
+    return data.link;
   },
 
-  verificarPagamento: function(orderNsu, transactionNsu, slug) {
-    return fetch('https://api.infinitepay.io/invoices/public/checkout/payment_check', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        handle: this.INFINITE_TAG,
-        order_nsu: orderNsu,
-        transaction_nsu: transactionNsu,
-        slug: slug
-      })
-    }).then(function(response) {
+  // ================================================
+  // INFINITEPAY — Verificar status do pagamento
+  // ================================================
+  verificarPagamento: async function(orderNsu, transactionNsu, slug) {
+    try {
+      var response = await fetch(
+        'https://api.infinitepay.io/invoices/public/checkout/payment_check',
+        {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({
+            handle:          this.INFINITE_TAG,
+            order_nsu:       orderNsu,
+            transaction_nsu: transactionNsu,
+            slug:            slug
+          })
+        }
+      );
+
       if (!response.ok) return null;
-      return response.json();
-    });
+      return await response.json();
+    } catch (e) {
+      console.error('[InfinitePay] Erro ao verificar pagamento:', e);
+      return null;
+    }
   }
 };

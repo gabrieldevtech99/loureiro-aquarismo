@@ -23,6 +23,21 @@
 
   <title>Finalizar Pedido — Loureiro Aquarismo</title>
 
+  <style>
+    .btn-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(10, 26, 46, 0.3);
+      border-top-color: #0A1A2E;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
@@ -348,51 +363,115 @@
     }
 
     function mostrarErroCheckout(msg) {
-      var erroEl = document.getElementById('checkout-erro');
-      if (!erroEl) {
-        erroEl = document.createElement('div');
-        erroEl.id = 'checkout-erro';
-        erroEl.style.cssText = 'background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.4);color:#ff6b6b;padding:12px 16px;border-radius:10px;font-family:Lato,sans-serif;font-size:14px;margin-bottom:16px;line-height:1.5;';
-        var btnPagar = document.getElementById('btn-pagar');
-        if (btnPagar && btnPagar.parentNode) btnPagar.parentNode.insertBefore(erroEl, btnPagar);
+      var el = document.getElementById('erro-checkout');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'erro-checkout';
+        el.style.cssText = [
+          'background:rgba(231,76,60,0.12)',
+          'border:1px solid rgba(231,76,60,0.4)',
+          'color:#ff6b6b',
+          'padding:12px 16px',
+          'border-radius:10px',
+          'font-family:Lato,sans-serif',
+          'font-size:14px',
+          'line-height:1.5',
+          'margin-bottom:14px',
+          'display:none'
+        ].join(';');
+        var btnEl = document.getElementById('btn-pagar');
+        if (btnEl && btnEl.parentNode) btnEl.parentNode.insertBefore(el, btnEl);
       }
-      erroEl.textContent = msg;
-      erroEl.style.display = 'block';
-      setTimeout(function() { if (erroEl) erroEl.style.display = 'none'; }, 6000);
+      el.textContent = '\u26A0\uFE0F ' + msg;
+      el.style.display = 'block';
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function processarPedido() {
-      var nome = document.getElementById('campo-nome').value.trim();
-      var telefone = document.getElementById('campo-telefone').value.trim();
-      var email = document.getElementById('campo-email').value.trim();
-      var obs = document.getElementById('campo-obs').value.trim();
+    function esconderErro() {
+      var el = document.getElementById('erro-checkout');
+      if (el) el.style.display = 'none';
+    }
 
-      if (!nome) { mostrarErroCheckout('Por favor, informe seu nome completo.'); document.getElementById('campo-nome').focus(); return; }
-      if (!telefone) { mostrarErroCheckout('Por favor, informe seu WhatsApp.'); document.getElementById('campo-telefone').focus(); return; }
-      if (carrinhoDB.getItens().length === 0) { mostrarErroCheckout('Seu carrinho esta vazio.'); return; }
+    async function processarPedido() {
+      var nomeEl = document.getElementById('campo-nome');
+      var telEl  = document.getElementById('campo-telefone');
+      var emailEl = document.getElementById('campo-email');
+      var obsEl  = document.getElementById('campo-obs');
+
+      var nome     = (nomeEl  && nomeEl.value  || '').trim();
+      var telefone = (telEl   && telEl.value   || '').trim();
+      var email    = (emailEl && emailEl.value || '').trim();
+      var obs      = (obsEl   && obsEl.value   || '').trim();
+
+      esconderErro();
+
+      if (!nome) {
+        mostrarErroCheckout('Por favor, informe seu nome completo.');
+        if (nomeEl) nomeEl.focus();
+        return;
+      }
+      if (!telefone) {
+        mostrarErroCheckout('Por favor, informe seu WhatsApp para contato.');
+        if (telEl) telEl.focus();
+        return;
+      }
+      if (telefone.replace(/\D/g, '').length < 10) {
+        mostrarErroCheckout('Informe um número de WhatsApp válido com DDD.');
+        if (telEl) telEl.focus();
+        return;
+      }
+      if (carrinhoDB.getItens().length === 0) {
+        mostrarErroCheckout('Seu carrinho está vazio. Adicione produtos antes de finalizar.');
+        return;
+      }
 
       var btn = document.getElementById('btn-pagar');
-      if (btn) { btn.disabled = true; btn.textContent = 'Gerando link de pagamento...'; btn.style.opacity = '0.7'; }
+      if (btn) {
+        btn.disabled      = true;
+        btn.innerHTML     = '<span class="btn-spinner"></span> Gerando link de pagamento...';
+        btn.style.opacity = '0.75';
+        btn.style.cursor  = 'not-allowed';
+      }
 
       var dadosPedido = {
-        nome: nome, telefone: telefone, email: email, obs: obs,
-        entrega: entregaSelecionada, pagamento: pagamentoSelecionado,
-        itens: carrinhoDB.getItens(), total: carrinhoDB.getTotalValor(),
-        data: new Date().toLocaleString('pt-BR')
+        nome: nome,
+        telefone: telefone,
+        email: email,
+        obs: obs,
+        entrega: entregaSelecionada,
+        pagamento: pagamentoSelecionado
       };
 
-      carrinhoDB.gerarLinkPagamento(dadosPedido).then(function(linkPagamento) {
-        if (!linkPagamento) throw new Error('Link nao gerado');
+      try {
+        var linkPagamento = await carrinhoDB.gerarLinkPagamento(dadosPedido);
+        console.log('[Checkout] Redirecionando para InfinitePay:', linkPagamento);
         window.location.href = linkPagamento;
-      }).catch(function(erro) {
-        console.error('Erro ao processar pedido:', erro);
-        mostrarErroCheckout('Nao foi possivel gerar o link de pagamento. Tente novamente ou fale pelo WhatsApp.');
-        if (btn) {
-          btn.disabled = false;
-          btn.textContent = pagamentoSelecionado === 'pix' ? 'Pagar com PIX' : 'Pagar com Cartao';
-          btn.style.opacity = '1';
+      } catch (erro) {
+        console.error('[Checkout] Erro ao gerar pagamento:', erro);
+
+        var msgErro = (erro && erro.message) || '';
+        if (msgErro.indexOf('Failed to fetch') !== -1 || msgErro.indexOf('NetworkError') !== -1 || msgErro.indexOf('CORS') !== -1) {
+          mostrarErroCheckout(
+            'Erro de conexão com o sistema de pagamento. ' +
+            'Verifique sua internet e tente novamente. ' +
+            'Se o problema persistir, finalize pelo WhatsApp.'
+          );
+        } else {
+          mostrarErroCheckout(
+            'Não foi possível gerar o link de pagamento. ' +
+            'Tente novamente ou fale com a gente pelo WhatsApp: (85) 98530-1616'
+          );
         }
-      });
+
+        if (btn) {
+          btn.disabled      = false;
+          btn.style.opacity = '1';
+          btn.style.cursor  = 'pointer';
+          btn.innerHTML     = pagamentoSelecionado === 'pix'
+            ? '\u26A1 Pagar com PIX'
+            : '\uD83D\uDCB3 Pagar com Cartão';
+        }
+      }
     }
 
     // Confirmacao agora fica em /pedido-confirmado (apos pagamento InfinitePay)
