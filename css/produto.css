@@ -402,6 +402,54 @@
   font-size: 15px;
 }
 
+/* ── Seletor de variações ── */
+#seletor-variacoes { margin-bottom: 20px; }
+.variacoes-label {
+  display: block;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.btn-variacao {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+  color: rgba(255,255,255,0.75);
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  text-align: center;
+}
+.btn-variacao:hover:not(.indisponivel) {
+  border-color: rgba(201,168,76,0.5);
+  color: white;
+}
+.btn-variacao.selecionado {
+  border-color: var(--dourado);
+  background: rgba(201,168,76,0.12);
+  color: var(--dourado);
+}
+.btn-variacao.indisponivel {
+  opacity: 0.35;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+.btn-variacao .preco-variacao {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.45);
+  margin-top: 2px;
+}
+.btn-variacao.selecionado .preco-variacao { color: rgba(201,168,76,0.7); }
+
 /* RESPONSIVO */
 @media (max-width: 1024px) {
   .produto-grid { grid-template-columns: 1fr; gap: 32px; }

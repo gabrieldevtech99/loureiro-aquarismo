@@ -133,6 +133,11 @@
 
         <div class="ficha-tecnica" id="ficha-tecnica"></div>
 
+        <div id="seletor-variacoes" style="display:none;">
+          <label class="variacoes-label" id="label-variacoes">Tamanho</label>
+          <div id="botoes-variacoes" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+        </div>
+
         <div class="produto-preco-bloco" id="produto-preco-bloco"></div>
 
         <div class="quantidade-wrap">
@@ -256,6 +261,7 @@
 
   let quantidadeSelecionada = 1;
   let produtoAtual = null;
+  let variacaoAtual = null;
 
   const iconesCategorias = {
     'agua-doce':'🐠','marinho':'🪸','aquarios':'🏠',
@@ -327,18 +333,98 @@
   // PEDIR NO WHATSAPP
   function pedirWhatsApp() {
     if (!produtoAtual) return;
-    var preco = produtoAtual.preco_promo || produtoAtual.preco;
-    var msg = 'Olá! Tenho interesse no produto:\n\n*' + produtoAtual.nome + '*\nPreço: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\n\nEste produto está disponível?';
+    var preco, nomeProd;
+    if (variacaoAtual) {
+      preco = Number(variacaoAtual.preco_promo || variacaoAtual.preco);
+      nomeProd = produtoAtual.nome + ' — ' + variacaoAtual.nome;
+    } else {
+      preco = Number(produtoAtual.preco_promo || produtoAtual.preco);
+      nomeProd = produtoAtual.nome;
+    }
+    var msg = 'Olá! Tenho interesse no produto:\n\n*' + nomeProd + '*\nPreço: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\n\nEste produto está disponível?';
     window.open('https://wa.me/5585985301616?text=' + encodeURIComponent(msg), '_blank');
   }
 
   // PEDIR COM QUANTIDADE
   function pedirWhatsAppComQtd() {
     if (!produtoAtual) return;
-    var preco = produtoAtual.preco_promo || produtoAtual.preco;
+    var preco, nomeProd;
+    if (variacaoAtual) {
+      preco = Number(variacaoAtual.preco_promo || variacaoAtual.preco);
+      nomeProd = produtoAtual.nome + ' — ' + variacaoAtual.nome;
+    } else {
+      preco = Number(produtoAtual.preco_promo || produtoAtual.preco);
+      nomeProd = produtoAtual.nome;
+    }
     var total = (Number(preco) * quantidadeSelecionada).toFixed(2).replace('.',',');
-    var msg = 'Olá! Gostaria de fazer um pedido:\n\n*' + produtoAtual.nome + '*\nQuantidade: ' + quantidadeSelecionada + ' unidade(s)\nPreço unitário: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\nTotal: R$ ' + total + '\n\nPoderia confirmar disponibilidade?';
+    var msg = 'Olá! Gostaria de fazer um pedido:\n\n*' + nomeProd + '*\nQuantidade: ' + quantidadeSelecionada + ' unidade(s)\nPreço unitário: R$ ' + Number(preco).toFixed(2).replace('.',',') + '\nTotal: R$ ' + total + '\n\nPoderia confirmar disponibilidade?';
     window.open('https://wa.me/5585985301616?text=' + encodeURIComponent(msg), '_blank');
+  }
+
+  // VARIAÇÕES
+  function configurarVariacoes(produto) {
+    var seletor = document.getElementById('seletor-variacoes');
+    var botoesEl = document.getElementById('botoes-variacoes');
+    variacaoAtual = null;
+
+    if (!produto.variacoes || produto.variacoes.length === 0) {
+      if (seletor) seletor.style.display = 'none';
+      return;
+    }
+
+    if (seletor) seletor.style.display = 'block';
+
+    var primeiroNome = produto.variacoes[0] && produto.variacoes[0].nome || '';
+    var labelEl = document.getElementById('label-variacoes');
+    if (labelEl) {
+      if (/ml|l\b|litro/i.test(primeiroNome))      labelEl.textContent = 'Volume';
+      else if (/g\b|kg|grama/i.test(primeiroNome)) labelEl.textContent = 'Peso';
+      else if (/cm|m\b|metro/i.test(primeiroNome)) labelEl.textContent = 'Tamanho';
+      else if (/cor|color/i.test(primeiroNome))    labelEl.textContent = 'Cor';
+      else                                          labelEl.textContent = 'Opção';
+    }
+
+    if (botoesEl) {
+      botoesEl.innerHTML = produto.variacoes.map(function(v) {
+        var precoVar = Number(v.preco_promo || v.preco).toFixed(2).replace('.', ',');
+        return '<button type="button" class="btn-variacao ' + (!v.disponivel ? 'indisponivel' : '') + '"' +
+          ' id="btn-var-' + v.id + '"' +
+          (v.disponivel ? ' onclick="selecionarVariacao(\'' + v.id + '\')"' : ' title="Indisponível"') +
+          '>' + v.nome + '<span class="preco-variacao">R$ ' + precoVar + '</span></button>';
+      }).join('');
+    }
+
+    var primeira = produto.variacoes.find(function(v) { return v.disponivel !== false; });
+    if (primeira) selecionarVariacao(primeira.id);
+  }
+
+  function selecionarVariacao(varId) {
+    if (!produtoAtual || !produtoAtual.variacoes) return;
+    var variacao = produtoAtual.variacoes.find(function(v) { return v.id === varId; });
+    if (!variacao || variacao.disponivel === false) return;
+
+    variacaoAtual = variacao;
+
+    document.querySelectorAll('.btn-variacao').forEach(function(btn) { btn.classList.remove('selecionado'); });
+    var btnAtivo = document.getElementById('btn-var-' + varId);
+    if (btnAtivo) btnAtivo.classList.add('selecionado');
+
+    atualizarPrecoExibido(variacao);
+  }
+
+  function atualizarPrecoExibido(variacao) {
+    var precoDiv = document.getElementById('produto-preco-bloco');
+    if (!precoDiv) return;
+    var fmt = function(v) { return Number(v || 0).toFixed(2).replace('.', ','); };
+    if (variacao.preco_promo) {
+      var eco = fmt(Number(variacao.preco) - Number(variacao.preco_promo));
+      precoDiv.innerHTML =
+        '<span class="preco-de">R$ ' + fmt(variacao.preco) + '</span>' +
+        '<span class="preco-atual">R$ ' + fmt(variacao.preco_promo) + '</span>' +
+        '<span class="preco-economia">Economia de R$ ' + eco + '</span>';
+    } else {
+      precoDiv.innerHTML = '<span class="preco-atual">R$ ' + fmt(variacao.preco) + '</span>';
+    }
   }
 
   // COMPARTILHAR
@@ -373,8 +459,30 @@
   // ADICIONAR AO CARRINHO
   function adicionarAoCarrinho() {
     if (!produtoAtual) return;
+
+    if (produtoAtual.variacoes && produtoAtual.variacoes.length > 0 && !variacaoAtual) {
+      alert('Por favor, selecione uma variação antes de adicionar ao carrinho.');
+      var sel = document.getElementById('seletor-variacoes');
+      if (sel) sel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
     var qtd = parseInt(document.getElementById('qtd-input').value) || 1;
-    carrinhoDB.adicionarItem(produtoAtual, qtd);
+    var itemParaCarrinho;
+    if (variacaoAtual) {
+      itemParaCarrinho = {
+        id:          produtoAtual.id + '-' + variacaoAtual.id,
+        nome:        produtoAtual.nome + ' — ' + variacaoAtual.nome,
+        preco:       Number(variacaoAtual.preco),
+        preco_promo: variacaoAtual.preco_promo ? Number(variacaoAtual.preco_promo) : null,
+        imagem_url:  (produtoAtual.imagens && produtoAtual.imagens[0]) || produtoAtual.imagem_url || null,
+        imagens:     produtoAtual.imagens || [],
+        categoria:   produtoAtual.categoria
+      };
+    } else {
+      itemParaCarrinho = produtoAtual;
+    }
+    carrinhoDB.adicionarItem(itemParaCarrinho, qtd);
     var btn = document.getElementById('btn-adicionar-carrinho');
     if (btn) {
       btn.textContent = 'Adicionado!';
@@ -490,6 +598,9 @@
       } else {
         precoBloco.innerHTML = '<span class="preco-atual">R$ ' + Number(p.preco).toFixed(2).replace('.',',') + '</span>';
       }
+
+      // Variações (configura seletor + atualiza preço se houver)
+      configurarVariacoes(p);
 
       // Descricao
       if (p.descricao && p.descricao.trim()) {

@@ -69,6 +69,7 @@ const produtosDB = {
       video_url:   produto.video_url   || null,
       disponivel:  produto.disponivel  !== false,
       destaque:    produto.destaque    || false,
+      variacoes:   produto.variacoes   || [],
     };
 
     if (produto.id) {
