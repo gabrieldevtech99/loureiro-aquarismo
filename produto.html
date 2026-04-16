@@ -139,6 +139,7 @@
         </div>
 
         <div class="produto-preco-bloco" id="produto-preco-bloco"></div>
+        <span id="badge-estoque" style="display:none"></span>
 
         <div class="quantidade-wrap">
           <label class="qtd-label">Quantidade</label>
@@ -369,6 +370,9 @@
 
     if (!produto.variacoes || produto.variacoes.length === 0) {
       if (seletor) seletor.style.display = 'none';
+      var info = produtosDB.textoEstoque(produto);
+      atualizarBadgeEstoque(info);
+      atualizarBotoesPorDisponibilidade(info.disponivel);
       return;
     }
 
@@ -386,22 +390,38 @@
 
     if (botoesEl) {
       botoesEl.innerHTML = produto.variacoes.map(function(v) {
+        var semEstoque = v.estoque !== null && v.estoque !== undefined && v.estoque <= 0;
+        var inativo = v.disponivel === false || semEstoque;
         var precoVar = Number(v.preco_promo || v.preco).toFixed(2).replace('.', ',');
-        return '<button type="button" class="btn-variacao ' + (!v.disponivel ? 'indisponivel' : '') + '"' +
+        return '<button type="button" class="btn-variacao ' + (inativo ? 'indisponivel' : '') + '"' +
           ' id="btn-var-' + v.id + '"' +
-          (v.disponivel ? ' onclick="selecionarVariacao(\'' + v.id + '\')"' : ' title="Indisponível"') +
-          '>' + v.nome + '<span class="preco-variacao">R$ ' + precoVar + '</span></button>';
+          (inativo ? ' title="' + (v.disponivel === false ? 'Indisponível' : 'Sem estoque') + '"' : ' onclick="selecionarVariacao(\'' + v.id + '\')"') +
+          '>' + v.nome + '<span class="preco-variacao">R$ ' + precoVar + '</span>' +
+          (semEstoque ? '<span class="variacao-sem-estoque">Esgotado</span>' : '') +
+          '</button>';
       }).join('');
     }
 
-    var primeira = produto.variacoes.find(function(v) { return v.disponivel !== false; });
-    if (primeira) selecionarVariacao(primeira.id);
+    var primeira = produto.variacoes.find(function(v) {
+      var temEstoque = v.estoque === null || v.estoque === undefined || v.estoque > 0;
+      return v.disponivel !== false && temEstoque;
+    });
+
+    if (primeira) {
+      selecionarVariacao(primeira.id);
+    } else {
+      atualizarBadgeEstoque({ texto: 'Sem estoque', cor: '#e74c3c', disponivel: false });
+      atualizarBotoesPorDisponibilidade(false);
+    }
   }
 
   function selecionarVariacao(varId) {
     if (!produtoAtual || !produtoAtual.variacoes) return;
     var variacao = produtoAtual.variacoes.find(function(v) { return v.id === varId; });
-    if (!variacao || variacao.disponivel === false) return;
+    if (!variacao) return;
+
+    var semEstoque = variacao.estoque !== null && variacao.estoque !== undefined && variacao.estoque <= 0;
+    if (variacao.disponivel === false || semEstoque) return;
 
     variacaoAtual = variacao;
 
@@ -410,6 +430,45 @@
     if (btnAtivo) btnAtivo.classList.add('selecionado');
 
     atualizarPrecoExibido(variacao);
+
+    var infoEstoque = produtosDB.textoEstoque(produtoAtual, variacao);
+    atualizarBadgeEstoque(infoEstoque);
+    atualizarBotoesPorDisponibilidade(infoEstoque.disponivel);
+  }
+
+  function atualizarBadgeEstoque(info) {
+    var badge = document.getElementById('badge-estoque');
+    if (!badge) return;
+    badge.textContent = info.texto;
+    badge.style.display = 'inline-block';
+    badge.style.padding = '6px 14px';
+    badge.style.borderRadius = '20px';
+    badge.style.fontFamily = "'Lato', sans-serif";
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '700';
+    badge.style.marginTop = '8px';
+    badge.style.border = '1px solid ' + info.cor + '44';
+    badge.style.background = info.cor + '22';
+    badge.style.color = info.cor;
+  }
+
+  function atualizarBotoesPorDisponibilidade(disponivel) {
+    var btnCarrinho = document.getElementById('btn-adicionar-carrinho');
+    if (btnCarrinho) {
+      if (disponivel) {
+        btnCarrinho.disabled = false;
+        btnCarrinho.style.opacity = '1';
+        btnCarrinho.style.cursor = 'pointer';
+        btnCarrinho.textContent = '\u{1F6D2} Adicionar ao Carrinho';
+        btnCarrinho.onclick = adicionarAoCarrinho;
+      } else {
+        btnCarrinho.disabled = true;
+        btnCarrinho.style.opacity = '0.4';
+        btnCarrinho.style.cursor = 'not-allowed';
+        btnCarrinho.textContent = 'Sem estoque';
+        btnCarrinho.onclick = null;
+      }
+    }
   }
 
   function atualizarPrecoExibido(variacao) {
@@ -602,20 +661,6 @@
       // Variações (configura seletor + atualiza preço se houver)
       configurarVariacoes(p);
 
-      // Estoque
-      if (!p.estoque || p.estoque <= 0) {
-        var btnCart = document.getElementById('btn-adicionar-carrinho');
-        if (btnCart) {
-          btnCart.disabled = true;
-          btnCart.textContent = 'Sem Estoque';
-          btnCart.style.background = '#555';
-          btnCart.style.cursor = 'not-allowed';
-          btnCart.style.opacity = '0.7';
-          btnCart.onclick = null;
-        }
-        precoBloco.insertAdjacentHTML('afterend', '<span style="display:inline-block;margin-top:8px;padding:4px 14px;background:#e74c3c;color:#fff;border-radius:20px;font-size:0.8rem;font-weight:700">SEM ESTOQUE</span>');
-      }
-
       // Descricao
       if (p.descricao && p.descricao.trim()) {
         document.getElementById('produto-descricao-bloco').style.display = 'block';
@@ -635,7 +680,7 @@
               (imgR
                 ? '<img src="' + imgR + '" alt="' + r.nome + '" loading="lazy">'
                 : '<span>' + (iconesCategorias[r.categoria] || '📦') + '</span>') +
-              ((!r.estoque || r.estoque <= 0) ? '<span style="position:absolute;top:6px;right:6px;padding:2px 8px;background:#e74c3c;color:#fff;font-size:0.6rem;font-weight:700;border-radius:10px;z-index:2">SEM ESTOQUE</span>' : '') +
+              (!produtosDB.estaDisponivel(r) ? '<span style="position:absolute;top:6px;right:6px;padding:2px 8px;background:#e74c3c;color:#fff;font-size:0.6rem;font-weight:700;border-radius:10px;z-index:2">SEM ESTOQUE</span>' : '') +
               '</div>' +
               '<div class="card-rel-info">' +
               '<h4>' + r.nome + '</h4>' +

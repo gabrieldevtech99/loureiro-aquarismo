@@ -706,8 +706,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     grid.innerHTML = destaques.map(p => {
       const cat = catMap[p.categoria] || catMap['agua-doce'];
-      const precoFinal = p.preco_promo || p.preco;
-      const precoStr = Number(precoFinal).toFixed(2).replace('.', ',');
+      const disponivel = produtosDB.estaDisponivel(p);
+      const fmt = v => Number(v || 0).toFixed(2).replace('.', ',');
+      let precoExib;
+      if (p.variacoes && p.variacoes.length > 0) {
+        const dispVars = p.variacoes.filter(v => v.disponivel !== false && (v.estoque === null || v.estoque === undefined || v.estoque > 0));
+        precoExib = dispVars.length > 0 ? Math.min(...dispVars.map(v => Number(v.preco_promo || v.preco))) : Number(p.preco_promo || p.preco);
+      } else {
+        precoExib = Number(p.preco_promo || p.preco);
+      }
+      const precoStr = fmt(precoExib);
       const precoPartes = precoStr.split(',');
       const imgSrc = (p.imagens && p.imagens[0]) ? p.imagens[0] : p.imagem_url;
       const produtoUrl = '/produto?id=' + encodeURIComponent(p.id);
@@ -715,8 +723,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return `
         <a href="${produtoUrl}" class="destaques__card visible" data-cat="${cat.css}" data-id="${p.id}" style="cursor:pointer;text-decoration:none;color:inherit">
           <div class="destaques__img destaques__img--${cat.css}">
-            ${p.preco_promo ? '<span class="destaques__badge destaques__badge--promo">Promoção</span>' : ''}
-            ${(!p.estoque || p.estoque <= 0) ? '<span class="destaques__badge" style="background:#e74c3c;right:10px;left:auto">SEM ESTOQUE</span>' : ''}
+            ${p.preco_promo && !(p.variacoes && p.variacoes.length) ? '<span class="destaques__badge destaques__badge--promo">Promoção</span>' : ''}
+            ${!disponivel ? '<span class="destaques__badge" style="background:#e74c3c;right:10px;left:auto">SEM ESTOQUE</span>' : ''}
             <button class="destaques__fav" aria-label="Favoritar">
               <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </button>
@@ -725,7 +733,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="destaques__body">
             <span class="destaques__category">${cat.nome}</span>
             <h3 class="destaques__name">${p.nome}</h3>
-            ${p.preco_promo ? `<span class="destaques__price" style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</span>` : ''}
+            ${p.variacoes && p.variacoes.length > 0 ? `<span style="font-size:0.7rem;color:rgba(255,255,255,0.4)">A partir de</span>` : ''}
+            ${p.preco_promo && !(p.variacoes && p.variacoes.length) ? `<span class="destaques__price" style="font-size:0.85rem;color:rgba(255,255,255,0.4);text-decoration:line-through">R$ ${fmt(p.preco)}</span>` : ''}
             <span class="destaques__price">R$ ${precoPartes[0]}<span class="destaques__price-cents">,${precoPartes[1]}</span></span>
             <span class="destaques__whatsapp" onclick="event.preventDefault();event.stopPropagation();window.open('https://wa.me/5585985301616?text=${encodeURIComponent(`Olá! Tenho interesse no ${p.nome} (R$${precoStr})`)}','_blank')">
               <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>

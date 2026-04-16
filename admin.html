@@ -764,7 +764,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             ${p.preco_promo ? `<span class="td-preco-promo">R$ ${Number(p.preco).toFixed(2).replace('.',',')}</span><br>` : ''}
             <span class="td-preco">R$ ${Number(precoFinal).toFixed(2).replace('.',',')}</span>
           </td>
-          <td><span class="${p.disponivel ? 'badge-on' : 'badge-off'}">${p.disponivel ? 'Disponivel' : 'Indisponivel'}</span></td>
+          <td><span class="${produtosDB.estaDisponivel(p) ? 'badge-on' : 'badge-off'}">${produtosDB.estaDisponivel(p) ? 'Disponivel' : 'Sem estoque'}</span></td>
           <td>${p.destaque ? '<span class="badge-destaque">Destaque</span>' : '<span style="color:rgba(255,255,255,0.2)">—</span>'}</td>
           <td>
             <div class="td-actions">

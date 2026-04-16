@@ -306,28 +306,39 @@
         }
 
         grid.innerHTML = produtos.map(p => {
-          const precoFinal = p.preco_promo || p.preco;
-          const precoStr = Number(precoFinal).toFixed(2).replace('.', ',');
+          const disponivel = produtosDB.estaDisponivel(p);
+          const fmt = v => Number(v || 0).toFixed(2).replace('.', ',');
+          let precoExib, precoLabel = '';
+          if (p.variacoes && p.variacoes.length > 0) {
+            const disponiveis = p.variacoes.filter(v => v.disponivel !== false && (v.estoque === null || v.estoque === undefined || v.estoque > 0));
+            const precoMin = disponiveis.length > 0 ? Math.min(...disponiveis.map(v => Number(v.preco_promo || v.preco))) : Number(p.preco_promo || p.preco);
+            precoExib = precoMin;
+            precoLabel = disponiveis.length > 0 ? 'A partir de' : '';
+          } else {
+            precoExib = Number(p.preco_promo || p.preco);
+          }
+          const precoStr = fmt(precoExib);
           const descCurta = p.descricao ? p.descricao.slice(0, 80) + (p.descricao.length > 80 ? '...' : '') : '';
           const imgSrc = (p.imagens && p.imagens[0]) ? p.imagens[0] : p.imagem_url;
           const produtoUrl = '/produto?id=' + encodeURIComponent(p.id);
 
           return `
-            <a href="${produtoUrl}" class="card-produto" data-id="${p.id}" style="cursor:pointer;text-decoration:none;color:inherit;display:block">
+            <a href="${produtoUrl}" class="card-produto ${!disponivel ? 'card-sem-estoque' : ''}" data-id="${p.id}" style="cursor:pointer;text-decoration:none;color:inherit;display:block">
               <div class="card-imagem">
                 ${imgSrc
                   ? `<img src="${imgSrc}" alt="${p.nome}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
                   : `<div class="placeholder-img cat-${p.categoria}">${catInfo.icone}</div>`
                 }
-                ${p.disponivel ? '<span class="badge-disponivel" title="Disponível"></span>' : ''}
-                ${p.preco_promo ? '<span class="badge-promo">PROMOÇÃO</span>' : ''}
-                ${(!p.estoque || p.estoque <= 0) ? '<span class="badge-sem-estoque">SEM ESTOQUE</span>' : ''}
+                ${disponivel ? '<span class="badge-disponivel" title="Disponível"></span>' : ''}
+                ${p.preco_promo && !(p.variacoes && p.variacoes.length) ? '<span class="badge-promo">PROMOÇÃO</span>' : ''}
+                ${!disponivel ? '<span class="badge-sem-estoque">SEM ESTOQUE</span>' : ''}
               </div>
               <div class="card-info">
                 <h3 class="card-nome">${p.nome}</h3>
                 ${descCurta ? `<p class="card-descricao">${descCurta}</p>` : ''}
                 <div class="card-preco">
-                  ${p.preco_promo ? `<span class="preco-de">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</span>` : ''}
+                  ${precoLabel ? `<span style="font-size:11px;color:rgba(255,255,255,0.4);display:block;margin-bottom:2px;">${precoLabel}</span>` : ''}
+                  ${p.preco_promo && !(p.variacoes && p.variacoes.length) ? `<span class="preco-de">R$ ${fmt(p.preco)}</span>` : ''}
                   <span class="preco-por">R$ ${precoStr}</span>
                 </div>
                 <button class="btn-whatsapp" onclick="event.preventDefault();event.stopPropagation();consultarWhatsApp('${p.nome.replace(/'/g,"\\'")}', 'R$ ${precoStr}')">

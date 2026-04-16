@@ -109,5 +109,38 @@ const produtosDB = {
     if (!url || !url.includes('supabase')) return;
     const nome = url.split('/').pop();
     await supabaseClient.storage.from('produtos').remove([nome]);
+  },
+
+  estaDisponivel(produto) {
+    if (produto.variacoes && produto.variacoes.length > 0) {
+      return produto.variacoes.some(v =>
+        v.disponivel !== false &&
+        (v.estoque === null || v.estoque === undefined || v.estoque > 0)
+      );
+    }
+    return produto.disponivel !== false &&
+      (produto.estoque === null || produto.estoque === undefined || produto.estoque > 0);
+  },
+
+  textoEstoque(produto, variacaoSelecionada = null) {
+    if (produto.variacoes && produto.variacoes.length > 0) {
+      if (variacaoSelecionada) {
+        const est = variacaoSelecionada.estoque;
+        if (est === null || est === undefined) return { texto: 'Disponível', cor: '#2ecc71', disponivel: true };
+        if (est <= 0)  return { texto: 'Sem estoque', cor: '#e74c3c', disponivel: false };
+        if (est <= 3)  return { texto: `Últimas ${est} unidades!`, cor: '#f39c12', disponivel: true };
+        return { texto: `${est} em estoque`, cor: '#2ecc71', disponivel: true };
+      }
+      const algumDisponivel = this.estaDisponivel(produto);
+      return algumDisponivel
+        ? { texto: 'Disponível', cor: '#2ecc71', disponivel: true }
+        : { texto: 'Sem estoque', cor: '#e74c3c', disponivel: false };
+    }
+    const est = produto.estoque;
+    if (!produto.disponivel) return { texto: 'Indisponível', cor: '#e74c3c', disponivel: false };
+    if (est === null || est === undefined) return { texto: 'Disponível', cor: '#2ecc71', disponivel: true };
+    if (est <= 0)  return { texto: 'Sem estoque', cor: '#e74c3c', disponivel: false };
+    if (est <= 3)  return { texto: `Últimas ${est} unidades!`, cor: '#f39c12', disponivel: true };
+    return { texto: `${est} em estoque`, cor: '#2ecc71', disponivel: true };
   }
 };

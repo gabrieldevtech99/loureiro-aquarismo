@@ -451,6 +451,17 @@
 }
 .btn-variacao.selecionado .preco-variacao { color: rgba(201,168,76,0.7); }
 
+.variacao-sem-estoque {
+  display: block;
+  font-size: 10px;
+  color: #e74c3c;
+  font-weight: 700;
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
 /* RESPONSIVO */
 @media (max-width: 1024px) {
   .produto-grid { grid-template-columns: 1fr; gap: 32px; }
