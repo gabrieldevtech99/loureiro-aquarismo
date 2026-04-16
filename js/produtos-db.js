@@ -62,6 +62,7 @@ const produtosDB = {
       categoria:   produto.categoria,
       preco:       parseFloat(produto.preco),
       preco_promo: produto.preco_promo ? parseFloat(produto.preco_promo) : null,
+      estoque:     parseInt(produto.estoque) || 0,
       descricao:   produto.descricao   || '',
       detalhes:    produto.detalhes    || {},
       imagem_url:  produto.imagem_url  || null,

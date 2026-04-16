@@ -410,6 +410,11 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         </div>
 
         <div class="form-group">
+          <label class="form-label">Estoque</label>
+          <input type="number" class="form-input" id="prodEstoque" step="1" min="0" placeholder="Qtd em estoque">
+        </div>
+
+        <div class="form-group">
           <label class="form-label">Detalhes extra</label>
           <input type="text" class="form-input" id="prodDetalhes" placeholder='Ex: tamanho:35cm, temp:24-28C'>
         </div>
@@ -516,6 +521,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   const fCategoria = document.getElementById('prodCategoria');
   const fPreco = document.getElementById('prodPreco');
   const fPrecoPromo = document.getElementById('prodPrecoPromo');
+  const fEstoque = document.getElementById('prodEstoque');
   const fDescricao = document.getElementById('prodDescricao');
   const fDetalhes = document.getElementById('prodDetalhes');
   const fDisponivel = document.getElementById('prodDisponivel');
@@ -783,6 +789,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       fCategoria.value = produto.categoria;
       fPreco.value = produto.preco;
       fPrecoPromo.value = produto.preco_promo || '';
+      fEstoque.value = produto.estoque || 0;
       fDescricao.value = produto.descricao || '';
       fDisponivel.checked = produto.disponivel;
       fDestaque.checked = produto.destaque;
@@ -883,6 +890,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         categoria: fCategoria.value,
         preco: parseFloat(fPreco.value) || 0,
         preco_promo: fPrecoPromo.value ? parseFloat(fPrecoPromo.value) : null,
+        estoque: parseInt(fEstoque.value) || 0,
         descricao: fDescricao.value.trim(),
         detalhes: detalhesObj,
         disponivel: fDisponivel.checked,
