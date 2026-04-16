@@ -80,8 +80,9 @@ var carrinhoDB = {
   },
 
   // ================================================
-  // INFINITEPAY — Geração de link de pagamento
+  // INFINITEPAY — Via proxy Supabase Edge Function
   // ================================================
+  PROXY_URL: 'https://imdrcbypudczfybkvhtx.supabase.co/functions/v1/infinitepay-proxy',
   INFINITE_TAG: 'loureiro_pet_ltd',
 
   gerarLinkPagamento: async function(dadosPedido) {
@@ -93,11 +94,16 @@ var carrinhoDB = {
 
     var itensPagamento = itens.map(function(item) {
       return {
-        quantity:    item.quantidade,
+        quantity:    Math.max(1, parseInt(item.quantidade) || 1),
         price:       Math.round(Number(item.preco) * 100),
-        description: String(item.nome).substring(0, 100)
+        description: String(item.nome).substring(0, 100).replace(/[^\w\s\-\.]/g, '')
       };
     });
+
+    var precoInvalido = itensPagamento.find(function(i) { return !i.price || i.price <= 0; });
+    if (precoInvalido) {
+      throw new Error('Preco invalido no carrinho: ' + JSON.stringify(precoInvalido));
+    }
 
     var orderNsu = 'loureiro-' + Date.now();
 
@@ -108,37 +114,34 @@ var carrinhoDB = {
       redirect_url: window.location.origin + '/pedido-confirmado'
     };
 
-    console.log('[InfinitePay] Enviando payload:', JSON.stringify(payload, null, 2));
+    console.log('[InfinitePay] Enviando via proxy:', JSON.stringify(payload, null, 2));
 
-    var response = await fetch(
-      'https://api.infinitepay.io/invoices/public/checkout/links',
-      {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
-      }
-    );
+    var response = await fetch(this.PROXY_URL, {
+      method:  'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+      },
+      body:    JSON.stringify({ action: 'gerar_link', payload: payload })
+    });
 
     var responseText = await response.text();
-    console.log('[InfinitePay] Resposta raw:', responseText);
+    console.log('[InfinitePay] Resposta proxy:', response.status, responseText);
 
     if (!response.ok) {
-      console.error('[InfinitePay] Erro HTTP:', response.status, responseText);
-      throw new Error('Erro ' + response.status + ': ' + responseText);
+      throw new Error('Proxy retornou erro ' + response.status + ': ' + responseText);
     }
 
     var data;
     try {
       data = JSON.parse(responseText);
     } catch (e) {
-      throw new Error('Resposta inválida da InfinitePay: ' + responseText);
+      throw new Error('Resposta invalida do proxy: ' + responseText);
     }
-
-    console.log('[InfinitePay] Link gerado:', data);
 
     var paymentUrl = data.url || data.link;
     if (!paymentUrl) {
-      throw new Error('InfinitePay não retornou link de pagamento: ' + responseText);
+      throw new Error('Link nao retornado: ' + JSON.stringify(data));
     }
 
     localStorage.setItem('loureiro_order_nsu', orderNsu);
@@ -157,19 +160,22 @@ var carrinhoDB = {
   // ================================================
   verificarPagamento: async function(orderNsu, transactionNsu, slug) {
     try {
-      var response = await fetch(
-        'https://api.infinitepay.io/invoices/public/checkout/payment_check',
-        {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({
+      var response = await fetch(this.PROXY_URL, {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body:    JSON.stringify({
+          action: 'verificar_pagamento',
+          payload: {
             handle:          this.INFINITE_TAG,
             order_nsu:       orderNsu,
             transaction_nsu: transactionNsu,
             slug:            slug
-          })
-        }
-      );
+          }
+        })
+      });
 
       if (!response.ok) return null;
       return await response.json();
