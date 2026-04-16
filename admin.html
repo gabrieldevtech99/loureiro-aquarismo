@@ -219,7 +219,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 }
 .lista-variacoes { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
 .variacao-item {
-  display: grid; grid-template-columns: 1fr 130px 130px 44px 44px; gap: 8px; align-items: center;
+  display: grid; grid-template-columns: 1fr 130px 130px 90px 44px 44px; gap: 8px; align-items: center;
   background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px; padding: 10px 12px;
 }
@@ -245,7 +245,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 }
 .btn-add-variacao:hover { background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.7); }
 .variacoes-header {
-  display: grid; grid-template-columns: 1fr 130px 130px 44px 44px; gap: 8px;
+  display: grid; grid-template-columns: 1fr 130px 130px 90px 44px 44px; gap: 8px;
   padding: 0 12px 6px; font-family: 'Lato', sans-serif; font-size: 11px;
   color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 1px;
 }
@@ -558,7 +558,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
   const adicionarVariacao = () => {
     const id = 'v' + (variacaoIdCounter++);
-    variacoes.push({ id, nome: '', preco: '', preco_promo: '', disponivel: true });
+    variacoes.push({ id, nome: '', preco: '', preco_promo: '', estoque: 0, disponivel: true });
     renderizarVariacoes();
     setTimeout(() => {
       const input = document.getElementById('var-nome-' + id);
@@ -587,6 +587,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <span>Nome da variação</span>
         <span>Preço (R$)</span>
         <span>Preço promo (R$)</span>
+        <span>Estoque</span>
         <span style="text-align:center">Ativo</span>
         <span></span>
       </div>
@@ -595,6 +596,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           <input type="text" id="var-nome-${v.id}" value="${v.nome || ''}" placeholder="Ex: 120ml, Vermelho, G..." data-vid="${v.id}" data-vcampo="nome">
           <input type="number" id="var-preco-${v.id}" value="${v.preco || ''}" placeholder="0,00" step="0.01" min="0" data-vid="${v.id}" data-vcampo="preco">
           <input type="number" id="var-promo-${v.id}" value="${v.preco_promo || ''}" placeholder="opcional" step="0.01" min="0" data-vid="${v.id}" data-vcampo="preco_promo">
+          <input type="number" id="var-estoque-${v.id}" value="${v.estoque || 0}" placeholder="0" step="1" min="0" data-vid="${v.id}" data-vcampo="estoque">
           <div class="variacao-disponivel" title="Disponível para venda">
             <input type="checkbox" id="var-disp-${v.id}" ${v.disponivel !== false ? 'checked' : ''} data-vid="${v.id}" data-vcampo="disponivel">
           </div>
@@ -632,6 +634,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         nome:        String(v.nome).trim(),
         preco:       parseFloat(v.preco) || 0,
         preco_promo: (v.preco_promo !== '' && v.preco_promo != null) ? parseFloat(v.preco_promo) : null,
+        estoque:     parseInt(v.estoque) || 0,
         disponivel:  v.disponivel !== false,
         ordem:       i
       }));
