@@ -321,6 +321,7 @@
                 }
                 ${p.disponivel ? '<span class="badge-disponivel" title="Disponível"></span>' : ''}
                 ${p.preco_promo ? '<span class="badge-promo">PROMOÇÃO</span>' : ''}
+                ${(!p.estoque || p.estoque <= 0) ? '<span class="badge-sem-estoque">SEM ESTOQUE</span>' : ''}
               </div>
               <div class="card-info">
                 <h3 class="card-nome">${p.nome}</h3>

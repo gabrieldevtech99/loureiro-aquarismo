@@ -378,6 +378,7 @@
   box-shadow: 0 8px 24px rgba(201,168,76,0.12);
 }
 .card-rel-img {
+  position: relative;
   aspect-ratio: 1/1;
   background: linear-gradient(135deg, #0D2840, #0D4F7C);
   display: flex;

@@ -716,6 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="${produtoUrl}" class="destaques__card visible" data-cat="${cat.css}" data-id="${p.id}" style="cursor:pointer;text-decoration:none;color:inherit">
           <div class="destaques__img destaques__img--${cat.css}">
             ${p.preco_promo ? '<span class="destaques__badge destaques__badge--promo">Promoção</span>' : ''}
+            ${(!p.estoque || p.estoque <= 0) ? '<span class="destaques__badge" style="background:#e74c3c;right:10px;left:auto">SEM ESTOQUE</span>' : ''}
             <button class="destaques__fav" aria-label="Favoritar">
               <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </button>
