@@ -82,7 +82,7 @@ var carrinhoDB = {
   // ================================================
   // INFINITEPAY — Geração de link de pagamento
   // ================================================
-  INFINITE_TAG: 'loureiro_pet_ltda',
+  INFINITE_TAG: 'loureiro_pet_ltd',
 
   gerarLinkPagamento: async function(dadosPedido) {
     var itens = this.getItens();
@@ -104,7 +104,7 @@ var carrinhoDB = {
     var payload = {
       handle:       this.INFINITE_TAG,
       order_nsu:    orderNsu,
-      itens:        itensPagamento,
+      items:        itensPagamento,
       redirect_url: window.location.origin + '/pedido-confirmado'
     };
 
@@ -136,7 +136,8 @@ var carrinhoDB = {
 
     console.log('[InfinitePay] Link gerado:', data);
 
-    if (!data.link) {
+    var paymentUrl = data.url || data.link;
+    if (!paymentUrl) {
       throw new Error('InfinitePay não retornou link de pagamento: ' + responseText);
     }
 
@@ -148,7 +149,7 @@ var carrinhoDB = {
       timestamp: new Date().toISOString()
     })));
 
-    return data.link;
+    return paymentUrl;
   },
 
   // ================================================
