@@ -691,12 +691,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const destaques = await produtosDB.getDestaques();
 
     const catMap = {
-      'agua-doce': { nome: 'Peixe de Água Doce', css: 'peixe', icone: '🐠' },
-      'marinho': { nome: 'Marinho', css: 'marinho', icone: '🪸' },
-      'aquarios': { nome: 'Aquário', css: 'peixe', icone: '🏠' },
-      'equipamentos': { nome: 'Equipamento', css: 'equipamento', icone: '⚙️' },
-      'racoes': { nome: 'Ração', css: 'racao', icone: '🍖' },
-      'manutencao': { nome: 'Manutenção', css: 'peixe', icone: '💧' }
+      'agua-doce':              { nome: 'Peixe de Água Doce', css: 'peixe', icone: '🐠' },
+      'marinho':                { nome: 'Marinho', css: 'marinho', icone: '🪸' },
+      'aquarios':               { nome: 'Aquário', css: 'peixe', icone: '🏠' },
+      'equipamentos':           { nome: 'Equipamento', css: 'equipamento', icone: '⚙️' },
+      'racoes':                 { nome: 'Ração', css: 'racao', icone: '🍖' },
+      'manutencao':             { nome: 'Manutenção', css: 'peixe', icone: '💧' },
+      'suplementos-marinho':    { nome: 'Suplementos Marinho', css: 'suplementos-marinho', icone: '🧂' },
+      'plantados':              { nome: 'Plantado', css: 'plantados', icone: '🌿' },
+      'plantas':                { nome: 'Plantas', css: 'plantas', icone: '🌱' },
+      'midias-biologicas':      { nome: 'Mídias Biológicas', css: 'midias-biologicas', icone: '🧫' },
+      'aceleradores-biologicos':{ nome: 'Aceleradores Biológicos', css: 'aceleradores-biologicos', icone: '🧪' }
     };
 
     if (!destaques.length) {

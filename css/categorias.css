@@ -140,6 +140,21 @@
   pointer-events: none;
 }
 
+/* Placeholder (div) para categorias sem foto */
+.categorias__foto--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  color: rgba(255,255,255,0.85);
+}
+
+.categorias__foto--placeholder.cat-suplementos-marinho    { background: linear-gradient(135deg, #0e2640, #2596be, #1f6b86); }
+.categorias__foto--placeholder.cat-plantados              { background: linear-gradient(135deg, #0a2e1a, #2d7a3e, #1a5c3a); }
+.categorias__foto--placeholder.cat-plantas                { background: linear-gradient(135deg, #1a3a1a, #3ea054, #1a6d3a); }
+.categorias__foto--placeholder.cat-midias-biologicas      { background: linear-gradient(135deg, #3a2a0a, #a07d2d, #6d5018); }
+.categorias__foto--placeholder.cat-aceleradores-biologicos{ background: linear-gradient(135deg, #0a2e3a, #2d8aa0, #1a5c6d); }
+
 /* ── Icone circular (legado, oculto) ── */
 .categorias__icon {
   display: none;
@@ -219,6 +234,11 @@
 .categorias__card:nth-child(4).visible { animation-delay: 0.35s; }
 .categorias__card:nth-child(5).visible { animation-delay: 0.45s; }
 .categorias__card:nth-child(6).visible { animation-delay: 0.55s; }
+.categorias__card:nth-child(7).visible { animation-delay: 0.65s; }
+.categorias__card:nth-child(8).visible { animation-delay: 0.75s; }
+.categorias__card:nth-child(9).visible { animation-delay: 0.85s; }
+.categorias__card:nth-child(10).visible { animation-delay: 0.95s; }
+.categorias__card:nth-child(11).visible { animation-delay: 1.05s; }
 
 @keyframes catCardIn {
   from {

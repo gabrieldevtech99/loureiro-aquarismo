@@ -193,6 +193,11 @@
 .placeholder-img.cat-equipamentos { background: linear-gradient(135deg, #0a1a2e, #1a3a5c, #2563a8); }
 .placeholder-img.cat-racoes      { background: linear-gradient(135deg, #2e1a0a, #5c3a1a, #7c4f0d); }
 .placeholder-img.cat-manutencao  { background: linear-gradient(135deg, #0a2e1a, #1a5c3a, #0d7c4f); }
+.placeholder-img.cat-suplementos-marinho    { background: linear-gradient(135deg, #0e2640, #2596be, #1f6b86); }
+.placeholder-img.cat-plantados              { background: linear-gradient(135deg, #0a2e1a, #2d7a3e, #1a5c3a); }
+.placeholder-img.cat-plantas                { background: linear-gradient(135deg, #1a3a1a, #3ea054, #1a6d3a); }
+.placeholder-img.cat-midias-biologicas      { background: linear-gradient(135deg, #3a2a0a, #a07d2d, #6d5018); }
+.placeholder-img.cat-aceleradores-biologicos{ background: linear-gradient(135deg, #0a2e3a, #2d8aa0, #1a5c6d); }
 
 /* Badges */
 .badge-promo {

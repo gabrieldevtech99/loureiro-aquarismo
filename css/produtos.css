@@ -191,6 +191,26 @@
   background: linear-gradient(135deg, #2e1a0a 0%, #5c3a1a 50%, #7c4f0d 100%);
 }
 
+.destaques__img--suplementos-marinho {
+  background: linear-gradient(135deg, #0e2640 0%, #2596be 50%, #1f6b86 100%);
+}
+
+.destaques__img--plantados {
+  background: linear-gradient(135deg, #0a2e1a 0%, #2d7a3e 50%, #1a5c3a 100%);
+}
+
+.destaques__img--plantas {
+  background: linear-gradient(135deg, #1a3a1a 0%, #3ea054 50%, #1a6d3a 100%);
+}
+
+.destaques__img--midias-biologicas {
+  background: linear-gradient(135deg, #3a2a0a 0%, #a07d2d 50%, #6d5018 100%);
+}
+
+.destaques__img--aceleradores-biologicos {
+  background: linear-gradient(135deg, #0a2e3a 0%, #2d8aa0 50%, #1a5c6d 100%);
+}
+
 /* ── Badges ── */
 .destaques__badge {
   position: absolute;

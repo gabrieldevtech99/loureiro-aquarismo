@@ -27,6 +27,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/produtos-db.js"></script>
+
+  <!-- Banner Em Construção — remover quando catálogo estiver completo -->
+  <script src="js/aviso-construcao.js"></script>
 </head>
 <body>
 
@@ -90,6 +93,11 @@
       <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
       <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
       <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="/categoria?cat=plantados" class="mobile-menu__link">Plantados</a>
+      <a href="/categoria?cat=plantas" class="mobile-menu__link">Plantas</a>
+      <a href="/categoria?cat=suplementos-marinho" class="mobile-menu__link">Suplementos Marinho</a>
+      <a href="/categoria?cat=midias-biologicas" class="mobile-menu__link">Mídias Biológicas</a>
+      <a href="/categoria?cat=aceleradores-biologicos" class="mobile-menu__link">Aceleradores Biológicos</a>
       <a href="/#sobre" class="mobile-menu__link">Sobre</a>
       <a href="/#contato" class="mobile-menu__link">Contato</a>
       <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
@@ -223,12 +231,17 @@
        Página de Categoria — Lógica Supabase
        ============================================ */
     const CATS_INFO = {
-      'agua-doce':    { nome: 'Peixes de Água Doce', icone: '🐠' },
-      'marinho':      { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
-      'aquarios':     { nome: 'Aquários & Kits', icone: '🏠' },
-      'equipamentos': { nome: 'Equipamentos', icone: '⚙️' },
-      'racoes':       { nome: 'Rações Premium', icone: '🍖' },
-      'manutencao':   { nome: 'Produtos de Manutenção', icone: '💧' }
+      'agua-doce':              { nome: 'Peixes de Água Doce', icone: '🐠' },
+      'marinho':                { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
+      'aquarios':               { nome: 'Aquários & Kits', icone: '🏠' },
+      'equipamentos':           { nome: 'Equipamentos', icone: '⚙️' },
+      'racoes':                 { nome: 'Rações Premium', icone: '🍖' },
+      'manutencao':             { nome: 'Produtos de Manutenção', icone: '💧' },
+      'suplementos-marinho':    { nome: 'Suplementos Marinho', icone: '🧂' },
+      'plantados':              { nome: 'Aquários Plantados', icone: '🌿' },
+      'plantas':                { nome: 'Plantas Aquáticas', icone: '🌱' },
+      'midias-biologicas':      { nome: 'Mídias Biológicas', icone: '🧫' },
+      'aceleradores-biologicos':{ nome: 'Aceleradores Biológicos', icone: '🧪' }
     };
 
     document.addEventListener('DOMContentLoaded', async () => {

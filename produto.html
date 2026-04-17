@@ -28,6 +28,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/produtos-db.js"></script>
+
+  <!-- Banner Em Construção — remover quando catálogo estiver completo -->
+  <script src="js/aviso-construcao.js"></script>
 </head>
 <body>
 
@@ -85,6 +88,11 @@
       <a href="/categoria?cat=equipamentos" class="mobile-menu__link">Equipamentos</a>
       <a href="/categoria?cat=racoes" class="mobile-menu__link">Rações</a>
       <a href="/categoria?cat=marinho" class="mobile-menu__link">Corais</a>
+      <a href="/categoria?cat=plantados" class="mobile-menu__link">Plantados</a>
+      <a href="/categoria?cat=plantas" class="mobile-menu__link">Plantas</a>
+      <a href="/categoria?cat=suplementos-marinho" class="mobile-menu__link">Suplementos Marinho</a>
+      <a href="/categoria?cat=midias-biologicas" class="mobile-menu__link">Mídias Biológicas</a>
+      <a href="/categoria?cat=aceleradores-biologicos" class="mobile-menu__link">Aceleradores Biológicos</a>
       <a href="/#sobre" class="mobile-menu__link">Sobre</a>
       <a href="/#contato" class="mobile-menu__link">Contato</a>
       <a href="https://wa.me/5585985301616" target="_blank" rel="noopener" class="mobile-menu__whatsapp">
@@ -266,12 +274,17 @@
 
   const iconesCategorias = {
     'agua-doce':'🐠','marinho':'🪸','aquarios':'🏠',
-    'equipamentos':'⚙️','racoes':'🍖','manutencao':'💧'
+    'equipamentos':'⚙️','racoes':'🍖','manutencao':'💧',
+    'suplementos-marinho':'🧂','plantados':'🌿','plantas':'🌱',
+    'midias-biologicas':'🧫','aceleradores-biologicos':'🧪'
   };
   const nomesCategorias = {
     'agua-doce':'Peixes de Água Doce','marinho':'Peixes e Corais Marinhos',
     'aquarios':'Aquários & Kits','equipamentos':'Equipamentos',
-    'racoes':'Rações Premium','manutencao':'Produtos de Manutenção'
+    'racoes':'Rações Premium','manutencao':'Produtos de Manutenção',
+    'suplementos-marinho':'Suplementos Marinho','plantados':'Aquários Plantados',
+    'plantas':'Plantas Aquáticas','midias-biologicas':'Mídias Biológicas',
+    'aceleradores-biologicos':'Aceleradores Biológicos'
   };
   const labelsDetalhes = {
     aquario_minimo:'Tamanho mínimo do aquário', cuidados:'Cuidados', temperamento:'Temperamento',
