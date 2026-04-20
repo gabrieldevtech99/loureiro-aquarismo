@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m http.server 8000)",
+      "Bash(start *)",
+      "WebFetch(domain:mwhorsstralwwizvykhe.supabase.co)",
+      "Bash(curl *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git config *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "WebFetch(domain:loureiro-aquarismo.vercel.app)",
+      "WebFetch(domain:checkout.infinitepay.io)",
+      "Bash(npx supabase *)",
+      "Bash(supabase --version)",
+      "Bash(py --version)",
+      "Bash(python dev-server.py)",
+      "Bash(nslookup imdrcbypudczfybkvhtx.supabase.co)",
+      "Bash(nslookup imdrcbypudczfybkvhtx.supabase.co 8.8.8.8)"
+    ]
+  }
+}
