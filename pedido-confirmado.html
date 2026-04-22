@@ -27,6 +27,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/produtos-db.js"></script>
+  <script src="js/pedidos-db.js"></script>
   <script src="js/carrinho-db.js"></script>
 
   <style>
@@ -343,6 +344,17 @@
       }
 
       renderizarConfirmado(dadosPedido, captureMethod, receiptUrl, dadosPagamento);
+
+      // Atualiza status do pedido no Supabase para "pago"
+      if (orderNsu && typeof pedidosDB !== 'undefined') {
+        pedidosDB.atualizarPorOrderNsu(orderNsu, {
+          status: 'pago',
+          transaction_nsu: transactionNsu || null,
+          slug_pagamento:  slug || null,
+          infinitepay:     dadosPagamento || null
+        }).catch(function(e) { console.warn('[pedido-confirmado] falha ao atualizar status:', e); });
+      }
+
       carrinhoDB.limpar();
       localStorage.removeItem('loureiro_order_nsu');
       localStorage.removeItem('loureiro_pedido_dados');

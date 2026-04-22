@@ -42,6 +42,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/produtos-db.js"></script>
+  <script src="js/pedidos-db.js"></script>
   <script src="js/carrinho-db.js"></script>
 
   <!-- Banner Em Construção — remover quando catálogo estiver completo -->
@@ -453,6 +454,31 @@
       try {
         var linkPagamento = await carrinhoDB.gerarLinkPagamento(dadosPedido);
         console.log('[Checkout] Redirecionando para InfinitePay:', linkPagamento);
+
+        // Salvar pedido no Supabase ANTES de redirecionar.
+        // Se falhar, seguimos em frente para não travar a venda — o pedido ainda
+        // pode ser reconstruído a partir do localStorage em /pedido-confirmado.
+        try {
+          if (typeof pedidosDB !== 'undefined') {
+            var orderNsu = localStorage.getItem('loureiro_order_nsu');
+            await pedidosDB.criar({
+              orderNsu:  orderNsu,
+              nome:      dadosPedido.nome,
+              telefone:  dadosPedido.telefone,
+              email:     dadosPedido.email,
+              obs:       dadosPedido.obs,
+              entrega:   dadosPedido.entrega,
+              pagamento: dadosPedido.pagamento,
+              itens:     carrinhoDB.getItens(),
+              total:     carrinhoDB.getTotalValor(),
+              status:    'pendente'
+            });
+            console.log('[Checkout] Pedido salvo no banco:', orderNsu);
+          }
+        } catch (errPedido) {
+          console.warn('[Checkout] Falha ao salvar pedido no banco (pagamento continua):', errPedido);
+        }
+
         window.location.href = linkPagamento;
       } catch (erro) {
         console.error('[Checkout] Erro ao gerar pagamento:', erro);

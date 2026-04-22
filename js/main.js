@@ -690,19 +690,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const destaques = await produtosDB.getDestaques();
 
-    const catMap = {
-      'agua-doce':              { nome: 'Peixe de Água Doce', css: 'peixe', icone: '🐠' },
-      'marinho':                { nome: 'Marinho', css: 'marinho', icone: '🪸' },
-      'aquarios':               { nome: 'Aquário', css: 'peixe', icone: '🏠' },
-      'equipamentos':           { nome: 'Equipamento', css: 'equipamento', icone: '⚙️' },
-      'racoes':                 { nome: 'Ração', css: 'racao', icone: '🍖' },
-      'manutencao':             { nome: 'Manutenção', css: 'peixe', icone: '💧' },
-      'suplementos-marinho':    { nome: 'Suplementos Marinho', css: 'suplementos-marinho', icone: '🧂' },
-      'plantados':              { nome: 'Plantado', css: 'plantados', icone: '🌿' },
-      'plantas':                { nome: 'Plantas', css: 'plantas', icone: '🌱' },
-      'midias-biologicas':      { nome: 'Mídias Biológicas', css: 'midias-biologicas', icone: '🧫' },
-      'aceleradores-biologicos':{ nome: 'Aceleradores Biológicos', css: 'aceleradores-biologicos', icone: '🧪' }
+    // Mapa CSS por slug (para escolher a classe visual do card).
+    // Se a categoria foi criada no admin e não está aqui, usa um fallback.
+    const catCssMap = {
+      'agua-doce': 'peixe', 'marinho': 'marinho', 'aquarios': 'peixe',
+      'equipamentos': 'equipamento', 'racoes': 'racao', 'manutencao': 'peixe',
+      'suplementos-marinho': 'suplementos-marinho', 'plantados': 'plantados',
+      'plantas': 'plantas', 'midias-biologicas': 'midias-biologicas',
+      'aceleradores-biologicos': 'aceleradores-biologicos'
     };
+
+    // Categorias dinâmicas (com fallback se categoriasDB não estiver carregado)
+    let catMap = {};
+    if (typeof categoriasDB !== 'undefined') {
+      const lista = await categoriasDB.getAll();
+      lista.forEach(c => {
+        catMap[c.slug] = {
+          nome:  c.nome,
+          css:   catCssMap[c.slug] || 'peixe',
+          icone: c.icone || '📦'
+        };
+      });
+    }
 
     if (!destaques.length) {
       grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px;color:rgba(255,255,255,0.4);font-family:'Lato',sans-serif;font-size:18px;"><span style="font-size:48px;display:block;margin-bottom:12px;">🐠</span>Em breve novos produtos!</div>`;

@@ -27,6 +27,7 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
+  <script src="js/categorias-db.js"></script>
   <script src="js/produtos-db.js"></script>
 
   <!-- Banner Em Construção — remover quando catálogo estiver completo -->
@@ -272,20 +273,20 @@
   let produtoAtual = null;
   let variacaoAtual = null;
 
-  const iconesCategorias = {
-    'agua-doce':'🐠','marinho':'🪸','aquarios':'🏠',
-    'equipamentos':'⚙️','racoes':'🍖','manutencao':'💧',
-    'suplementos-marinho':'🧂','plantados':'🌿','plantas':'🌱',
-    'midias-biologicas':'🧫','aceleradores-biologicos':'🧪'
-  };
-  const nomesCategorias = {
-    'agua-doce':'Peixes de Água Doce','marinho':'Peixes e Corais Marinhos',
-    'aquarios':'Aquários & Kits','equipamentos':'Equipamentos',
-    'racoes':'Rações Premium','manutencao':'Produtos de Manutenção',
-    'suplementos-marinho':'Suplementos Marinho','plantados':'Aquários Plantados',
-    'plantas':'Plantas Aquáticas','midias-biologicas':'Mídias Biológicas',
-    'aceleradores-biologicos':'Aceleradores Biológicos'
-  };
+  // Mapas de categorias — preenchidos dinamicamente a partir do Supabase
+  // (até carregar, o fallback embutido em categoriasDB é usado).
+  let iconesCategorias = {};
+  let nomesCategorias  = {};
+
+  async function carregarMapasCategorias() {
+    const lista = await categoriasDB.getAll();
+    iconesCategorias = {};
+    nomesCategorias  = {};
+    lista.forEach(c => {
+      iconesCategorias[c.slug] = c.icone || '📦';
+      nomesCategorias[c.slug]  = c.nome;
+    });
+  }
   const labelsDetalhes = {
     aquario_minimo:'Tamanho mínimo do aquário', cuidados:'Cuidados', temperamento:'Temperamento',
     temperatura:'Temperatura', ph:'pH da água', tamanho:'Tamanho adulto',
@@ -571,8 +572,9 @@
   }
 
   // CARREGAR PRODUTO
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
     carrinhoDB._atualizarContador();
+    await carregarMapasCategorias();
     var id = extrairIdDaUrl();
 
     console.log('[produto] URL:', window.location.href);

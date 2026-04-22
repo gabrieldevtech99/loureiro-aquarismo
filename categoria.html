@@ -26,6 +26,7 @@
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
+  <script src="js/categorias-db.js"></script>
   <script src="js/produtos-db.js"></script>
 
   <!-- Banner Em Construção — remover quando catálogo estiver completo -->
@@ -230,23 +231,10 @@
     /* ============================================
        Página de Categoria — Lógica Supabase
        ============================================ */
-    const CATS_INFO = {
-      'agua-doce':              { nome: 'Peixes de Água Doce', icone: '🐠' },
-      'marinho':                { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
-      'aquarios':               { nome: 'Aquários & Kits', icone: '🏠' },
-      'equipamentos':           { nome: 'Equipamentos', icone: '⚙️' },
-      'racoes':                 { nome: 'Rações Premium', icone: '🍖' },
-      'manutencao':             { nome: 'Produtos de Manutenção', icone: '💧' },
-      'suplementos-marinho':    { nome: 'Suplementos Marinho', icone: '🧂' },
-      'plantados':              { nome: 'Aquários Plantados', icone: '🌿' },
-      'plantas':                { nome: 'Plantas Aquáticas', icone: '🌱' },
-      'midias-biologicas':      { nome: 'Mídias Biológicas', icone: '🧫' },
-      'aceleradores-biologicos':{ nome: 'Aceleradores Biológicos', icone: '🧪' }
-    };
-
     document.addEventListener('DOMContentLoaded', async () => {
       const params   = new URLSearchParams(window.location.search);
       const catSlug  = params.get('cat') || 'agua-doce';
+      const CATS_INFO = await categoriasDB.getMap();
       const catInfo  = CATS_INFO[catSlug];
 
       if (!catInfo) {

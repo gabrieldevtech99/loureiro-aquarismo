@@ -9,6 +9,8 @@
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabase-config.js"></script>
+<script src="js/categorias-db.js"></script>
+<script src="js/pedidos-db.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -295,6 +297,116 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .toast.error { background: var(--vermelho); color: var(--branco); }
 .toast.info { background: var(--azul-profundo); color: var(--branco); border: 1px solid var(--azul-agua); }
 
+/* ── ABAS ── */
+.tabs {
+  display: flex; gap: 4px; margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 12px 24px; font-family: var(--font-body); font-weight: 700; font-size: 0.9rem;
+  background: transparent; border: none; color: rgba(255,255,255,0.5);
+  cursor: pointer; transition: color 0.2s, border-color 0.2s;
+  border-bottom: 3px solid transparent; white-space: nowrap;
+}
+.tab-btn:hover { color: var(--branco); }
+.tab-btn.active { color: var(--dourado); border-bottom-color: var(--dourado); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── PEDIDOS ── */
+.pedidos-lista { display: flex; flex-direction: column; gap: 12px; }
+.pedido-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 16px 20px; transition: border-color 0.2s;
+}
+.pedido-card:hover { border-color: rgba(201,168,76,0.4); }
+.pedido-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.pedido-cliente { display: flex; flex-direction: column; gap: 2px; }
+.pedido-cliente strong { color: var(--branco); font-size: 1rem; }
+.pedido-cliente small { color: rgba(255,255,255,0.5); font-size: 0.82rem; }
+.pedido-total-wrap { text-align: right; }
+.pedido-total {
+  font-family: var(--font-display); font-size: 1.15rem;
+  font-weight: 900; color: var(--dourado);
+}
+.pedido-data { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+.pedido-badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.pedido-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 700;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
+}
+.pedido-badge.status-pendente  { background: rgba(243,156,18,0.15);  color: #f39c12; }
+.pedido-badge.status-pago      { background: rgba(37,211,102,0.15);  color: #25D366; }
+.pedido-badge.status-cancelado { background: rgba(231,76,60,0.15);   color: #e74c3c; }
+.pedido-badge.status-entregue  { background: rgba(26,143,191,0.15);  color: #1A8FBF; }
+.pedido-itens-resumo {
+  color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 10px;
+}
+.pedido-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.pedido-btn {
+  padding: 6px 14px; font-family: var(--font-body); font-weight: 700; font-size: 0.78rem;
+  background: rgba(26,143,191,0.15); color: var(--azul-agua);
+  border: none; border-radius: 6px; cursor: pointer; transition: background 0.2s;
+}
+.pedido-btn:hover { background: rgba(26,143,191,0.3); }
+.pedido-btn.ver-wpp  { background: rgba(37,211,102,0.15); color: var(--verde); }
+.pedido-btn.ver-wpp:hover { background: rgba(37,211,102,0.3); }
+.pedido-btn.excluir  { background: rgba(192,57,43,0.15); color: #e74c3c; }
+.pedido-btn.excluir:hover { background: rgba(192,57,43,0.3); }
+.pedido-detalhe {
+  display: none; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.88rem; color: rgba(255,255,255,0.7); line-height: 1.5;
+}
+.pedido-detalhe.open { display: block; }
+.pedido-detalhe .det-linha { display: flex; justify-content: space-between; padding: 4px 0; }
+.pedido-detalhe .det-linha strong { color: rgba(255,255,255,0.55); font-weight: 700; }
+.pedido-detalhe .status-select {
+  padding: 6px 10px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15); color: var(--branco);
+  border-radius: 6px; font-size: 0.82rem;
+}
+
+/* ── CATEGORIAS ── */
+.categorias-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+.categoria-card {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 16px; display: flex; align-items: center;
+  gap: 14px; transition: border-color 0.2s;
+}
+.categoria-card:hover { border-color: rgba(201,168,76,0.4); }
+.categoria-card.inativa { opacity: 0.5; }
+.categoria-icone {
+  font-size: 32px; width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(26,143,191,0.12); border-radius: 10px; flex-shrink: 0;
+}
+.categoria-info { flex: 1; min-width: 0; }
+.categoria-info strong {
+  color: var(--branco); font-size: 0.92rem; display: block;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.categoria-info small { color: rgba(255,255,255,0.45); font-size: 0.75rem; }
+.categoria-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+.categoria-actions button {
+  padding: 5px 10px; font-size: 0.72rem; font-weight: 700;
+  border: none; border-radius: 6px; cursor: pointer;
+  font-family: var(--font-body);
+}
+.categoria-actions .cat-edit { background: rgba(26,143,191,0.2); color: var(--azul-agua); }
+.categoria-actions .cat-edit:hover { background: rgba(26,143,191,0.35); }
+.categoria-actions .cat-del  { background: rgba(192,57,43,0.15); color: #e74c3c; }
+.categoria-actions .cat-del:hover  { background: rgba(192,57,43,0.3); }
+
 /* ── RESPONSIVO ── */
 @media (max-width: 768px) {
   .form-grid { grid-template-columns: 1fr; }
@@ -343,38 +455,77 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <!-- Stats -->
     <div class="stats-grid" id="statsGrid"></div>
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <input type="text" class="toolbar-search" id="toolSearch" placeholder="Buscar produto por nome...">
-      <select class="toolbar-select" id="toolCategoria">
-        <option value="">Todas as categorias</option>
-      </select>
-      <select class="toolbar-select" id="toolStatus">
-        <option value="">Todos os status</option>
-        <option value="disponivel">Disponíveis</option>
-        <option value="indisponivel">Indisponíveis</option>
-        <option value="destaque">Destaques</option>
-        <option value="promocao">Em promoção</option>
-      </select>
-      <button class="btn-novo" id="btnNovo">+ Novo Produto</button>
+    <!-- Abas -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tab-produtos">📦 Produtos</button>
+      <button class="tab-btn" data-tab="tab-pedidos">🛒 Pedidos</button>
+      <button class="tab-btn" data-tab="tab-categorias">📁 Categorias</button>
     </div>
 
-    <!-- Tabela -->
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Produto</th>
-            <th>Categoria</th>
-            <th>Preco</th>
-            <th>Status</th>
-            <th>Destaque</th>
-            <th>Acoes</th>
-          </tr>
-        </thead>
-        <tbody id="tabelaBody"></tbody>
-      </table>
+    <!-- Painel Produtos -->
+    <div class="tab-panel active" id="tab-produtos">
+      <div class="toolbar">
+        <input type="text" class="toolbar-search" id="toolSearch" placeholder="Buscar produto por nome...">
+        <select class="toolbar-select" id="toolCategoria">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select class="toolbar-select" id="toolStatus">
+          <option value="">Todos os status</option>
+          <option value="disponivel">Disponíveis</option>
+          <option value="indisponivel">Indisponíveis</option>
+          <option value="destaque">Destaques</option>
+          <option value="promocao">Em promoção</option>
+        </select>
+        <button class="btn-novo" id="btnNovo">+ Novo Produto</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Preco</th>
+              <th>Status</th>
+              <th>Destaque</th>
+              <th>Acoes</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Painel Pedidos -->
+    <div class="tab-panel" id="tab-pedidos">
+      <div class="toolbar">
+        <input type="text" class="toolbar-search" id="pedSearch" placeholder="Buscar por nome, telefone ou nº do pedido...">
+        <select class="toolbar-select" id="pedStatus">
+          <option value="">Todos os status</option>
+          <option value="pendente">Pendentes</option>
+          <option value="pago">Pagos</option>
+          <option value="entregue">Entregues</option>
+          <option value="cancelado">Cancelados</option>
+        </select>
+        <button class="btn-novo" id="btnRecarregarPedidos">🔄 Atualizar</button>
+      </div>
+      <div class="pedidos-lista" id="pedidosLista">
+        <div class="empty-msg">Carregando pedidos...</div>
+      </div>
+    </div>
+
+    <!-- Painel Categorias -->
+    <div class="tab-panel" id="tab-categorias">
+      <div class="toolbar">
+        <span style="flex:1;color:rgba(255,255,255,0.5);font-size:0.88rem;">
+          Organize o catálogo em categorias. Cada produto é vinculado a uma categoria pelo slug (identificador único).
+        </span>
+        <button class="btn-novo" id="btnNovaCategoria">+ Nova Categoria</button>
+      </div>
+      <div class="categorias-grid" id="categoriasGrid">
+        <div class="empty-msg">Carregando categorias...</div>
+      </div>
     </div>
   </div>
 </div>
@@ -473,6 +624,62 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   </div>
 </div>
 
+<!-- ============ MODAL DE CATEGORIA ============ -->
+<div class="modal-overlay" id="catModalOverlay">
+  <div class="modal" style="max-width: 520px">
+    <button class="modal-close" id="catModalClose">&times;</button>
+    <h2 id="catModalTitle">Nova Categoria</h2>
+
+    <form id="categoriaForm">
+      <input type="hidden" id="catId">
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome da Categoria *</label>
+          <input type="text" class="form-input" id="catNome" required placeholder="Ex: Acessórios Decorativos">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ícone (emoji)</label>
+          <input type="text" class="form-input" id="catIcone" maxlength="4" placeholder="📦">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ordem de exibição</label>
+          <input type="number" class="form-input" id="catOrdem" step="10" placeholder="0">
+        </div>
+
+        <div class="form-group full">
+          <label class="form-label">Slug (identificador URL) *</label>
+          <input type="text" class="form-input" id="catSlug" required placeholder="acessorios-decorativos" pattern="[a-z0-9-]+">
+          <small style="color:rgba(255,255,255,0.4);font-size:0.72rem;margin-top:4px;">
+            Apenas letras minúsculas, números e hífens. Gerado automaticamente a partir do nome.
+          </small>
+        </div>
+
+        <div class="form-group full">
+          <div class="form-check-row">
+            <label class="form-check">
+              <input type="checkbox" id="catAtivo" checked> Ativa (aparece no site)
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group full">
+          <div style="padding:12px;background:rgba(243,156,18,0.08);border:1px solid rgba(243,156,18,0.25);border-radius:8px;font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:1.5;">
+            ⚠️ <strong>Atenção:</strong> Ao editar o slug de uma categoria existente, os produtos já cadastrados nela continuarão apontando para o slug antigo. Use com cuidado.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" id="catBtnCancelar">Cancelar</button>
+        <button type="submit" class="btn-salvar">Salvar Categoria</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -486,19 +693,9 @@ tr:hover td { background: rgba(255,255,255,0.02); }
   const SENHA = 'loureiro2025';
   const AUTH_KEY = 'loureiro_admin_logado';
 
-  const CATEGORIAS = {
-    'agua-doce':              { nome: 'Peixes de Água Doce', icone: '🐠' },
-    'marinho':                { nome: 'Peixes e Corais Marinhos', icone: '🪸' },
-    'aquarios':               { nome: 'Aquários & Kits', icone: '🏠' },
-    'equipamentos':           { nome: 'Equipamentos', icone: '⚙️' },
-    'racoes':                 { nome: 'Rações Premium', icone: '🍖' },
-    'manutencao':             { nome: 'Produtos de Manutenção', icone: '💧' },
-    'suplementos-marinho':    { nome: 'Suplementos Marinho', icone: '🧂' },
-    'plantados':              { nome: 'Aquários Plantados', icone: '🌿' },
-    'plantas':                { nome: 'Plantas Aquáticas', icone: '🌱' },
-    'midias-biologicas':      { nome: 'Mídias Biológicas', icone: '🧫' },
-    'aceleradores-biologicos':{ nome: 'Aceleradores Biológicos', icone: '🧪' }
-  };
+  // CATEGORIAS agora vem do Supabase via categoriasDB (fallback embutido).
+  // Mapa { slug: {nome, icone, ...} } recarregado toda vez que categorias mudam.
+  let CATEGORIAS = {};
 
   /* ── Elementos ── */
   const loginOverlay = document.getElementById('loginOverlay');
@@ -704,30 +901,39 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     location.reload();
   });
 
-  /* ── Popular selects de categoria ── */
-  const popularCategorias = () => {
-    let opts = '';
-    for (const [slug, info] of Object.entries(CATEGORIAS)) {
-      opts += `<option value="${slug}">${info.icone} ${info.nome}</option>`;
-    }
+  /* ── Popular selects de categoria (carrega do Supabase) ── */
+  const popularCategorias = async () => {
+    const lista = await categoriasDB.getAll(true);
+    CATEGORIAS = {};
+    lista.forEach(c => { CATEGORIAS[c.slug] = { nome: c.nome, icone: c.icone || '📦', id: c.id, ativo: c.ativo }; });
+
+    const opts = lista
+      .filter(c => c.ativo !== false)
+      .map(c => `<option value="${c.slug}">${c.icone || '📦'} ${c.nome}</option>`)
+      .join('');
     fCategoria.innerHTML = opts;
     toolCategoria.innerHTML = '<option value="">Todas as categorias</option>' + opts;
   };
 
   /* ── Stats (async) ── */
   const renderStats = async () => {
-    const todos = await produtosDB.getAll();
-    const disponiveis = todos.filter(p => p.disponivel).length;
-    const destaques = todos.filter(p => p.destaque).length;
-    const promos = todos.filter(p => p.preco_promo).length;
-    const cats = new Set(todos.map(p => p.categoria)).size;
+    const [todos, cats, pedidos] = await Promise.all([
+      produtosDB.getAll(),
+      categoriasDB.getAll(true).catch(() => []),
+      pedidosDB.getAll().catch(() => [])
+    ]);
+    const disponiveis   = todos.filter(p => p.disponivel).length;
+    const destaques     = todos.filter(p => p.destaque).length;
+    const pedidosPend   = pedidos.filter(p => p.status === 'pendente').length;
+    const pedidosPagos  = pedidos.filter(p => p.status === 'pago').length;
 
     statsGrid.innerHTML = `
       <div class="stat-card"><div class="stat-icon">&#x1F4E6;</div><div class="stat-number">${todos.length}</div><div class="stat-label">Total de Produtos</div></div>
       <div class="stat-card"><div class="stat-icon">&#x2705;</div><div class="stat-number">${disponiveis}</div><div class="stat-label">Disponiveis</div></div>
       <div class="stat-card"><div class="stat-icon">&#x2B50;</div><div class="stat-number">${destaques}</div><div class="stat-label">Destaques</div></div>
-      <div class="stat-card"><div class="stat-icon">&#x1F525;</div><div class="stat-number">${promos}</div><div class="stat-label">Em Promocao</div></div>
-      <div class="stat-card"><div class="stat-icon">&#x1F4C1;</div><div class="stat-number">${cats}</div><div class="stat-label">Categorias</div></div>
+      <div class="stat-card"><div class="stat-icon">&#x1F4C1;</div><div class="stat-number">${cats.length}</div><div class="stat-label">Categorias</div></div>
+      <div class="stat-card" style="border-color:rgba(243,156,18,0.3)"><div class="stat-icon">&#x1F6D2;</div><div class="stat-number" style="color:#f39c12">${pedidosPend}</div><div class="stat-label">Pedidos Pendentes</div></div>
+      <div class="stat-card" style="border-color:rgba(37,211,102,0.3)"><div class="stat-icon">&#x1F4B0;</div><div class="stat-number" style="color:#25D366">${pedidosPagos}</div><div class="stat-label">Pedidos Pagos</div></div>
     `;
   };
 
@@ -966,9 +1172,308 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     }
   };
 
+  /* ══════════════════════════════════════════════
+     SISTEMA DE ABAS
+     ══════════════════════════════════════════════ */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const alvo = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === alvo));
+
+      if (alvo === 'tab-pedidos')    renderPedidos();
+      if (alvo === 'tab-categorias') renderCategorias();
+    });
+  });
+
+  /* ══════════════════════════════════════════════
+     ABA: CATEGORIAS
+     ══════════════════════════════════════════════ */
+  const catModalOverlay = document.getElementById('catModalOverlay');
+  const catModalClose   = document.getElementById('catModalClose');
+  const catModalTitle   = document.getElementById('catModalTitle');
+  const categoriaForm   = document.getElementById('categoriaForm');
+  const catBtnCancelar  = document.getElementById('catBtnCancelar');
+  const btnNovaCategoria = document.getElementById('btnNovaCategoria');
+  const categoriasGrid  = document.getElementById('categoriasGrid');
+
+  const fCatId    = document.getElementById('catId');
+  const fCatNome  = document.getElementById('catNome');
+  const fCatIcone = document.getElementById('catIcone');
+  const fCatOrdem = document.getElementById('catOrdem');
+  const fCatSlug  = document.getElementById('catSlug');
+  const fCatAtivo = document.getElementById('catAtivo');
+
+  let slugFoiEditadoManualmente = false;
+
+  fCatNome.addEventListener('input', () => {
+    if (!slugFoiEditadoManualmente && !fCatId.value) {
+      fCatSlug.value = categoriasDB.slugify(fCatNome.value);
+    }
+  });
+  fCatSlug.addEventListener('input', () => { slugFoiEditadoManualmente = true; });
+
+  const abrirCatModal = (cat) => {
+    categoriaForm.reset();
+    slugFoiEditadoManualmente = false;
+    if (cat) {
+      catModalTitle.textContent = 'Editar Categoria';
+      fCatId.value    = cat.id;
+      fCatNome.value  = cat.nome;
+      fCatIcone.value = cat.icone || '';
+      fCatOrdem.value = cat.ordem || 0;
+      fCatSlug.value  = cat.slug;
+      fCatAtivo.checked = cat.ativo !== false;
+      slugFoiEditadoManualmente = true;
+    } else {
+      catModalTitle.textContent = 'Nova Categoria';
+      fCatId.value = '';
+      fCatAtivo.checked = true;
+      fCatIcone.value = '📦';
+    }
+    catModalOverlay.classList.add('open');
+    fCatNome.focus();
+  };
+
+  const fecharCatModal = () => catModalOverlay.classList.remove('open');
+
+  btnNovaCategoria.addEventListener('click', () => abrirCatModal());
+  catModalClose.addEventListener('click', fecharCatModal);
+  catBtnCancelar.addEventListener('click', fecharCatModal);
+  catModalOverlay.addEventListener('click', (e) => { if (e.target === catModalOverlay) fecharCatModal(); });
+
+  categoriaForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = categoriaForm.querySelector('button[type="submit"]');
+    const textoOriginal = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = '⏳ Salvando...';
+
+    try {
+      const categoria = {
+        nome:  fCatNome.value.trim(),
+        icone: fCatIcone.value.trim() || '📦',
+        ordem: parseInt(fCatOrdem.value) || 0,
+        slug:  categoriasDB.slugify(fCatSlug.value || fCatNome.value),
+        ativo: fCatAtivo.checked
+      };
+      if (fCatId.value) categoria.id = fCatId.value;
+
+      await categoriasDB.salvar(categoria);
+      fecharCatModal();
+      await popularCategorias();
+      await renderCategorias();
+      await renderStats();
+      toast(fCatId.value ? 'Categoria atualizada!' : 'Categoria criada!');
+    } catch (err) {
+      console.error('Erro ao salvar categoria:', err);
+      toast(err.message || 'Erro ao salvar categoria', 'error');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = textoOriginal;
+  });
+
+  const renderCategorias = async () => {
+    const lista = await categoriasDB.getAll(true);
+    if (!lista.length) {
+      categoriasGrid.innerHTML = '<div class="empty-msg">Nenhuma categoria cadastrada.</div>';
+      return;
+    }
+    categoriasGrid.innerHTML = lista.map(c => `
+      <div class="categoria-card ${c.ativo === false ? 'inativa' : ''}">
+        <div class="categoria-icone">${c.icone || '📦'}</div>
+        <div class="categoria-info">
+          <strong>${c.nome}</strong>
+          <small>${c.slug}${c.ativo === false ? ' · inativa' : ''}</small>
+        </div>
+        <div class="categoria-actions">
+          <button class="cat-edit" data-edit="${c.id || ''}" data-slug="${c.slug}">Editar</button>
+          ${c.id ? `<button class="cat-del" data-del="${c.id}" data-nome="${c.nome}">Excluir</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  };
+
+  categoriasGrid.addEventListener('click', async (e) => {
+    const editBtn = e.target.closest('[data-edit]');
+    const delBtn  = e.target.closest('[data-del]');
+
+    if (editBtn) {
+      const id = editBtn.dataset.edit;
+      const slug = editBtn.dataset.slug;
+      const lista = await categoriasDB.getAll();
+      const cat = lista.find(c => (id && c.id === id) || c.slug === slug);
+      if (cat && !cat.id) {
+        toast('Esta é uma categoria padrão. Crie a tabela "categorias" no Supabase primeiro (rode supabase/schema-categorias-pedidos.sql).', 'error');
+        return;
+      }
+      abrirCatModal(cat);
+    }
+
+    if (delBtn) {
+      const id = delBtn.dataset.del;
+      const nome = delBtn.dataset.nome;
+      if (!confirm(`Excluir categoria "${nome}"?\n\nProdutos já vinculados a ela ficarão órfãos — você pode reatribuí-los depois.`)) return;
+      const ok = await categoriasDB.deletar(id);
+      if (ok) {
+        await popularCategorias();
+        await renderCategorias();
+        await renderStats();
+        toast('Categoria excluída.', 'info');
+      } else {
+        toast('Erro ao excluir categoria.', 'error');
+      }
+    }
+  });
+
+  /* ══════════════════════════════════════════════
+     ABA: PEDIDOS
+     ══════════════════════════════════════════════ */
+  const pedidosLista     = document.getElementById('pedidosLista');
+  const pedSearch        = document.getElementById('pedSearch');
+  const pedStatus        = document.getElementById('pedStatus');
+  const btnRecarregarPedidos = document.getElementById('btnRecarregarPedidos');
+
+  const fmtReais = (v) => 'R$ ' + Number(v || 0).toFixed(2).replace('.', ',');
+
+  const renderPedidos = async () => {
+    pedidosLista.innerHTML = '<div class="empty-msg">Carregando...</div>';
+
+    let filtros = {};
+    if (pedStatus.value) filtros.status = pedStatus.value;
+
+    let pedidos = [];
+    try {
+      pedidos = await pedidosDB.getAll(filtros);
+    } catch (e) {
+      pedidosLista.innerHTML = `<div class="empty-msg">⚠️ Não foi possível carregar os pedidos.<br><small>Verifique se a tabela "pedidos" foi criada (rode supabase/schema-categorias-pedidos.sql).</small></div>`;
+      return;
+    }
+
+    const busca = pedSearch.value.trim().toLowerCase();
+    if (busca) {
+      pedidos = pedidos.filter(p =>
+        (p.cliente_nome || '').toLowerCase().includes(busca) ||
+        (p.cliente_telefone || '').toLowerCase().includes(busca) ||
+        (p.order_nsu || '').toLowerCase().includes(busca)
+      );
+    }
+
+    if (!pedidos.length) {
+      pedidosLista.innerHTML = '<div class="empty-msg">Nenhum pedido encontrado.</div>';
+      return;
+    }
+
+    pedidosLista.innerHTML = pedidos.map(p => {
+      const status = pedidosDB.STATUS[p.status] || { label: p.status, cor: '#999', icone: '•' };
+      const qtdItens = (p.itens || []).reduce((a, i) => a + (i.quantidade || 0), 0);
+      const primeiros = (p.itens || []).slice(0, 2).map(i => `${i.nome} ×${i.quantidade}`).join(', ');
+      const resto = (p.itens || []).length > 2 ? ` e mais ${(p.itens || []).length - 2}` : '';
+
+      return `
+        <div class="pedido-card" data-pid="${p.id}">
+          <div class="pedido-head">
+            <div class="pedido-cliente">
+              <strong>${p.cliente_nome}</strong>
+              <small>📱 ${pedidosDB.formatarTelefone(p.cliente_telefone)}${p.cliente_email ? ' · ' + p.cliente_email : ''}</small>
+              <small>#${p.order_nsu}</small>
+            </div>
+            <div class="pedido-total-wrap">
+              <div class="pedido-total">${fmtReais(p.total)}</div>
+              <div class="pedido-data">${pedidosDB.formatarData(p.data_criacao)}</div>
+            </div>
+          </div>
+          <div class="pedido-badges">
+            <span class="pedido-badge status-${p.status}">${status.icone} ${status.label}</span>
+            <span class="pedido-badge">${p.pagamento === 'pix' ? '⚡ PIX' : '💳 Cartão'}</span>
+            <span class="pedido-badge">${p.entrega === 'retirada' ? '🏪 Retirada' : '🚚 Entrega'}</span>
+            <span class="pedido-badge">${qtdItens} ${qtdItens === 1 ? 'item' : 'itens'}</span>
+          </div>
+          <div class="pedido-itens-resumo">${primeiros}${resto}</div>
+          <div class="pedido-actions">
+            <button class="pedido-btn" data-ped-toggle="${p.id}">Ver detalhes</button>
+            <button class="pedido-btn ver-wpp" data-ped-wpp="${p.id}">💬 WhatsApp do cliente</button>
+            <button class="pedido-btn excluir" data-ped-del="${p.id}">Excluir</button>
+          </div>
+          <div class="pedido-detalhe" id="det-${p.id}">
+            ${p.observacoes ? `<div style="margin-bottom:10px;padding:10px;background:rgba(201,168,76,0.08);border-radius:6px;"><strong style="color:#C9A84C;">📝 Obs:</strong> ${p.observacoes}</div>` : ''}
+            <div style="margin-bottom:10px;"><strong style="color:rgba(255,255,255,0.55);">Itens:</strong></div>
+            ${(p.itens || []).map(i => `
+              <div class="det-linha">
+                <span>${i.nome} × ${i.quantidade}</span>
+                <span style="color:#C9A84C;">${fmtReais(i.preco * i.quantidade)}</span>
+              </div>
+            `).join('')}
+            <div class="det-linha" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.08);">
+              <strong>Total:</strong>
+              <strong style="color:#C9A84C;font-size:1.05rem;">${fmtReais(p.total)}</strong>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <label style="font-size:0.82rem;color:rgba(255,255,255,0.55);">Alterar status:</label>
+              <select class="status-select" data-ped-status="${p.id}">
+                ${Object.keys(pedidosDB.STATUS).map(s =>
+                  `<option value="${s}" ${s === p.status ? 'selected' : ''}>${pedidosDB.STATUS[s].icone} ${pedidosDB.STATUS[s].label}</option>`
+                ).join('')}
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  pedidosLista.addEventListener('click', async (e) => {
+    const toggleBtn = e.target.closest('[data-ped-toggle]');
+    const wppBtn    = e.target.closest('[data-ped-wpp]');
+    const delBtn    = e.target.closest('[data-ped-del]');
+
+    if (toggleBtn) {
+      const det = document.getElementById('det-' + toggleBtn.dataset.pedToggle);
+      if (det) det.classList.toggle('open');
+    }
+
+    if (wppBtn) {
+      const p = await pedidosDB.getById(wppBtn.dataset.pedWpp);
+      if (p) {
+        const link = pedidosDB.linkWhatsApp(p);
+        if (link) window.open(link, '_blank');
+      }
+    }
+
+    if (delBtn) {
+      if (!confirm('Excluir este pedido? Esta ação não pode ser desfeita.')) return;
+      const ok = await pedidosDB.deletar(delBtn.dataset.pedDel);
+      if (ok) { await renderPedidos(); toast('Pedido excluído.', 'info'); }
+      else toast('Erro ao excluir pedido.', 'error');
+    }
+  });
+
+  pedidosLista.addEventListener('change', async (e) => {
+    const sel = e.target.closest('[data-ped-status]');
+    if (!sel) return;
+    const id = sel.dataset.pedStatus;
+    const novoStatus = sel.value;
+    const atualizado = await pedidosDB.atualizarStatus(id, novoStatus);
+    if (atualizado) {
+      toast(`Status alterado para "${pedidosDB.STATUS[novoStatus].label}".`);
+      await renderPedidos();
+    } else {
+      toast('Erro ao atualizar status.', 'error');
+    }
+  });
+
+  let pedSearchTimer;
+  pedSearch.addEventListener('input', () => {
+    clearTimeout(pedSearchTimer);
+    pedSearchTimer = setTimeout(renderPedidos, 300);
+  });
+  pedStatus.addEventListener('change', renderPedidos);
+  btnRecarregarPedidos.addEventListener('click', renderPedidos);
+
   /* ── Init (async) ── */
   const init = async () => {
-    popularCategorias();
+    await popularCategorias();
     await renderStats();
     await renderTabela();
   };
