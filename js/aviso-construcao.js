@@ -1,114 +1,123 @@
 // ============================================
-// js/aviso-construcao.js
-// Banner "Em Construção" — Loureiro Aquarismo
-// Para ATIVAR:  AVISO_ATIVO = true
-// Para REMOVER: AVISO_ATIVO = false
+// js/aviso-construcao.js — VERSÃO 2
+// Banner Em Construção com Ticker
+// Para DESATIVAR: AVISO_ATIVO = false
 // ============================================
 
-const AVISO_ATIVO = true  // ← mudar para false quando o catálogo estiver pronto
+const AVISO_ATIVO = true
 
-const AVISO_CONFIG = {
-  mensagem:   'Estamos montando nosso catálogo! Em breve todos os produtos disponíveis aqui. 🐠',
-  submensagem:'Enquanto isso, consulte pelo WhatsApp ou visite nossa loja em Fortaleza.',
-  botaoTexto: '💬 Ver produtos no WhatsApp',
-  botaoLink:  'https://wa.me/5585985301616?text=Olá!%20Vi%20o%20site%20e%20gostaria%20de%20ver%20os%20produtos%20disponíveis.',
-  dispensavel: true,  // true = mostra botão de fechar (X)
-}
+// Frases que vão passar no ticker (texto correndo)
+const TICKER_FRASES = [
+  '🚧 Estamos montando nosso catálogo online!',
+  '🐠 Em breve todos os produtos disponíveis aqui.',
+  '🪸 Peixes, corais, aquários e equipamentos selecionados.',
+  '💬 Enquanto isso, consulte pelo WhatsApp: (85) 98530-1616',
+  '📍 Visite nossa loja — R. Raimundo Neri, 372 · Fortaleza, CE',
+  '⭐ 4,8 no Google · Loureiro Aquarismo · Especialistas em aquarismo!',
+]
 
 ;(function () {
   if (!AVISO_ATIVO) return
 
-  // Não mostrar novamente se o usuário fechou recentemente (24h)
-  if (AVISO_CONFIG.dispensavel) {
-    const fechouEm = localStorage.getItem('loureiro_aviso_fechou')
-    if (fechouEm && Date.now() - parseInt(fechouEm) < 24 * 60 * 60 * 1000) return
-  }
-
+  // ── CSS ──────────────────────────────────────
   const style = document.createElement('style')
   style.textContent = `
-    #aviso-construcao {
-      position: relative;
+
+    /* ═══════════════════════════════════════════
+       BANNER TOPO
+    ═══════════════════════════════════════════ */
+    #aviso-topo {
       width: 100%;
-      background: linear-gradient(135deg, #0A1A2E 0%, #0D4F7C 50%, #0A1A2E 100%);
-      background-size: 200% 200%;
-      animation: gradientShift 6s ease infinite;
-      border-bottom: 2px solid #C9A84C;
-      padding: 14px 20px;
-      z-index: 999;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+      background: linear-gradient(135deg, #071422 0%, #0D4F7C 40%, #0A2744 60%, #071422 100%);
+      background-size: 300% 300%;
+      animation: bgMove 8s ease infinite;
+      border-bottom: 3px solid #C9A84C;
+      position: relative;
+      z-index: 1000;
       overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.15);
     }
 
-    @keyframes gradientShift {
+    @keyframes bgMove {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* Bolhas decorativas */
-    #aviso-construcao::before {
-      content: '🐠 🪸 🐟 🌊 🐠 🪸 🐟 🌊 🐠 🪸 🐟 🌊';
+    /* Brilho dourado nas bordas */
+    #aviso-topo::before {
+      content: '';
       position: absolute;
-      top: -8px;
-      left: 0;
-      right: 0;
-      font-size: 14px;
-      opacity: 0.08;
-      letter-spacing: 20px;
-      white-space: nowrap;
-      overflow: hidden;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(201,168,76,0.6) 30%,
+        #C9A84C 50%,
+        rgba(201,168,76,0.6) 70%,
+        transparent 100%
+      );
     }
 
-    .aviso-inner {
-      max-width: 1280px;
-      margin: 0 auto;
+    /* Linha superior com info rápida */
+    .aviso-topbar {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px 6px;
       gap: 16px;
       flex-wrap: wrap;
-      justify-content: center;
-      position: relative;
+      max-width: 1280px;
+      margin: 0 auto;
     }
 
-    .aviso-icone {
-      font-size: 28px;
-      animation: balancar 2s ease-in-out infinite;
-      flex-shrink: 0;
+    .aviso-topbar__left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    @keyframes balancar {
-      0%, 100% { transform: rotate(-8deg); }
-      50%       { transform: rotate(8deg); }
-    }
-
-    .aviso-textos {
-      flex: 1;
-      min-width: 200px;
-      text-align: center;
-    }
-
-    .aviso-titulo {
-      font-family: 'Cinzel', serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: #C9A84C;
-      margin: 0 0 3px;
-      letter-spacing: 0.5px;
-    }
-
-    .aviso-sub {
-      font-family: 'Lato', sans-serif;
-      font-size: 13px;
-      color: rgba(255,255,255,0.65);
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .aviso-btn {
+    .aviso-badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 9px 18px;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 20px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #C9A84C;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .aviso-badge .dot {
+      width: 6px;
+      height: 6px;
+      background: #C9A84C;
+      border-radius: 50%;
+      animation: piscaBadge 1.5s ease-in-out infinite;
+    }
+
+    @keyframes piscaBadge {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.3; transform: scale(0.6); }
+    }
+
+    .aviso-topbar__right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .aviso-btn-wpp {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
       background: #25D366;
       color: white;
       border: none;
@@ -120,126 +129,316 @@ const AVISO_CONFIG = {
       text-decoration: none;
       white-space: nowrap;
       transition: all 0.2s;
-      flex-shrink: 0;
-      box-shadow: 0 2px 12px rgba(37,211,102,0.3);
+      box-shadow: 0 2px 12px rgba(37,211,102,0.35);
     }
 
-    .aviso-btn:hover {
+    .aviso-btn-wpp:hover {
       background: #20bc5a;
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+      box-shadow: 0 4px 18px rgba(37,211,102,0.5);
     }
 
-    .aviso-fechar {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.15);
+    .aviso-fechar-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       color: rgba(255,255,255,0.4);
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
       flex-shrink: 0;
-      line-height: 1;
       padding: 0;
+      line-height: 1;
     }
 
-    .aviso-fechar:hover {
-      background: rgba(255,255,255,0.1);
+    .aviso-fechar-btn:hover {
+      background: rgba(255,255,255,0.12);
       color: white;
       border-color: rgba(255,255,255,0.3);
     }
 
-    /* Barra de progresso decorativa */
-    .aviso-progresso {
+    /* ── TICKER (texto correndo) ── */
+    .aviso-ticker-wrap {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0,0,0,0.25);
+      border-top: 1px solid rgba(201,168,76,0.12);
+      padding: 8px 0;
+      cursor: default;
+    }
+
+    /* Fade nas bordas */
+    .aviso-ticker-wrap::before,
+    .aviso-ticker-wrap::after {
+      content: '';
       position: absolute;
-      bottom: 0;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .aviso-ticker-wrap::before {
       left: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #C9A84C, #E8C96A, #C9A84C);
-      background-size: 200% 100%;
-      animation: progressoShine 2s linear infinite;
+      background: linear-gradient(to right, #071422, transparent);
+    }
+
+    .aviso-ticker-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, #071422, transparent);
+    }
+
+    .aviso-ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 40s linear infinite;
+      gap: 0;
+    }
+
+    .aviso-ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .aviso-ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 32px;
+      font-family: 'Lato', sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+
+    .aviso-ticker-sep {
+      color: rgba(201,168,76,0.5);
+      font-size: 18px;
+      line-height: 1;
+      margin: 0 -16px;
+    }
+
+    /* ═══════════════════════════════════════════
+       BANNER RODAPÉ
+    ═══════════════════════════════════════════ */
+    #aviso-rodape {
       width: 100%;
-      opacity: 0.6;
+      background: linear-gradient(180deg, #050D1A 0%, #0A1A2E 100%);
+      border-top: 2px solid rgba(201,168,76,0.3);
+      border-bottom: 1px solid rgba(201,168,76,0.1);
+      padding: 28px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    @keyframes progressoShine {
-      0%   { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    #aviso-rodape::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #C9A84C, transparent);
     }
 
+    .aviso-rodape__inner {
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .aviso-rodape__icones {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 24px;
+    }
+
+    .aviso-rodape__icone {
+      animation: flutuarRodape 3s ease-in-out infinite;
+    }
+
+    .aviso-rodape__icone:nth-child(2) { animation-delay: 0.4s; }
+    .aviso-rodape__icone:nth-child(3) { animation-delay: 0.8s; }
+    .aviso-rodape__icone:nth-child(4) { animation-delay: 1.2s; }
+    .aviso-rodape__icone:nth-child(5) { animation-delay: 1.6s; }
+
+    @keyframes flutuarRodape {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+
+    .aviso-rodape__titulo {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: #C9A84C;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .aviso-rodape__sub {
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .aviso-rodape__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Lato', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    }
+
+    .aviso-rodape__btn:hover {
+      background: #20bc5a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+    }
+
+    /* Responsivo */
     @media (max-width: 600px) {
-      #aviso-construcao { padding: 12px 16px; }
-      .aviso-titulo { font-size: 13px; }
-      .aviso-sub    { font-size: 12px; }
-      .aviso-btn    { font-size: 12px; padding: 8px 14px; }
-      .aviso-fechar { right: 0; }
+      .aviso-topbar { padding: 8px 16px 4px; }
+      .aviso-btn-wpp span { display: none; }
+      .aviso-btn-wpp::after { content: 'WhatsApp'; }
+      .aviso-ticker-item { font-size: 12px; padding: 0 20px; }
     }
   `
   document.head.appendChild(style)
 
-  const banner = document.createElement('div')
-  banner.id    = 'aviso-construcao'
-  banner.innerHTML = `
-    <div class="aviso-inner">
-      <span class="aviso-icone">🚧</span>
+  // ── Montar HTML do TICKER ─────────────────────
+  // Duplicar as frases para loop sem corte
+  const todasFrases = [...TICKER_FRASES, ...TICKER_FRASES]
+  const tickerItens = todasFrases.map((frase, i) => `
+    <span class="aviso-ticker-item">${frase}</span>
+    <span class="aviso-ticker-sep">✦</span>
+  `).join('')
 
-      <div class="aviso-textos">
-        <p class="aviso-titulo">${AVISO_CONFIG.mensagem}</p>
-        <p class="aviso-sub">${AVISO_CONFIG.submensagem}</p>
+  // ── Banner TOPO ───────────────────────────────
+  const bannerTopo = document.createElement('div')
+  bannerTopo.id    = 'aviso-topo'
+  bannerTopo.innerHTML = `
+    <div class="aviso-topbar">
+      <div class="aviso-topbar__left">
+        <span class="aviso-badge">
+          <span class="dot"></span>
+          Em Construção
+        </span>
       </div>
+      <div class="aviso-topbar__right">
+        <a href="https://wa.me/5585985301616?text=Olá!%20Vi%20o%20site%20e%20gostaria%20de%20ver%20os%20produtos%20disponíveis."
+           target="_blank" rel="noopener" class="aviso-btn-wpp">
+          💬 <span>Ver produtos no WhatsApp</span>
+        </a>
+        <button class="aviso-fechar-btn"
+                onclick="fecharAvisoTopo()"
+                title="Fechar">✕</button>
+      </div>
+    </div>
 
-      <a href="${AVISO_CONFIG.botaoLink}"
-         target="_blank"
-         rel="noopener"
-         class="aviso-btn">
-        ${AVISO_CONFIG.botaoTexto}
-      </a>
-
-      ${AVISO_CONFIG.dispensavel ? `
-        <button class="aviso-fechar"
-                onclick="fecharAviso()"
-                title="Fechar aviso">✕</button>
-      ` : ''}
-
-      <div class="aviso-progresso"></div>
+    <div class="aviso-ticker-wrap">
+      <div class="aviso-ticker-track" id="ticker-track">
+        ${tickerItens}
+      </div>
     </div>
   `
 
-  // Inserir logo após o header
+  // ── Banner RODAPÉ ─────────────────────────────
+  const bannerRodape = document.createElement('div')
+  bannerRodape.id    = 'aviso-rodape'
+  bannerRodape.innerHTML = `
+    <div class="aviso-rodape__inner">
+      <div class="aviso-rodape__icones">
+        <span class="aviso-rodape__icone">🐠</span>
+        <span class="aviso-rodape__icone">🪸</span>
+        <span class="aviso-rodape__icone">🏠</span>
+        <span class="aviso-rodape__icone">⚙️</span>
+        <span class="aviso-rodape__icone">🍖</span>
+      </div>
+      <h3 class="aviso-rodape__titulo">
+        🚧 Catálogo em construção — em breve tudo disponível aqui!
+      </h3>
+      <p class="aviso-rodape__sub">
+        Estamos preparando os melhores peixes, corais e equipamentos.<br>
+        Consulte nosso catálogo completo pelo WhatsApp enquanto finalizamos.
+      </p>
+      <a href="https://wa.me/5585985301616?text=Olá!%20Vi%20o%20site%20e%20gostaria%20de%20ver%20os%20produtos%20disponíveis."
+         target="_blank" rel="noopener" class="aviso-rodape__btn">
+        💬 Ver catálogo completo no WhatsApp
+      </a>
+    </div>
+  `
+
+  // ── Inserir no DOM ────────────────────────────
   document.addEventListener('DOMContentLoaded', function () {
-    const header = document.querySelector('header') || document.querySelector('#header')
-    if (header && header.nextSibling) {
-      header.parentNode.insertBefore(banner, header.nextSibling)
+    // Topo: inserir após o header
+    const header = document.querySelector('header') || document.getElementById('header')
+    if (header) {
+      header.insertAdjacentElement('afterend', bannerTopo)
     } else {
-      document.body.insertBefore(banner, document.body.firstChild)
+      document.body.prepend(bannerTopo)
+    }
+
+    // Rodapé: inserir ANTES do footer
+    const footer = document.querySelector('footer') || document.getElementById('footer')
+    if (footer) {
+      footer.insertAdjacentElement('beforebegin', bannerRodape)
+    } else {
+      document.body.appendChild(bannerRodape)
     }
   })
 
-  // Função para fechar o banner
-  window.fecharAviso = function () {
-    const el = document.getElementById('aviso-construcao')
-    if (el) {
-      el.style.transition = 'all 0.4s ease'
-      el.style.maxHeight  = el.offsetHeight + 'px'
-      requestAnimationFrame(() => {
-        el.style.maxHeight  = '0'
-        el.style.padding    = '0'
-        el.style.opacity    = '0'
-        el.style.overflow   = 'hidden'
-      })
-      setTimeout(() => el.remove(), 400)
-    }
-    if (AVISO_CONFIG.dispensavel) {
-      localStorage.setItem('loureiro_aviso_fechou', Date.now().toString())
-    }
+  // ── Fechar banner topo ────────────────────────
+  window.fecharAvisoTopo = function () {
+    const el = document.getElementById('aviso-topo')
+    if (!el) return
+    el.style.transition  = 'max-height 0.4s ease, opacity 0.4s ease, padding 0.4s ease'
+    el.style.overflow    = 'hidden'
+    el.style.maxHeight   = el.offsetHeight + 'px'
+    requestAnimationFrame(() => {
+      el.style.maxHeight = '0'
+      el.style.opacity   = '0'
+    })
+    setTimeout(() => el.remove(), 420)
+    // Guardar por 24h
+    localStorage.setItem('loureiro_aviso_fechou', Date.now().toString())
   }
+
+  // Checar se fechou recentemente (24h)
+  const fechouEm = localStorage.getItem('loureiro_aviso_fechou')
+  if (fechouEm && Date.now() - parseInt(fechouEm) < 24 * 60 * 60 * 1000) {
+    // Remover só o topo, manter rodapé
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const t = document.getElementById('aviso-topo')
+        if (t) t.remove()
+      }, 100)
+    })
+  }
+
 })()
